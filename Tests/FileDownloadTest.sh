@@ -6,8 +6,8 @@ function cleanup
 	if [ "$TESTING_ACTIVE" == true ]; then
 		PiDUTSignal E
 	fi
-	cd $WORKING_DIR # Incase script sourced onto executing shell
-	[ -e  $DOWNLOAD_LOCATION/test_file ] && rm $DOWNLOAD_LOCATION/test_file
+	cd $WORKING_DIR # In case script sourced onto executing shell
+	[ -e  $DOWNLOAD_LOCATION/* ] && rm -rf $DOWNLOAD_LOCATION/*
 	# http://mirrors.rit.edu/ubuntu-releases/18.10/ubuntu-18.10-desktop-amd64.iso
 	exit
 
@@ -21,11 +21,7 @@ case $i in
     shift # past argument=value
     ;;
     -u=*|--test_url=*)
-    DOWNLOAD_LINK="${i#*=}"
-    shift # past argument=value
-    ;;
-    -w=*|--wait=*)
-    DELAY_TESTS_IN_MIN="${i#*=}"
+    DOWNLOAD_FILE="${i#*=}"
     shift # past argument=value
     ;;
     *)
@@ -40,31 +36,41 @@ if [ "$DOWNLOAD_LOCATION" == "" ]; then
 	DOWNLOAD_LOCATION=$(pwd)
 fi
 
-if [ "$DOWNLOAD_LINK" == "" ]; then
+if [ "$DOWNLOAD_FILE" == "" ]; then
 	echo "A URL was not provided for this test. Exiting..."
 	exit 1
 fi
 
-if [ "$DELAY_TESTS_IN_MIN" == "" ]; then
-    DELAY_TESTS_IN_MIN=60
-    echo "You did not provide a delay to wait between tests. Defaulting to $(( "$DELAY_TESTS_IN_MIN" / 60 )) minute(s)..."
-else 
-    DELAY_TESTS_IN_MIN=$(( "$DELAY_TESTS_IN_MIN" * 60  ))
-    echo "Delay interval set between tests is set to $(( "$DELAY_TESTS_IN_MIN" / 60 )) minute(s)..."
-fi
 
-cd $DOWNLOAD_LOCATION
-
-while true; do
-	 
-	TESTING_ACTIVE=true
-	PiDUTSignal B
-	wget -O test_file $DOWNLOAD_LINK
+function doEverything(){
+	randomizer=${RANDOM}
+	mkdir "$location${randomizer}"
+	start=`date +%s`
+    wget -q -O "${randomizer}.tar.gz" $0 >& /dev/null
 	sync
-	PiDUTSignal E
-	TESTING_ACTIVE=false
-	[ -e  $DOWNLOAD_LOCATION/test_file ] && rm $DOWNLOAD_LOCATION/test_file
-	sync
-	sleep $DELAY_TEST_IN_MIN
-done
+	tar -xzf "${randomizer}.tar.gz" -C "$location${randomizer}"
+	grep -r the "$location${randomizer}" >& /dev/null
+	tar -czf "${randomizer}-zipped.tar.gz" "$location${randomizer}/"
+	end=`date +%s`
+	runtime=$((end-start))
+	echo "$0,$runtime" >> recording.csv
+	rm -rf "$location${randomizer}"
+	rm "${randomizer}.tar.gz"
+	rm "${randomizer}-zipped.tar.gz"
+}
 
+TESTING_ACTIVE=true
+PiDUTSignal B
+
+export -f doEverything
+export location=$DOWNLOAD_LOCATION
+
+IFS=$'\n' read -d '' -r -a lines < $DOWNLOAD_FILE
+printf '%s\0' "${lines[@]}" | xargs -n 1 -P 8 -0 bash -c 'doEverything "$@"'
+    
+sync
+PiDUTSignal E
+
+TESTING_ACTIVE=false
+[ -e  $DOWNLOAD_LOCATION/* ] && rm -rf $DOWNLOAD_LOCATION/*
+sync
