@@ -7,7 +7,7 @@ function cleanup
 		PiDUTSignal E
 	fi
 	cd $WORKING_DIR # In case script sourced onto executing shell
-	[ -e  $DOWNLOAD_LOCATION/* ] && rm -rf $DOWNLOAD_LOCATION/*
+	rm -rf $DOWNLOAD_LOCATION/*
 	# http://mirrors.rit.edu/ubuntu-releases/18.10/ubuntu-18.10-desktop-amd64.iso
 	exit
 
@@ -54,9 +54,9 @@ function doEverything(){
 	end=`date +%s`
 	runtime=$((end-start))
 	echo "$0,$runtime" >> recording.csv
-	rm -rf "$location${randomizer}"
-	rm "${randomizer}.tar.gz"
-	rm "${randomizer}-zipped.tar.gz"
+	[ -e  "$location${randomizer}" ] && rm -rf "$location${randomizer}"
+	[ -e  "${randomizer}.tar.gz" ] && rm "${randomizer}.tar.gz"
+	[ -e  "${randomizer}-zipped.tar.gz" ] && rm "${randomizer}-zipped.tar.gz"
 }
 
 TESTING_ACTIVE=true
@@ -72,5 +72,4 @@ sync
 PiDUTSignal E
 
 TESTING_ACTIVE=false
-[ -e  $DOWNLOAD_LOCATION/* ] && rm -rf $DOWNLOAD_LOCATION/*
 sync
