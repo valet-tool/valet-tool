@@ -43,33 +43,35 @@ fi
 
 
 function doEverything(){
-	randomizer=${RANDOM}
-	mkdir "$location${randomizer}"
-	start=`date +%s`
-    wget -q -O "${randomizer}.tar.gz" $0 >& /dev/null
+	compresedFileName="file.tar.gz"
+    wget -q -O "$location/$compresedFileName" $1 >& /dev/null
 	sync
-	tar -xzf "${randomizer}.tar.gz" -C "$location${randomizer}"
-	grep -r the "$location${randomizer}" >& /dev/null
-	tar -czf "${randomizer}-zipped.tar.gz" "$location${randomizer}/"
-	end=`date +%s`
-	runtime=$((end-start))
-	echo "$0,$runtime" >> recording.csv
-	[ -e  "$location${randomizer}" ] && rm -rf "$location${randomizer}"
-	[ -e  "${randomizer}.tar.gz" ] && rm "${randomizer}.tar.gz"
-	[ -e  "${randomizer}-zipped.tar.gz" ] && rm "${randomizer}-zipped.tar.gz"
+	tar -xzf "$location/$compresedFileName" -C "$location/" 
+	grep -r the "$location/" >& /dev/null
+	extractedFileName=$(ls $location/ | awk '{print $1}' | grep -v $compresedFileName | grep -v file-zipped.tar.gz)
+	tar czf "$location/file-zipped.tar.gz" "$location/$extractedFileName" 
 }
 
-TESTING_ACTIVE=true
-PiDUTSignal B
 
 export -f doEverything
 export location=$DOWNLOAD_LOCATION
 
-IFS=$'\n' read -d '' -r -a lines < $DOWNLOAD_FILE
-printf '%s\0' "${lines[@]}" | xargs -n 1 -P 8 -0 bash -c 'doEverything "$@"'
-    
-sync
-PiDUTSignal E
+rm -rf $location/*
 
-TESTING_ACTIVE=false
-sync
+while true; do
+	while read line; do	
+		TESTING_ACTIVE=true
+		PiDUTSignal B
+		start=`date +%s`
+		doEverything $line
+		end=`date +%s`
+		runtime=$((end-start))
+		echo "$line,$runtime" >> recording.csv
+		rm -rf $location/*
+		sync
+		PiDUTSignal E
+		TESTING_ACTIVE=false
+		sync
+		sleep runtime
+	done < "$DOWNLOAD_FILE"
+done
