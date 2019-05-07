@@ -1,4 +1,9 @@
-http://ftp.kaist.ac.kr/tdf/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
 http://libreoffice.mirror.garr.it/mirrors/tdf/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
 http://ftp.bme.hu/pub/mirrors/tdf/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
 http://tdf.ufes.br/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
+https://mirrors.ucr.ac.cr/tdf/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
+http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
+https://espejito.fder.edu.uy/tdf/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
+https://ftp.nluug.nl/office/libreoffice/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
+https://mirror.aptus.co.tz/pub/tdf/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
+http://ftp.kaist.ac.kr/tdf/libreoffice/stable/6.2.2/deb/x86/LibreOffice_6.2.2_Linux_x86_deb.tar.gz
