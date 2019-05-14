@@ -24,6 +24,7 @@ int main()
 	char current_date_time[26];
 	uint8_t test_active = 0;
 	uint32_t delay = 1000000;
+	printf("Date,Current(mA),Power(mW),Is_Active");
 	while (1)
 	{
 		usleep(delay);
@@ -40,7 +41,7 @@ int main()
 			test_active = 0;
 			break;
 		}
-		printf("%s, %.2f mA, %.2f mW, %d,\r\n", 
+		printf("%s,%.2f,%.2f,%d,\r\n", 
 			current_date_time, get_current_in_mA(i2c_bus_1_fd), 
 			get_power_in_mW(i2c_bus_1_fd),test_active);
 	 }
