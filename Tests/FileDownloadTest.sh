@@ -8,9 +8,7 @@ function cleanup
 	fi
 	cd $WORKING_DIR # In case script sourced onto executing shell
 	rm -rf $DOWNLOAD_LOCATION/*
-	# http://mirrors.rit.edu/ubuntu-releases/18.10/ubuntu-18.10-desktop-amd64.iso
 	exit
-
 }
 #Collect provided options
 for i in "$@"
@@ -66,7 +64,7 @@ while true; do
 		doEverything $line
 		end=`date +%s`
 		runtime=$((end-start))
-		echo "$line,$runtime" >> recording.csv
+		echo "$line,$runtime" >> `date +%Y-%m-%d-`recording.csv
 		rm -rf $location/*
 		sync
 		PiDUTSignal E
