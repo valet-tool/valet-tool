@@ -24,7 +24,7 @@ int main()
 	char current_date_time[26];
 	uint8_t test_active = 0;
 	uint32_t delay = 1000000;
-	printf("Date,Current(mA),Power(mW),Is_Active");
+	printf("Date,Current(mA),Power(mW),Is_Active\n");
 	while (1)
 	{
 		usleep(delay);
