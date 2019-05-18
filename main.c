@@ -34,7 +34,7 @@ int main()
 		{
 		case 'B':
 			test_active = 1;
-			delay = 50000;
+			delay = 300000;
 			break;
 		case 'E':
 			delay = 1000000;
