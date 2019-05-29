@@ -23,8 +23,9 @@ int main()
 	int serial_port_fd = uart_init();
 	char current_date_time[26];
 	uint8_t test_active = 0;
+	uint8_t tactic = 0;
 	uint32_t delay = 1000000;
-	printf("Date,Current(mA),Power(mW),Is_Active\n");
+	printf("Date,Current(mA),Power(mW),Is_Active,Tactic\n");
 	while (1)
 	{
 		usleep(delay);
@@ -34,16 +35,38 @@ int main()
 		{
 		case 'B':
 			test_active = 1;
-			delay = 300000;
+			tactic = 1;
+			delay = 100000;
+			break;
+		case 'X':
+			test_active = 1;
+			tactic = 2;
+			delay = 100000;
+			break;
+		case 'G':
+			test_active = 1;
+			tactic = 1;
+			delay = 100000;
+			break;
+		case 'C':
+			test_active = 1;
+			tactic = 1;
+			delay = 100000;
+			break;
+		case 'D':
+			test_active = 1;
+			tactic = 1;
+			delay = 100000;
 			break;
 		case 'E':
 			delay = 1000000;
+			tactic = 0;
 			test_active = 0;
 			break;
 		}
-		printf("%s,%.2f,%.2f,%d,\r\n", 
+		printf("%s,%.2f,%.2f,%d,%d\r\n", 
 			current_date_time, get_current_in_mA(i2c_bus_1_fd), 
-			get_power_in_mW(i2c_bus_1_fd),test_active);
+			get_power_in_mW(i2c_bus_1_fd),test_active,tactic);
 	 }
 
 	return 0;

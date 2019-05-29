@@ -41,13 +41,38 @@ fi
 
 
 function doEverything(){
+	TESTING_ACTIVE=true
+	PiDUTSignal B
 	compresedFileName="file.tar.gz"
     wget -q -O "$location/$compresedFileName" $1 >& /dev/null
+	PiDUTSignal E
 	sync
-	tar -xzf "$location/$compresedFileName" -C "$location/" 
+	TESTING_ACTIVE=false
+	sleep 1
+
+	TESTING_ACTIVE=true
+	PiDUTSignal X
+	tar -xzf "$location/$compresedFileName" -C "$location/"
+	PiDUTSignal E
+	sync
+	TESTING_ACTIVE=false
+	sleep 1
+
+	TESTING_ACTIVE=true
+	PiDUTSignal G
 	grep -r the "$location/" >& /dev/null
+	PiDUTSignal E
+	sync
+	TESTING_ACTIVE=false
+	sleep 1
+
+	TESTING_ACTIVE=true
+	PiDUTSignal C
 	extractedFileName=$(ls $location/ | awk '{print $1}' | grep -v $compresedFileName | grep -v file-zipped.tar.gz)
-	tar czf "$location/file-zipped.tar.gz" "$location/$extractedFileName" 
+	tar czf "$location/file-zipped.tar.gz" "$location/$extractedFileName"
+	PiDUTSignal E
+	sync
+	sleep 1
 }
 
 
@@ -57,17 +82,17 @@ export location=$DOWNLOAD_LOCATION
 rm -rf $location/*
 
 while true; do
-	while read line; do	
-		TESTING_ACTIVE=true
-		PiDUTSignal B
+	while read line; do
 		start=`date +%s`
 		doEverything $line
-		end=`date +%s`
-		runtime=$((end-start))
-		echo "$line,$runtime" >> `date +%Y-%m-%d-`recording.csv
+		TESTING_ACTIVE=true
+		PiDUTSignal D
 		rm -rf $location/*
 		sync
 		PiDUTSignal E
+		end=`date +%s`
+		runtime=$((end-start))-4
+		echo "$line,$runtime" >> `date +%Y-%m-%d-`recording.csv
 		TESTING_ACTIVE=false
 		sync
 		sleep runtime
