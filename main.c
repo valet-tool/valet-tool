@@ -100,30 +100,48 @@ void *printMsg(void *ptr)
 	}
 
 	signal(SIGINT, sig_handler);
+	char zero='0';
+	memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 	while (keep_running)
 	{
 		int i = 0;
 		for (i = 0; i <= 0; i++)
 		{
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
-			get_current_date_time(current_date_time_thread);
 			//Download: tactic 1
+			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%d, %s,%d\n",1, current_date_time_thread, i+1);
 			system("wget 'http://tdf.ufes.br/libreoffice/stable/6.2.3/deb/x86/LibreOffice_6.2.3_Linux_x86_deb.tar.gz' '-O' 'LibreOffice_6.2.3_Linux_x86_deb.tar.gz'");
+			
+			//Placeholder Sleep Tactic 0
+			get_current_date_time(current_date_time_thread);
+			fprintf(file_thread, "%c, %s,%d\n",zero, current_date_time_thread, i+1);
+			sleep(1)
+
 			//Unzip: Tactic 2
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%d, %s,%d\n",2, current_date_time_thread, i+1);
 			system("tar 'xvf' 'LibreOffice_6.2.3_Linux_x86_deb.tar.gz'");
+
+			//Placeholder Sleep Tactic 0
+			get_current_date_time(current_date_time_thread);
+			fprintf(file_thread, "%c, %s,%d\n",zero, current_date_time_thread, i+1);
+			sleep(1)
+
 			//Bla Bla Tactic 3
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%d, %s,%d\n",3, current_date_time_thread, i+1);
 			sleep(1);
+
+			//Placeholder Sleep Tactic 0
+			get_current_date_time(current_date_time_thread);
+			fprintf(file_thread, "%c, %s,%d\n",zero, current_date_time_thread, i+1);
+			sleep(1)
+
 			// Delete: Tactic 5
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%d, %s,%d\n",5, current_date_time_thread, i+1);
 			system("rm 'LibreOffice_6.2.3_Linux_x86_deb.tar.gz'");
-
-			
+	
 		}
 		
 		sleep(30);
