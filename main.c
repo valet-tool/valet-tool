@@ -49,6 +49,7 @@ int main()
 	printf("Date,Current(mA),Power(mW),Is_Active,Tactic\n");
 	int iret = pthread_create(&thread, NULL, printMsg, (void *)message1);
 	file = fopen(filename, "r");
+	float current = 0,power = 0;
 	if (file != NULL)
 	{
 		file_exists = true;
@@ -67,10 +68,10 @@ int main()
 		usleep(delay);
 		memset(current_date_time, 0x00, sizeof(current_date_time) / sizeof(current_date_time[0]));
 		get_current_date_time(current_date_time);
-		fprintf(file, "%s,%.2f,%.2f\r\n", current_date_time,
-				get_current_in_mA(i2c_bus_1_fd), get_power_in_mW(i2c_bus_1_fd));
-		printf("%s,%.2f,%.2f\r\n", current_date_time,
-			   get_current_in_mA(i2c_bus_1_fd), get_power_in_mW(i2c_bus_1_fd));
+		current = get_current_in_mA(i2c_bus_1_fd);
+		power = get_power_in_mW(i2c_bus_1_fd);
+		fprintf(file, "%s,%.2f,%.2f\r\n", current_date_time, current, power);
+		printf("%s,%.2f,%.2f\r\n", current_date_time, current, power);
 	}
 	fclose(file);
 	printf("Exiting Gracefully...\n");
