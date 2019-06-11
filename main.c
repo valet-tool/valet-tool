@@ -141,6 +141,11 @@ void *printMsg(void *ptr)
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,5, i+1);
 			system("rm 'LibreOffice_6.2.3_Linux_x86_deb.tar.gz'");
+
+			//Placeholder Sleep Tactic 0
+			get_current_date_time(current_date_time_thread);
+			fprintf(file_thread, "%s,%c,%d\n", current_date_time_thread,zero, i+1);
+			sleep(1);
 	
 		}
 		
