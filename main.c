@@ -115,7 +115,7 @@ void *printMsg(void *ptr)
 			//Placeholder Sleep Tactic 0
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%c, %s,%d\n",zero, current_date_time_thread, i+1);
-			sleep(1)
+			sleep(1);
 
 			//Unzip: Tactic 2
 			get_current_date_time(current_date_time_thread);
@@ -125,7 +125,7 @@ void *printMsg(void *ptr)
 			//Placeholder Sleep Tactic 0
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%c, %s,%d\n",zero, current_date_time_thread, i+1);
-			sleep(1)
+			sleep(1);
 
 			//Bla Bla Tactic 3
 			get_current_date_time(current_date_time_thread);
@@ -135,7 +135,7 @@ void *printMsg(void *ptr)
 			//Placeholder Sleep Tactic 0
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%c, %s,%d\n",zero, current_date_time_thread, i+1);
-			sleep(1)
+			sleep(1);
 
 			// Delete: Tactic 5
 			get_current_date_time(current_date_time_thread);
