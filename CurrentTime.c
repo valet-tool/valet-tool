@@ -40,7 +40,7 @@ void get_current_date_time(char* current_date_time)
 	}
 
 	gettimeofday(&time_us, NULL);
-	sprintf(current_date_time, "%d-%d-%dT%s:%s:%s.%dZ", 
+	sprintf(current_date_time, "%d-%d-%dT%s:%s:%s.%sZ", 
 		 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, 
 		 timeInHours, timeInMins, 
 		 timeInSecs, timeInMsecs);
