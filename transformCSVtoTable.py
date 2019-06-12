@@ -34,7 +34,7 @@ with open('sorted.csv') as csv_file:
             powerConsumed = totalPowerForTactic / counter
             endedTimestamp = dateutil.parser.parse(row[0])
             latency = str(endedTimestamp - firstStartedTimestamp)
-            record = [tacticnum, powerConsumed, latency, servernum, tacticnum]
+            record = [powerConsumed, latency, servernum, tacticnum]
             records.append(record)
             totalPowerForTactic = 0
             totalCurrentForTactic = 0
