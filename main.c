@@ -85,6 +85,7 @@ void *printMsg(void *ptr)
 	bool file_exists = false;
 	int serverNumber = 0;
 	char current_date_time_thread[26];
+	uint32_t delay = 1000000;
 	file_thread = fopen(filename, "r");
 	if (file_thread != NULL)
 	{
