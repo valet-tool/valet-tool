@@ -45,7 +45,7 @@ int main()
 	pthread_t thread;
 	FILE *file;
 	bool file_exists = false;
-	const char *filename = "output-";
+	const char *filename = "rawfiles/output-";
 	printf("Date,Current(mA),Power(mW),Is_Active,Tactic\n");
 	memset(current_date_time, 0x00, sizeof(current_date_time) / sizeof(current_date_time[0]));
 	get_current_date_time(current_date_time);
@@ -84,7 +84,7 @@ int main()
 void *printMsg(void *ptr)
 {
 	FILE *file_thread;
-	const char *filename = "downstamps-";
+	const char *filename = "rawfiles/downstamps-";
 	bool file_exists = false;
 	int serverNumber = 0;
 	char current_date_time_thread[26];
