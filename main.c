@@ -45,7 +45,7 @@ int main()
 	pthread_t thread;
 	FILE *file;
 	bool file_exists = false;
-	char *filename = "rawfiles/output-";
+	char *filename = "/home/pi/valet-tool/rawfiles/output-";
 	printf("Date,Current(mA),Power(mW),Is_Active,Tactic\n");
 	memset(current_date_time, 0x00, sizeof(current_date_time) / sizeof(current_date_time[0]));
 	get_current_date_time(current_date_time);
@@ -84,7 +84,7 @@ int main()
 void *printMsg(void *ptr)
 {
 	FILE *file_thread;
-	char *filename = "rawfiles/downstamps-";
+	char *filename = "/home/pi/valet-tool/rawfiles/downstamps-";
 	bool file_exists = false;
 	int serverNumber = 0;
 	char current_date_time_thread[26];
