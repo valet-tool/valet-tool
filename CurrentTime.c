@@ -9,6 +9,8 @@ void get_current_date_time(char* current_date_time)
 	char timeInMins[2];
 	char timeInHours[2];
 	char timeInMsecs[3];
+	char month[2];
+	char day[2];
 	int intTimeInMS = time_us.tv_usec/1000;
 	if(tm.tm_hour<10){
 		sprintf(timeInHours,"0%d",tm.tm_hour);
@@ -39,9 +41,24 @@ void get_current_date_time(char* current_date_time)
 		sprintf(timeInMins,"%d",tm.tm_min);
 	}
 
+	if(tm.tm_mon+1 < 10){
+		sprintf(month,"0%d",tm.tm_mon+1);
+	}
+	else
+	{
+		sprintf(month,"%d",tm.tm_mon+1);
+	}
+	if(tm.tm_mday < 10){
+		sprintf(day,"0%d",tm.tm_mday);
+	}
+	else
+	{
+		sprintf(day,"%d",tm.tm_mday);
+	}
+	
 	gettimeofday(&time_us, NULL);
-	sprintf(current_date_time, "%d-%d-%dT%s:%s:%s.%sZ", 
-		 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, 
+	sprintf(current_date_time, "%d-%s-%sT%s:%s:%s.%sZ", 
+		 tm.tm_year + 1900, month, day, 
 		 timeInHours, timeInMins, 
 		 timeInSecs, timeInMsecs);
 	
