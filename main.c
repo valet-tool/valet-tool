@@ -45,10 +45,15 @@ int main()
 	pthread_t thread;
 	FILE *file;
 	bool file_exists = false;
-	char *filename = "/home/pi/valet-tool/rawfiles/output-";
+	char filename[100] = "/home/pi/valet-tool/rawfiles/output-";
+	memset(current_date_time, 0x00, sizeof(current_date_time) / sizeof(current_date_time[0]));
+	get_current_date_time(current_date_time);
+	strcat(filename,current_date_time);
+	strcat(filename,".csv");
+	char *filenameptr = filename;
 	printf("Date,Current(mA),Power(mW),Is_Active,Tactic\n");
 	int iret = pthread_create(&thread, NULL, printMsg, (void *)message1);
-	file = fopen(filename, "r");
+	file = fopen(filenameptr, "r");
 	float current = 0,power = 0;
 	if (file != NULL)
 	{
@@ -57,11 +62,11 @@ int main()
 	}
 	if (file_exists == true)
 	{
-		file = fopen(filename, "a");
+		file = fopen(filenameptr, "a");
 	}
 	else
 	{
-		file = fopen(filename, "w+");
+		file = fopen(filenameptr, "w+");
 	}
 	while (keep_running)
 	{
@@ -81,7 +86,7 @@ int main()
 void *printMsg(void *ptr)
 {
 	FILE *file_thread;
-	char *filename = "/home/pi/valet-tool/rawfiles/downstamps-";
+	char filename[100] = "/home/pi/valet-tool/rawfiles/downstamps-";
 	bool file_exists = false;
 	int serverNumber = 0;
 	char current_date_time_thread[26];
@@ -96,7 +101,12 @@ void *printMsg(void *ptr)
 	char zipCommand[100]="tar '-cvzf' ";
 	char rmCommand[100]="rm ";
 	char findCommand[100]="find './' '-name' ";
-	file_thread = fopen(filename, "r");
+	memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+	get_current_date_time(current_date_time_thread);
+	strcat(filename,current_date_time_thread);
+	strcat(filename,".csv");
+	char *filenameptr = filename;
+	file_thread = fopen(filenameptr, "r");
 	if (file_thread != NULL)
 	{
 		file_exists = true;
@@ -104,11 +114,11 @@ void *printMsg(void *ptr)
 	}
 	if (file_exists == true)
 	{
-		file_thread = fopen(filename, "a");
+		file_thread = fopen(filenameptr, "a");
 	}
 	else
 	{
-		file_thread = fopen(filename, "w+");
+		file_thread = fopen(filenameptr, "w+");
 	}
 
 	signal(SIGINT, sig_handler);
