@@ -1,18 +1,31 @@
 import csv
 import os
-
+import pathlib
 import dateutil.parser
+import datetime
 
+
+TODAY = str(datetime.date.today())
 
 def sort_file():
-    sortCommand = 'sort downstamps.csv output.csv > sorted.csv'
+    py = pathlib.Path().glob("rawfiles/*.csv")
+    downstamps_file_name = ''
+    output_file_name = ''
+    for file in py:
+        filename = str(file)
+        if filename.find(TODAY) != -1 and filename.find('downstamps') != -1:
+            downstamps_file_name = filename
+        if filename.find(TODAY) != -1 and filename.find('output') != -1:
+            output_file_name = filename
+    temp = "sort {}" + downstamps_file_name + '{} {}'+output_file_name+'{} > rawfiles/sorted-'+TODAY+'.csv'
+    sort_command = temp.format('"', '"', '"', '"')
     print('Sorting Script')
-    if os.system(sortCommand):
+    if os.system(sort_command):
         print('Sorting was successful')
 
 
 def merge_files():
-    with open('sorted.csv') as csv_file:
+    with open('rawfiles/sorted-'+TODAY+'.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         flag = 0
         counter = 0
