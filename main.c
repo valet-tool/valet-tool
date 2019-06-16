@@ -38,6 +38,7 @@ int main()
 	IN219A_reset(i2c_bus_1_fd);
 	int serial_port_fd = uart_init();
 	char current_date_time[26];
+	char current_date[26];
 	uint8_t test_active = 0;
 	uint8_t tactic = 0;
 	uint32_t delay = 1000000;
@@ -46,9 +47,9 @@ int main()
 	FILE *file;
 	bool file_exists = false;
 	char filename[100] = "/home/pi/valet-tool/rawfiles/output-";
-	memset(current_date_time, 0x00, sizeof(current_date_time) / sizeof(current_date_time[0]));
-	get_current_date_time(current_date_time);
-	strcat(filename,current_date_time);
+	memset(current_date, 0x00, sizeof(current_date) / sizeof(current_date[0]));
+	get_current_date(current_date);
+	strcat(filename,current_date);
 	strcat(filename,".csv");
 	char *filenameptr = filename;
 	printf("Date,Current(mA),Power(mW),Is_Active,Tactic\n");
@@ -90,6 +91,7 @@ void *printMsg(void *ptr)
 	bool file_exists = false;
 	int serverNumber = 0;
 	char current_date_time_thread[26];
+	char current_date[26];
 	uint32_t delay = 1000000;
 	char zipfilename[100]="'LibreOffice_6.2.3_Linux_x86_deb.tar.gz'";
 	char debDir[100]= "'LibreOffice_6.2.3_Linux_x86_deb'";
@@ -101,9 +103,9 @@ void *printMsg(void *ptr)
 	char zipCommand[100]="tar '-cvzf' ";
 	char rmCommand[100]="rm ";
 	char findCommand[100]="find './' '-name' ";
-	memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
-	get_current_date_time(current_date_time_thread);
-	strcat(filename,current_date_time_thread);
+	memset(current_date, 0x00, sizeof(current_date) / sizeof(current_date[0]));
+	get_current_date(current_date);
+	strcat(filename,current_date);
 	strcat(filename,".csv");
 	char *filenameptr = filename;
 	file_thread = fopen(filenameptr, "r");

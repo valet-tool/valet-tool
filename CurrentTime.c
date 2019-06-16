@@ -64,3 +64,29 @@ void get_current_date_time(char* current_date_time)
 	
 }
 
+void get_current_date(char* current_date)
+{
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+	char month[2];
+	char day[2];
+
+	if(tm.tm_mon+1 < 10){
+		sprintf(month,"0%d",tm.tm_mon+1);
+	}
+	else
+	{
+		sprintf(month,"%d",tm.tm_mon+1);
+	}
+	if(tm.tm_mday < 10){
+		sprintf(day,"0%d",tm.tm_mday);
+	}
+	else
+	{
+		sprintf(day,"%d",tm.tm_mday);
+	}
+	
+	sprintf(current_date, "%d-%s-%s", 
+		 tm.tm_year + 1900, month, day);
+	
+}
