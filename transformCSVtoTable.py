@@ -35,43 +35,44 @@ def merge_files():
         servernum = -1
         tacticnum = -1
         firstStartedTimestamp = ''
-        for row in csv_reader:
-            try:
-                if (row[1] == '1' or row[1] == '2' or row[1] == '3' or row[1] == '4' or row[1] == '5') and flag == 0:
-                    print('Tactic {} observed for server {}'.format(row[1], row[2]))
-                    flag = 1
-                    counter = 1
-                    tacticnum = int(row[1])
-                    servernum = int(row[2])
-                    firstStartedTimestamp = dateutil.parser.parse(row[0])
+        try:
+            for row in csv_reader:
+                try:
+                    if (row[1] == '1' or row[1] == '2' or row[1] == '3' or row[1] == '4' or row[1] == '5') and flag == 0:
+                        print('Tactic {} observed for server {}'.format(row[1], row[2]))
+                        flag = 1
+                        counter = 1
+                        tacticnum = int(row[1])
+                        servernum = int(row[2])
+                        firstStartedTimestamp = dateutil.parser.parse(row[0])
 
-                elif row[1] == '0' and flag == 1:
-                    print('Tactic 0 observed')
-                    flag = 0
-                    averagePowerConsumed = totalPowerForTactic / counter
-                    endedTimestamp = dateutil.parser.parse(row[0])
-                    latency = str(endedTimestamp - firstStartedTimestamp)
-                    record = [averagePowerConsumed, str(firstStartedTimestamp), latency, servernum, tacticnum]
-                    records.append(record)
-                    totalPowerForTactic = 0
-                    totalCurrentForTactic = 0
-                    counter = 0
-                elif flag == 1:
-                    # Total Current in mA for specific tactic
-                    totalCurrentForTactic += float(row[1])
-                    # Total power in mW for specific tactic
-                    totalPowerForTactic += float(row[2])
-                    # Increment counter
-                    counter += 1
-            except IndexError:
-                continue
-            except ValueError:
-                continue
-            except UnicodeDecodeError:
-                continue
+                    elif row[1] == '0' and flag == 1:
+                        print('Tactic 0 observed')
+                        flag = 0
+                        averagePowerConsumed = totalPowerForTactic / counter
+                        endedTimestamp = dateutil.parser.parse(row[0])
+                        latency = str(endedTimestamp - firstStartedTimestamp)
+                        record = [averagePowerConsumed, str(firstStartedTimestamp), latency, servernum, tacticnum]
+                        records.append(record)
+                        totalPowerForTactic = 0
+                        totalCurrentForTactic = 0
+                        counter = 0
+                    elif flag == 1:
+                        # Total Current in mA for specific tactic
+                        totalCurrentForTactic += float(row[1])
+                        # Total power in mW for specific tactic
+                        totalPowerForTactic += float(row[2])
+                        # Increment counter
+                        counter += 1
+                except IndexError:
+                    continue
+                except ValueError:
+                    continue
+        except UnicodeDecodeError:
+            print('Unicode Error')
     pd = pandas.DataFrame(records)
-    today = str(date.today())
-    pd.to_csv('results-' + today + '.csv')
+    today = str(datetime.date.today())
+    pd.to_csv('rawfiles/results-' + today + '.csv')
     print('Done...')
 
 if __name__ == '__main__':
