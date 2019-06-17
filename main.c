@@ -95,7 +95,6 @@ void *printMsg(void *ptr)
 	uint32_t delay = 1000000;
 	char zipfilename[100]="'LibreOffice_6.2.3_Linux_x86_deb.tar.gz'";
 	char debDir[100]= "'LibreOffice_6.2.3_Linux_x86_deb'";
-	char whatToFind[100] = "'README_en-US'";
 	char filenameArgument[1000]=" '-O' 'LibreOffice_6.2.3_Linux_x86_deb.tar.gz'";
 	char wgetCommand[1000]="wget ";
     char link[1000]="";
@@ -124,7 +123,6 @@ void *printMsg(void *ptr)
 	}
 
 	signal(SIGINT, sig_handler);
-	strcat(grepCommand,whatToFind);
 	strcat(rmCommand,zipfilename);
 	strcat(unzipCommand,zipfilename);
 	strcat(zipCommand,zipfilename);
