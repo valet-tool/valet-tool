@@ -71,6 +71,7 @@ def merge_files():
         except UnicodeDecodeError:
             print('Unicode Error')
     pd = pandas.DataFrame(records)
+    pd.columns = ['averagePowerConsumed', 'firstStartedTimestamp', 'latency', 'serverNumber', 'tacticNumber']
     today = str(datetime.date.today())
     pd.to_csv('rawfiles/results-' + today + '.csv')
     print('Done...')
