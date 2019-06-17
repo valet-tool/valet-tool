@@ -229,6 +229,7 @@ void *printMsg(void *ptr)
 			fprintf(file_thread, "%s,%c,%d\n", current_date_time_thread,'0', i+1);
 			usleep(delay);
 
+			// Reset wget command to be able to download again
 			strcpy(wgetCommand,"wget ");
 			strcpy(link,"");
 		}
