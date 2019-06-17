@@ -35,6 +35,7 @@ def merge_files():
         servernum = -1
         tacticnum = -1
         firstStartedTimestamp = ''
+        lastpower = 0
         try:
             for row in csv_reader:
                 try:
@@ -53,6 +54,8 @@ def merge_files():
                         endedTimestamp = dateutil.parser.parse(row[0])
                         latency = str(endedTimestamp - firstStartedTimestamp)
                         record = [averagePowerConsumed, str(firstStartedTimestamp), latency, servernum, tacticnum]
+                        if record[0] == 0:
+                            record[0] = lastpower
                         records.append(record)
                         totalPowerForTactic = 0
                         totalCurrentForTactic = 0
@@ -64,6 +67,8 @@ def merge_files():
                         totalPowerForTactic += float(row[2])
                         # Increment counter
                         counter += 1
+                        #record last power
+                        lastpower = float(row[2])
                 except IndexError:
                     continue
                 except ValueError:
