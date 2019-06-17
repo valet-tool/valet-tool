@@ -77,7 +77,7 @@ int main()
 		current = get_current_in_mA(i2c_bus_1_fd);
 		power = get_power_in_mW(i2c_bus_1_fd);
 		fprintf(file, "%s,%.2f,%.2f\r\n", current_date_time, current, power);
-		printf("%s,%.2f,%.2f\r\n", current_date_time, current, power);
+		//printf("%s,%.2f,%.2f\r\n", current_date_time, current, power);
 	}
 	fclose(file);
 	printf("Exiting Gracefully...\n");
@@ -99,7 +99,7 @@ void *printMsg(void *ptr)
 	char wgetCommand[1000]="wget ";
     char link[1000]="";
 	char unzipCommand[100]="tar 'xvf' ";
-	char zipCommand[100]="tar '-cvzf' ";
+	char zipCommand[100]="tar '-cvzf' 'hello.tar.gz' 'hello.txt'";
 	char rmCommand[100]="rm ";
 	char grepCommand[100]="grep '-r' 'Hello' '.'";
 	memset(current_date, 0x00, sizeof(current_date) / sizeof(current_date[0]));
@@ -125,8 +125,6 @@ void *printMsg(void *ptr)
 	signal(SIGINT, sig_handler);
 	strcat(rmCommand,zipfilename);
 	strcat(unzipCommand,zipfilename);
-	strcat(zipCommand,zipfilename);
-	strcat(zipCommand,debDir);
 	while (keep_running)
 	{
 		int i = 0;
@@ -207,7 +205,7 @@ void *printMsg(void *ptr)
 			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,4, i+1);
-			system(grepCommand);
+			system(zipCommand);
 
 			//Placeholder Sleep Tactic 0
 			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
