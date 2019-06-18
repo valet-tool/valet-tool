@@ -86,10 +86,12 @@ int main()
 
 void *printMsg(void *ptr)
 {
-	FILE *file_thread;
+	FILE *file_thread,*error_logging_thread;
 	char filename[100] = "/home/pi/valet-tool/rawfiles/downstamps-";
+	char errorlogfilename[100] = "/home/pi/valet-tool/rawfiles/error-log-";
 	bool file_exists = false;
-	int serverNumber = 0;
+	bool error_file_exists = false;
+	int serverNumber = 0,exitcode = 0;
 	char current_date_time_thread[26];
 	char current_date[26];
 	uint32_t delay = 1000000;
@@ -106,8 +108,12 @@ void *printMsg(void *ptr)
 	get_current_date(current_date);
 	strcat(filename,current_date);
 	strcat(filename,".csv");
+	strcat(errorlogfilename,current_date);
+	strcat(errorlogfilename,".csv");
 	char *filenameptr = filename;
+	char *errorlogfilenameptr = errorlogfilename;
 	file_thread = fopen(filenameptr, "r");
+	error_logging_thread = fopen(errorlogfilename, "r");
 	if (file_thread != NULL)
 	{
 		file_exists = true;
@@ -120,6 +126,20 @@ void *printMsg(void *ptr)
 	else
 	{
 		file_thread = fopen(filenameptr, "w+");
+	}
+
+	if (error_logging_thread != NULL)
+	{
+		error_file_exists = true;
+		fclose(error_logging_thread);
+	}
+	if (error_file_exists == true)
+	{
+		error_logging_thread = fopen(errorlogfilenameptr, "a");
+	}
+	else
+	{
+		error_logging_thread = fopen(errorlogfilenameptr, "w+");
 	}
 
 	signal(SIGINT, sig_handler);
@@ -169,8 +189,13 @@ void *printMsg(void *ptr)
 			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,1, i+1);
-			system(wgetCommand);
-			
+			exitcode = system(wgetCommand);
+			if(exitcode){
+				fprintf(error_logging_thread,"%s,%d,%d,false", current_date_time_thread,1,i+1);
+			}
+			else{
+				fprintf(error_logging_thread,"%s,%d,%d,true", current_date_time_thread,1,i+1);
+			}
 			//Placeholder Sleep Tactic 0
 			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
