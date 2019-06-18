@@ -35,6 +35,7 @@ def merge_files():
         servernum = -1
         tacticnum = -1
         firstStartedTimestamp = ''
+        last_power = 0
         try:
             for row in csv_reader:
                 try:
@@ -51,8 +52,13 @@ def merge_files():
                         flag = 0
                         averagePowerConsumed = totalPowerForTactic / counter
                         endedTimestamp = dateutil.parser.parse(row[0])
-                        latency = str(endedTimestamp - firstStartedTimestamp)
-                        record = [averagePowerConsumed, str(firstStartedTimestamp), latency, servernum, tacticnum]
+                        latency_in_mins = endedTimestamp - firstStartedTimestamp
+                        latency = str(latency_in_mins.total_seconds())
+                        record = [totalPowerForTactic, averagePowerConsumed, str(firstStartedTimestamp), latency, servernum, tacticnum]
+                        if record[0] == 0:
+                            record[0] = last_power
+                        if record[1] == 0:
+                            record[1] = last_power
                         records.append(record)
                         totalPowerForTactic = 0
                         totalCurrentForTactic = 0
@@ -64,6 +70,8 @@ def merge_files():
                         totalPowerForTactic += float(row[2])
                         # Increment counter
                         counter += 1
+                        #record last power
+                        last_power = float(row[2])
                 except IndexError:
                     continue
                 except ValueError:
@@ -71,7 +79,7 @@ def merge_files():
         except UnicodeDecodeError:
             print('Unicode Error')
     pd = pandas.DataFrame(records)
-    pd.columns = ['averagePowerConsumed', 'firstStartedTimestamp', 'latency', 'serverNumber', 'tacticNumber']
+    pd.columns = ['totalPowerConsumed', 'averagePowerConsumed', 'firstStartedTimestamp', 'latency', 'serverNumber', 'tacticNumber']
     today = str(datetime.date.today())
     pd.to_csv('rawfiles/results-' + today + '.csv')
     print('Done...')
