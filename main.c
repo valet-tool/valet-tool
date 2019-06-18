@@ -191,10 +191,10 @@ void *printMsg(void *ptr)
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,1, i+1);
 			exitcode = system(wgetCommand);
 			if(exitcode){
-				fprintf(error_logging_thread,"%s,%d,%d,false", current_date_time_thread,1,i+1);
+				fprintf(error_logging_thread,"%s,%d,%d,false\n", current_date_time_thread,1,i+1);
 			}
 			else{
-				fprintf(error_logging_thread,"%s,%d,%d,true", current_date_time_thread,1,i+1);
+				fprintf(error_logging_thread,"%s,%d,%d,true\n", current_date_time_thread,1,i+1);
 			}
 			//Placeholder Sleep Tactic 0
 			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
