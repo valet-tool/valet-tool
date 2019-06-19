@@ -186,7 +186,7 @@ void *printMsg(void *ptr)
 			}
 			strcat(wgetCommand,strcat(link,filenameArgument));
 			//Download: tactic 1
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,1, i+1);
 			exitcode = system(wgetCommand);
@@ -197,55 +197,55 @@ void *printMsg(void *ptr)
 				fprintf(error_logging_thread,"%s,%d,%d,true\n", current_date_time_thread,1,i+1);
 			}
 			//Placeholder Sleep Tactic 0
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%c,%d\n", current_date_time_thread,'0', i+1);
 			usleep(delay);
 
 			//Unzip: Tactic 2
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,2, i+1);
 			system(unzipCommand);
 
 			//Placeholder Sleep Tactic 0
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%c,%d\n", current_date_time_thread,'0', i+1);
 			usleep(delay);
 
 			//find command: Tactic 3
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,3, i+1);
 			system(grepCommand);
 
 			//Placeholder Sleep Tactic 0
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%c,%d\n", current_date_time_thread,'0', i+1);
 			usleep(delay);
 
 			//compress command: Tactic 4
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,4, i+1);
 			system(zipCommand);
 
 			//Placeholder Sleep Tactic 0
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%c,%d\n", current_date_time_thread,'0', i+1);
 			usleep(delay);
 
 			// Delete: Tactic 5
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%d,%d\n", current_date_time_thread,5, i+1);
 			system(rmCommand);
 
 			//Placeholder Sleep Tactic 0
-			memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
+			//memset(current_date_time_thread, 0x00, sizeof(current_date_time_thread) / sizeof(current_date_time_thread[0]));
 			get_current_date_time(current_date_time_thread);
 			fprintf(file_thread, "%s,%c,%d\n", current_date_time_thread,'0', i+1);
 			usleep(delay);
