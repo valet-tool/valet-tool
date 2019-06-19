@@ -255,7 +255,7 @@ void *printMsg(void *ptr)
 			strcpy(link,"");
 		}
 		
-		sleep(30);
+		usleep(delay*30);
 	}
 	fclose(file_thread);
 }
