@@ -7,7 +7,7 @@
 #include "IN219a.h"
 #include "CurrentTime.h"
 #include "UART_Monitor.h"
-
+#include "locale.h"
 void *printMsg(void *ptr);
 static volatile sig_atomic_t keep_running = 1;
 
@@ -19,7 +19,7 @@ static void sig_handler(int _)
 
 int main()
 {
-
+	setlocale(LC_ALL, "en_US.UTF-8");
 	setbuf(stdout, NULL); // Disable stdout buffering
 	int i2c_bus_1_fd;
 	char *i2c_bus_1 = (char *)"/dev/i2c-1";
@@ -71,12 +71,12 @@ int main()
 	}
 	while (keep_running)
 	{
-		usleep(delay);
 		memset(current_date_time, 0x00, sizeof(current_date_time) / sizeof(current_date_time[0]));
 		get_current_date_time(current_date_time);
 		current = get_current_in_mA(i2c_bus_1_fd);
 		power = get_power_in_mW(i2c_bus_1_fd);
 		fprintf(file, "%s,%.2f,%.2f\r\n", current_date_time, current, power);
+		usleep(delay);
 		//printf("%s,%.2f,%.2f\r\n", current_date_time, current, power);
 	}
 	fclose(file);
