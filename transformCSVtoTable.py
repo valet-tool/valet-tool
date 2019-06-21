@@ -1,89 +1,67 @@
 import csv
-import os
-import pathlib
 import dateutil.parser
 import datetime
 import pandas
 
 TODAY = str(datetime.date.today())
+def calculate_final_data(timegroups):
+    time_records_list = []
+    totalPowerForTactic = 0
+    with open('rawfiles/output-' + TODAY + '.csv') as time_file:
+        time_reader = list(csv.reader(time_file, delimiter=','))
+        for timegroup in timegroups:
+            startedTimestamp = dateutil.parser.parse(timegroup[0])
+            endedTimestamp = dateutil.parser.parse(timegroup[1])
+            if endedTimestamp <= startedTimestamp:
+                continue
+            for time_row in time_reader:
+                if startedTimestamp <= dateutil.parser.parse(time_row[0]) <= endedTimestamp:
+                    totalPowerForTactic += float(time_row[2])
+            latency_in_mins = endedTimestamp - startedTimestamp
+            latency = str(latency_in_mins.total_seconds())
+            servernum = timegroup[2]
+            tacticnum = timegroup[3]
+            record = [totalPowerForTactic, str(startedTimestamp), latency, servernum, tacticnum]
+            time_records_list.append(record)
+            totalPowerForTactic = 0
 
-def sort_file():
-    py = pathlib.Path().glob("rawfiles/*.csv")
-    downstamps_file_name = ''
-    output_file_name = ''
-    for file in py:
-        filename = str(file)
-        if filename.find(TODAY) != -1 and filename.find('downstamps') != -1:
-            downstamps_file_name = filename
-        if filename.find(TODAY) != -1 and filename.find('output') != -1:
-            output_file_name = filename
-    temp = "sort {}" + downstamps_file_name + '{} {}'+output_file_name+'{} > rawfiles/sorted-'+TODAY+'.csv'
-    sort_command = temp.format('"', '"', '"', '"')
-    print('Sorting Script')
-    if os.system(sort_command):
-        print('Sorting was successful')
-
-
-def merge_files():
-    with open('rawfiles/sorted-'+TODAY+'.csv') as csv_file:
+    return time_records_list
+def create_time_groups():
+    with open('rawfiles/downstamps-'+TODAY+'.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
-        flag = 0
-        counter = 0
+
         records = []
-        totalCurrentForTactic = 0
-        totalPowerForTactic = 0
         servernum = -1
         tacticnum = -1
         firstStartedTimestamp = ''
-        last_power = 0
         try:
             for row in csv_reader:
                 try:
-                    if (row[1] == '1' or row[1] == '2' or row[1] == '3' or row[1] == '4' or row[1] == '5') and flag == 0:
+                    if row[1] == '1' or row[1] == '2' or row[1] == '3' or row[1] == '4' or row[1] == '5':
                         print('Tactic {} observed for server {}'.format(row[1], row[2]))
-                        flag = 1
-                        counter = 1
                         tacticnum = int(row[1])
                         servernum = int(row[2])
                         firstStartedTimestamp = dateutil.parser.parse(row[0])
 
-                    elif row[1] == '0' and flag == 1:
+                    elif row[1] == '0':
                         print('Tactic 0 observed')
-                        flag = 0
-                        averagePowerConsumed = totalPowerForTactic / counter
                         endedTimestamp = dateutil.parser.parse(row[0])
-                        latency_in_mins = endedTimestamp - firstStartedTimestamp
-                        latency = str(latency_in_mins.total_seconds())
-                        record = [totalPowerForTactic, averagePowerConsumed, str(firstStartedTimestamp), latency, servernum, tacticnum]
-                        if record[0] == 0:
-                            record[0] = last_power
-                        if record[1] == 0:
-                            record[1] = last_power
+                        record = [str(firstStartedTimestamp), str(endedTimestamp), servernum, tacticnum]
                         records.append(record)
-                        totalPowerForTactic = 0
-                        totalCurrentForTactic = 0
-                        counter = 0
-                    elif flag == 1:
-                        # Total Current in mA for specific tactic
-                        totalCurrentForTactic += float(row[1])
-                        # Total power in mW for specific tactic
-                        totalPowerForTactic += float(row[2])
-                        # Increment counter
-                        counter += 1
-                        #record last power
-                        last_power = float(row[2])
+
                 except IndexError:
                     continue
                 except ValueError:
                     continue
         except UnicodeDecodeError:
             print('Unicode Error')
+    return records
+
+if __name__ == '__main__':
+    timegroups = create_time_groups()
+    records = calculate_final_data(timegroups)
     pd = pandas.DataFrame(records)
-    pd.columns = ['totalPowerConsumed', 'averagePowerConsumed', 'firstStartedTimestamp', 'latency', 'serverNumber', 'tacticNumber']
+    pd.columns = ['totalPowerConsumed', 'firstStartedTimestamp', 'latency', 'serverNumber', 'tacticNumber']
     today = str(datetime.date.today())
     pd.to_csv('rawfiles/results-' + today + '.csv')
     print('Done...')
-
-if __name__ == '__main__':
-    sort_file()
-    merge_files()
