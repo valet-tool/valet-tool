@@ -101,7 +101,7 @@ void *printMsg(void *ptr)
 	char wgetCommand[1000]="wget ";
     char link[1000]="";
 	char unzipCommand[100]="tar 'xvf' ";
-	char zipCommand[100]="tar '-cvzf' 'hello.tar.gz' 'hello.txt'";
+	char zipCommand[100]="tar '-cvzf' 'LibreOffice_6.2.3_Linux_x86_deb.tar.gz' 'LibreOffice_6.2.3.2_Linux_x86_deb'";
 	char rmCommand[100]="rm ";
 	char grepCommand[100]="grep '-r' 'Hello' '.'";
 	memset(current_date, 0x00, sizeof(current_date) / sizeof(current_date[0]));
