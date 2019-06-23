@@ -66,5 +66,5 @@ if __name__ == '__main__':
     pd = pandas.DataFrame(records)
     pd.columns = ['totalPowerConsumed', 'firstStartedTimestamp', 'latency', 'serverNumber', 'tacticNumber']
     today = str(datetime.date.today())
-    pd.to_csv('rawfiles/results-' + today + '.csv')
+    pd.to_csv('processedfiles/results-' + today + '.csv')
     print('Done...')
