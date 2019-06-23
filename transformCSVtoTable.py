@@ -53,6 +53,9 @@ def create_time_groups():
                     continue
                 except ValueError:
                     continue
+                except UnicodeDecodeError:
+                    print('Unicode Error')
+                    continue
         except UnicodeDecodeError:
             print('Unicode Error')
     return records
