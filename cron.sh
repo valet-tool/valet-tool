@@ -1,8 +1,7 @@
-killall PiMonitor
-sleep 5
+#!/bin/sh
+tmux kill-session -t 'pimon'
 cd /home/pi/valet-tool
-sleep 5
 python3 transformCSVtoTable.py
 sh /home/pi/valet-tool/git.sh
-sleep 5
-/home/pi/valet-tool/PiMonitor
+tmux new-session -d -s 'pimon'
+tmux send -t pimon.0 sh run.sh ENTER
