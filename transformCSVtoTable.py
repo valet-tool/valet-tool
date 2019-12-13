@@ -86,7 +86,7 @@ if __name__ == '__main__':
     timegroups = create_time_groups()
     records = calculate_final_data(timegroups)
     pd = pandas.DataFrame(records)
-    pd.columns = ['totalPowerConsumed', 'firstStartedTimestamp', 'latency', 'serverNumber', 'tacticNumber']
+    pd.columns = ['totalPowerConsumed', 'firstStartedTimestamp', 'latency(s)', 'serverNumber', 'tacticNumber']
     today = str(datetime.date.today())
     pd.to_csv('processedfiles/results-' + today + '.csv')
     print('Done...')
