@@ -1,4 +1,4 @@
-,totalPowerConsumed,firstStartedTimestamp,latency,serverNumber,tacticNumber
+,totalPowerConsumed,firstStartedTimestamp,latency(s),serverNumber,tacticNumber
 0,2756.6,2019-07-21 00:01:03+00:00,1.0,1,1
 1,76842.92000000001,2019-07-21 00:01:06.150000+00:00,46.85,1,3
 2,87068.52,2019-07-21 00:01:58.630000+00:00,47.37,2,3
