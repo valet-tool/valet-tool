@@ -8,7 +8,6 @@ import java.util.Date;
 import java.sql.*;
 
 
-
 public class Main {
 
     // SQLite Database Location
@@ -24,6 +23,7 @@ public class Main {
         // loop through the records in the download table
         Connection c = null;
         Statement stmt = null;
+        Statement stmt2 = null;
         try {
             Class.forName("org.sqlite.JDBC");
 
@@ -31,22 +31,19 @@ public class Main {
             c.setAutoCommit(true); // can toggle to false
 
             stmt = c.createStatement();
+            stmt2 = c.createStatement();
 
-
-            final String sqlAllDown="select * from down where ID > 2  and ID < 5 limit 10;";
-//            final String sqlAllDown="select * from down limit 10";
-
-  //          final String outRecords="select * from down where actionTime < \"2019-06-24T00:03:29.658Z\";";
-   //         System.out.println(outRecords);
-
+            final String sqlAllDown="select * from down where ID > 2;";
             ResultSet rsAllDown = stmt.executeQuery( sqlAllDown );
             System.out.println(sqlAllDown);
 
             while (rsAllDown.next()) {
+                System.out.println("Record Check: " + rsAllDown.getInt("ID"));
+
 
                 int downID = rsAllDown.getInt("ID");
-                if(!rsAllDown.getString("Tactic").equals("0")){
-                   // System.out.println("Tactic: " + rsAllDown.getString("Tactic"));
+                if(rsAllDown.getInt("Tactic") != 0){ // Don't care about tactic 0
+
 
                     // **** Get the latency
 
@@ -56,8 +53,11 @@ public class Main {
 
 
                     // Get the time when the tactic ended
-                    final String nextTimeSearch="select ID, ActionTime from down where ID = " +  (rsAllDown.getInt("ID") + 1) + ";";
-                    ResultSet rsNextTime = stmt.executeQuery( nextTimeSearch );
+                    final String nextTimeSearch="select ID, ActionTime from down where ID = " +  (downID + 1) + ";";
+                    System.out.println(nextTimeSearch);
+                    ResultSet rsNextTime = stmt2.executeQuery( nextTimeSearch ); // need to be statement 2 to differentiate it from the other statement
+
+
 
                     final String DateEnd = rsNextTime.getString("ActionTime").replace("Z","");
 
@@ -66,6 +66,8 @@ public class Main {
                     Date result2 = df1.parse(DateEnd);
 
                     long Latencydiff = Math.abs(result1.getTime() - result2.getTime());
+                    //rsNextTime.close();
+                    stmt2.close();
 
                     String query = "update down set latency = ? where ID = ?";
                     PreparedStatement preparedStmt = c.prepareStatement(query);
@@ -76,6 +78,23 @@ public class Main {
 
 
                     System.out.println("Latency Update -- ID: " +downID + " " + "Latency: " + Latencydiff);
+                    
+                    
+                    // Now get the cost
+                    
+                    
+                    // Get tactic 0 time before
+
+                    // Get tactic 0 time after
+                    
+                    // Get all cost values before
+
+                    // Get all cost values after
+                    
+                    // Get Average cost before, after
+                    
+                    // Diff the cost during, with the cost after
+                    
 
 
                 }else{
@@ -84,10 +103,7 @@ public class Main {
                 }
 
 
-                //if the tactic is not 0, then 1) Get the latecy 2) Get the average cost (All 0s before and after)
-
-
-
+                
             }
 
             // close all the connections so the information can be written to the DB. Prevent locking
@@ -102,6 +118,7 @@ public class Main {
         }
 
     }
+
 
 
 }
