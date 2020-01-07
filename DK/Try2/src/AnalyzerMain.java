@@ -14,7 +14,6 @@ public class AnalyzerMain {
 //    private final String DbLocation = "/Users/dxkvse/Desktop/Try1/data/Try1.sqlite";
     private final String DbLocation = "/Users/dkrutz/Documents/GIT/valet-tool/DK/data/Try1.sqlite";
 
-    //
 
     // Your program begins with a call to main().
     // Prints "Hello, World" to the terminal window.
@@ -42,7 +41,7 @@ public class AnalyzerMain {
             stmt = c.createStatement();
             stmt2 = c.createStatement();
 
-            final String sqlAllDown="select * from down where ID > 2;";
+            final String sqlAllDown="select * from down where ID > 2 limit 1;";
             ResultSet rsAllDown = stmt.executeQuery( sqlAllDown );
             System.out.println(sqlAllDown);
 
@@ -71,14 +70,14 @@ public class AnalyzerMain {
                     final String DateEnd = rsNextTime.getString("ActionTime").replace("Z","");
 
                     DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                    Date result1 = df1.parse(DateStart);
-                    Date result2 = df1.parse(DateEnd);
+                    Date resultStart = df1.parse(DateStart);
+                    Date resultEnd = df1.parse(DateEnd);
 
-                    long Latencydiff = Math.abs(result1.getTime() - result2.getTime());
+                    long Latencydiff = Math.abs(resultStart.getTime() - resultEnd.getTime());
                     //rsNextTime.close();
                     stmt2.close();
 
-                    /*
+/*
                     String query = "update down set latency = ? where ID = ?";
                     PreparedStatement preparedStmt = c.prepareStatement(query);
                     preparedStmt.setLong   (1, Latencydiff);
@@ -91,9 +90,160 @@ public class AnalyzerMain {
 
 
                     // Now get the cost
+                    System.out.println("****** Cost ********");
+
+
+
+                    // Get Time Range before, during, after
+
+
+                    // Get Date Before
+                    final String findBeforeTime="select ID, ActionTime from down where ID = " +  (downID - 1) + ";";
+                   // System.out.println(findBeforeTime);
+                    ResultSet rsBeforeTime = stmt2.executeQuery( findBeforeTime ); // need to be statement 2 to differentiate it from the other statement
+
+
+                    final String DateBefore = rsBeforeTime.getString("ActionTime").replace("Z","");
+
+                    rsBeforeTime.close();
+
+                    //System.out.println("Before " + DateBefore);
+                   // System.out.println("During " + DateStart);
+                   // System.out.println("End " + DateEnd);
+
+
+                   // 2019-06-24T00:03:28.000Z
+                   // 2019-06-24T00:03:29.658Z
+                   // 2019-06-24T00:08:05.000Z
+                   // 2019-06-24T00:08:06.376Z
+
+                    // Now get all the cost values for each of the three slots
+
+                    final String findCostBefore="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '2019-06-24T00:03:28.000Z' and ActionTime <= '2019-06-24T00:03:29.658Z';";
+                    ResultSet rsCostBeforeVals = stmt2.executeQuery( findCostBefore ); // need to be statement 2 to differentiate it from the other statement
+
+                    double Cost1Total = 0;
+                    double Cost2Total = 0;
+                    int RecordCount = 0;
+
+                    //System.out.println(findCostBefore);
+                    while (rsCostBeforeVals.next()) {
+
+                           // System.out.println(rsCostBeforeVals.getInt("ID"));
+                        RecordCount++;
+                        Cost1Total = Cost1Total + rsCostBeforeVals.getDouble("Cost1");
+                        Cost2Total = Cost2Total + rsCostBeforeVals.getDouble("Cost2");
+                    }
+
+                    rsCostBeforeVals.close();
+                    stmt2.close();
+
+                    final int CostBeforeRecordCount = RecordCount;
+                    final double Cost1Before = Cost1Total/RecordCount;
+                    final double Cost2Before = Cost2Total/RecordCount;
+
+                    System.out.println("Record Count " + CostBeforeRecordCount);
+                    System.out.println("Cost1 total " + Cost1Total + "Avg: " + Math.round(Cost1Before));
+                    System.out.println("Cost2 total " + Cost2Total+ "Avg: " + Math.round(Cost2Before));
+
+
+
+
+
+                    // Now Get the Average Cost During
+                    final String findCostDuring="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '2019-06-24T00:03:29.658Z' and ActionTime <= '2019-06-24T00:08:05.000Z';";
+                    ResultSet rsCostDuringVals = stmt2.executeQuery( findCostDuring ); // need to be statement 2 to differentiate it from the other statement
+
+                    Cost1Total = 0;
+                    Cost2Total = 0;
+                    RecordCount = 0;
+
+                    //System.out.println(findCostBefore);
+                    while (rsCostDuringVals.next()) {
+
+                        // System.out.println(rsCostBeforeVals.getInt("ID"));
+                        RecordCount++;
+                        Cost1Total = Cost1Total + rsCostDuringVals.getDouble("Cost1");
+                        Cost2Total = Cost2Total + rsCostDuringVals.getDouble("Cost2");
+                    }
+
+                    rsCostDuringVals.close();
+                    stmt2.close();
+
+                    final int CostDuringRecordCount = RecordCount;
+                    final double Cost1During = Cost1Total/RecordCount;
+                    final double Cost2During = Cost2Total/RecordCount;
+
+                    System.out.println("Record Count " + CostDuringRecordCount);
+                    System.out.println("Cost1 total " + Cost1Total + "Avg: " + Math.round(Cost1During));
+                    System.out.println("Cost2 total " + Cost2Total+ "Avg: " + Math.round(Cost2During));
+
+
+
+                // Get the tactic cost for after
+
+
+                    // Start by getting the end tactic time after
+
+                    final String findCostAfterTactic="select ID, ActionTime from down where ID = " +  (downID + 2) + ";";
+                    ResultSet findNextTatcitStartTime = stmt2.executeQuery( findCostAfterTactic ); // need to be statement 2 to differentiate it from the other statement
+
+                    final String lastTacticTime =  findNextTatcitStartTime.getString("ActionTime");
+
+                    System.out.println("Last Tactic Time = " + lastTacticTime);
+
+                    findNextTatcitStartTime.close();
+                    stmt2.close();
+
+
+                    final String findCostAfter="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '2019-06-24T00:08:05.000Z' and ActionTime <= '2019-06-24T00:08:06.376Z';";
+                    ResultSet rsCostAfterVals = stmt2.executeQuery( findCostAfter ); // need to be statement 2 to differentiate it from the other statement
+
+                    Cost1Total = 0;
+                    Cost2Total = 0;
+                    RecordCount = 0;
+
+
+                    //System.out.println(findCostBefore);
+                    while (rsCostAfterVals.next()) {
+
+                        // System.out.println(rsCostBeforeVals.getInt("ID"));
+                        RecordCount++;
+                        Cost1Total = Cost1Total + rsCostAfterVals.getDouble("Cost1");
+                        Cost2Total = Cost2Total + rsCostAfterVals.getDouble("Cost2");
+                    }
+
+                    rsCostAfterVals.close();
+                    stmt2.close();
+
+                    final int CostAfterRecordCount = RecordCount;
+                    final double Cost1After = Cost1Total/RecordCount;
+                    final double Cost2After = Cost2Total/RecordCount;
+
+                    System.out.println("Record Count " + CostAfterRecordCount);
+                    System.out.println("Cost1 total " + Cost1Total + "Avg: " + Math.round(Cost1After));
+                    System.out.println("Cost2 total " + Cost2Total+ "Avg: " + Math.round(Cost2After));
+
+
+
+
+
+
+
+
+
+                    // Cost after
+
+                   // select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '2019-06-24T00:08:05.000Z' and ActionTime <= '2019-06-24T00:08:06.376Z'
+
+
+                    // Tactic Time below
+
 
 
                     // Get tactic 0 time before
+
+
 
                     // Get tactic 0 time after
 
