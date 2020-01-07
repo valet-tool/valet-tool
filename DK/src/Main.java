@@ -20,6 +20,9 @@ public class Main {
 
     private void Run(){
 
+        System.out.println("23");
+
+
         // loop through the records in the download table
         Connection c = null;
         Statement stmt = null;
