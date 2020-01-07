@@ -41,7 +41,8 @@ public class AnalyzerMain {
             stmt = c.createStatement();
             stmt2 = c.createStatement();
 
-            final String sqlAllDown="select * from down where ID > 2 limit 1;";
+           // final String sqlAllDown="select * from down where ID > 2 limit 1;";
+            final String sqlAllDown="select * from down where ID > 2;";
             ResultSet rsAllDown = stmt.executeQuery( sqlAllDown );
             System.out.println(sqlAllDown);
 
@@ -77,14 +78,14 @@ public class AnalyzerMain {
                     //rsNextTime.close();
                     stmt2.close();
 
-/*
+
                     String query = "update down set latency = ? where ID = ?";
                     PreparedStatement preparedStmt = c.prepareStatement(query);
                     preparedStmt.setLong   (1, Latencydiff);
                     preparedStmt.setInt   (2, downID);
                     preparedStmt.executeUpdate();
                     preparedStmt.execute();
-*/
+
 
                     System.out.println("Latency Update -- ID: " +downID + " " + "Latency: " + Latencydiff);
 
@@ -249,22 +250,22 @@ public class AnalyzerMain {
 
 
                     // Save all of the cost results
-                    String query = "update down set Cost1 = ?, Cost2 = ?, Cost1Before = ?, Cost1During = ?, Cost1After = ?, Cost2Before = ?, Cost2During = ?, Cost2After = ? where ID = ?";
-                    PreparedStatement preparedStmt = c.prepareStatement(query);
-                    preparedStmt.setDouble  (1, Cost1AvgDiff);
-                    preparedStmt.setDouble  (2, Cost2AvgDiff);
-                    preparedStmt.setDouble  (3, Cost1Before);
-                    preparedStmt.setDouble  (4, Cost1During);
-                    preparedStmt.setDouble  (5, Cost1After);
-                    preparedStmt.setDouble  (6, Cost2Before);
-                    preparedStmt.setDouble  (7, Cost2During);
-                    preparedStmt.setDouble  (8, Cost2After);
-                    preparedStmt.setInt   (9, downID);
-                    preparedStmt.executeUpdate();
-                    preparedStmt.execute();
+                    String query2 = "update down set Cost1 = ?, Cost2 = ?, Cost1Before = ?, Cost1During = ?, Cost1After = ?, Cost2Before = ?, Cost2During = ?, Cost2After = ? where ID = ?";
+                    PreparedStatement preparedStmt2 = c.prepareStatement(query2);
+                    preparedStmt2.setDouble  (1, Cost1AvgDiff);
+                    preparedStmt2.setDouble  (2, Cost2AvgDiff);
+                    preparedStmt2.setDouble  (3, Cost1Before);
+                    preparedStmt2.setDouble  (4, Cost1During);
+                    preparedStmt2.setDouble  (5, Cost1After);
+                    preparedStmt2.setDouble  (6, Cost2Before);
+                    preparedStmt2.setDouble  (7, Cost2During);
+                    preparedStmt2.setDouble  (8, Cost2After);
+                    preparedStmt2.setInt   (9, downID);
+                    preparedStmt2.executeUpdate();
+                    preparedStmt2.execute();
 
 
-                    preparedStmt.close();
+                    preparedStmt2.close();
 
 
                     // Cost after
