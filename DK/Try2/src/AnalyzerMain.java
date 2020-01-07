@@ -107,9 +107,9 @@ public class AnalyzerMain {
 
                     rsBeforeTime.close();
 
-                    //System.out.println("Before " + DateBefore);
-                   // System.out.println("During " + DateStart);
-                   // System.out.println("End " + DateEnd);
+                    System.out.println("Before " + DateBefore);
+                   System.out.println("During " + DateStart);
+                    System.out.println("End " + DateEnd);
 
 
                    // 2019-06-24T00:03:28.000Z
@@ -119,7 +119,8 @@ public class AnalyzerMain {
 
                     // Now get all the cost values for each of the three slots
 
-                    final String findCostBefore="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '2019-06-24T00:03:28.000Z' and ActionTime <= '2019-06-24T00:03:29.658Z';";
+                    final String findCostBefore="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '"+DateBefore+ "' and ActionTime <= '" + DateStart +"';";
+                    System.out.println(findCostBefore);
                     ResultSet rsCostBeforeVals = stmt2.executeQuery( findCostBefore ); // need to be statement 2 to differentiate it from the other statement
 
                     double Cost1Total = 0;
@@ -151,7 +152,8 @@ public class AnalyzerMain {
 
 
                     // Now Get the Average Cost During
-                    final String findCostDuring="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '2019-06-24T00:03:29.658Z' and ActionTime <= '2019-06-24T00:08:05.000Z';";
+                    final String findCostDuring="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '" +DateStart + "' and ActionTime <= '"+  DateEnd  +"';";
+                    System.out.println(findCostDuring);
                     ResultSet rsCostDuringVals = stmt2.executeQuery( findCostDuring ); // need to be statement 2 to differentiate it from the other statement
 
                     Cost1Total = 0;
@@ -190,13 +192,14 @@ public class AnalyzerMain {
 
                     final String lastTacticTime =  findNextTatcitStartTime.getString("ActionTime");
 
-                    System.out.println("Last Tactic Time = " + lastTacticTime);
+               //     System.out.println("Last Tactic Time = " + lastTacticTime);
 
                     findNextTatcitStartTime.close();
                     stmt2.close();
 
 
-                    final String findCostAfter="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '2019-06-24T00:08:05.000Z' and ActionTime <= '2019-06-24T00:08:06.376Z';";
+                    final String findCostAfter="select ID, ActionTime, Cost1, Cost2 from out where ActionTime >= '" + DateEnd +   "' and ActionTime <= '"+ lastTacticTime +"';";
+                    System.out.println(findCostAfter);
                     ResultSet rsCostAfterVals = stmt2.executeQuery( findCostAfter ); // need to be statement 2 to differentiate it from the other statement
 
                     Cost1Total = 0;
@@ -226,10 +229,42 @@ public class AnalyzerMain {
 
 
 
+                    // Determine the average Differences
+                    final double Cost1AvgDiff = Cost1During - ((Cost1Before + Cost1After)/2);
+                    final double Cost2AvgDiff = Cost2During - ((Cost2Before + Cost2After)/2);
+
+
+                    // Now update the values
+                    System.out.println("**************************");
+                    System.out.println("DownID: " + downID);
+                    System.out.println("Cost1 Before: " + Cost1Before);
+                    System.out.println("Cost1 During: " + Cost1During);
+                    System.out.println("Cost1 After: " + Cost1After);
+                    System.out.println("Avg Diff Cost1: " + Cost1AvgDiff);
+                    System.out.println("Cost2 Before: " + Cost2Before);
+                    System.out.println("Cost2 During: " + Cost2During);
+                    System.out.println("Cost2 After: " + Cost2After);
+                    System.out.println("Avg Diff Cost1: " + Cost2AvgDiff);
 
 
 
+                    // Save all of the cost results
+                    String query = "update down set Cost1 = ?, Cost2 = ?, Cost1Before = ?, Cost1During = ?, Cost1After = ?, Cost2Before = ?, Cost2During = ?, Cost2After = ? where ID = ?";
+                    PreparedStatement preparedStmt = c.prepareStatement(query);
+                    preparedStmt.setDouble  (1, Cost1AvgDiff);
+                    preparedStmt.setDouble  (2, Cost2AvgDiff);
+                    preparedStmt.setDouble  (3, Cost1Before);
+                    preparedStmt.setDouble  (4, Cost1During);
+                    preparedStmt.setDouble  (5, Cost1After);
+                    preparedStmt.setDouble  (6, Cost2Before);
+                    preparedStmt.setDouble  (7, Cost2During);
+                    preparedStmt.setDouble  (8, Cost2After);
+                    preparedStmt.setInt   (9, downID);
+                    preparedStmt.executeUpdate();
+                    preparedStmt.execute();
 
+
+                    preparedStmt.close();
 
 
                     // Cost after
