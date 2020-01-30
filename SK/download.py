@@ -1,10 +1,10 @@
 from __future__ import print_function
 from datetime import datetime
-import requests, zipfile, io
+import requests
 import time as time
 import csv
 import psutil
-import os
+
 
 
 def download_file(url):
@@ -20,7 +20,7 @@ def download_file(url):
             url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 1
     elif (
-            url == 'https://ftp.tu-chemnitz.de/pub/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == 'http://ftp-srv2.kddilabs.jp/office/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 2
     elif (url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 3
@@ -41,17 +41,16 @@ def download_file(url):
     elif (url == 'http://tdf.saix.net/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 9
 
+
     if final_time > 60.00:
-        final_time == -1;
+        final_time = -1
+
+    reliability = 1
+
+    if final_time == -1:
+        reliability= 0
 
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
-        writer.writerow([dateTimeObj, flag, "1", (str)(final_time), psutil.cpu_percent()])
-        # fd.write("\n")
-    # print(psutil.cpu_percent())
-    # print(psutil.virtual_memory())
-    # print('memory % used:', psutil.virtual_memory()[2])
-    # pid = os.getpid()
-    # py = psutil.Process(pid)
-    # memoryUse = py.memory_info()[0]/2.**30
-    # print('memory use:', memoryUse)
+        writer.writerow([dateTimeObj, flag, "1", (str)(final_time), psutil.cpu_percent(),reliability])
+
