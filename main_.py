@@ -12,7 +12,7 @@ import os
 def download_file(url):
     starttime = time.time()
     results = requests.get(url)
-    open('/Users/sakshikarnawat/PycharmProjects/data/zip_file.tar.gz', 'wb').write(results.content)
+    open('zip_file.tar.gz', 'wb').write(results.content)
     print("File downloaded")
     endtime = time.time()
     final_time = endtime - starttime
