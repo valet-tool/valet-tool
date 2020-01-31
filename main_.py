@@ -12,7 +12,7 @@ import os
 def download_file(url):
     starttime = time.time()
     results = requests.get(url)
-    open('zip_file.tar.gz', 'wb').write(results.content)
+    open('/Users/sakshikarnawat/PycharmProjects/data/zip_file.tar.gz', 'wb').write(results.content)
     print("File downloaded")
     endtime = time.time()
     final_time = endtime - starttime
@@ -140,9 +140,6 @@ def grep_file(url):
         flag = 8
     elif (url == 'http://tdf.saix.net/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 9
-
-    if final_time > 60.00:
-        final_time = -1
 
     reliability = 1
 
@@ -346,3 +343,4 @@ while pointer == True:
         zip_file(location8)
         delete_file(location8)
         flag = False
+
