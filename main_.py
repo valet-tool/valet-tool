@@ -17,7 +17,7 @@ def download_file(url):
     endtime = time.time()
     final_time = endtime - starttime
     dateTimeObj = datetime.now()
-    current_time = dateTimeObj.strftime("%H:%M:%S")
+   
 
     if (
             url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
@@ -44,8 +44,6 @@ def download_file(url):
     elif (url == 'http://tdf.saix.net/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 9
 
-    if final_time > 60.00:
-        final_time = -1
 
     reliability = 1
 
@@ -54,7 +52,7 @@ def download_file(url):
 
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
-        writer.writerow([dateTimeObj, current_time, flag, "1", (str)(final_time), psutil.cpu_percent(), reliability])
+        writer.writerow([dateTimeObj, flag, "1", (str)(final_time), psutil.cpu_percent(), reliability])
 
 
 def unzipfile(url):
@@ -71,7 +69,7 @@ def unzipfile(url):
     print("File unzipped")
     endtime = time.time()
     dateTimeObj = datetime.now()
-    current_time = dateTimeObj.strftime("%H:%M:%S")
+    
 
     if (
             url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
@@ -103,7 +101,7 @@ def unzipfile(url):
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
         writer.writerow(
-            [dateTimeObj, current_time, flag, "2", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
+            [dateTimeObj, flag, "2", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
 
 
 def grep_file(url):
@@ -143,9 +141,6 @@ def grep_file(url):
 
     reliability = 1
 
-    if final_time == -1:
-        reliability = 0
-
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
         writer.writerow([dateTimeObj, flag, "3", (str)(final_time), psutil.cpu_percent(), reliability])
@@ -162,7 +157,7 @@ def zip_file(url):
     print("File Zipped")
     endtime = time.time()
     dateTimeObj = datetime.now()
-    current_time = dateTimeObj.strftime("%H:%M:%S")
+
 
     if (
             url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
@@ -193,7 +188,7 @@ def zip_file(url):
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
         writer.writerow(
-            [dateTimeObj, current_time, flag, "4", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
+            [dateTimeObj, flag, "4", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
 
 
 def delete_file(url):
@@ -204,7 +199,7 @@ def delete_file(url):
     print("Files deleted")
     endtime = time.time()
     dateTimeObj = datetime.now()
-    current_time = dateTimeObj.strftime("%H:%M:%S")
+   
 
     if (
             url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
@@ -235,7 +230,7 @@ def delete_file(url):
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
         writer.writerow(
-            [dateTimeObj, current_time, flag, "5", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
+            [dateTimeObj, flag, "5", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
 
 
 pointer = True
