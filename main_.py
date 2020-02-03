@@ -185,7 +185,7 @@ def zip_file(url):
         reliability = 1
         with open('document1.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([dateTimeObj, flag, "3", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
+            writer.writerow([dateTimeObj, flag, "4", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
 
 
 def delete_file(url):
@@ -228,7 +228,7 @@ def delete_file(url):
         reliability = 1
         with open('document1.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([dateTimeObj, flag, "3", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
+            writer.writerow([dateTimeObj, flag, "5", (str)(endtime - starttime), psutil.cpu_percent(), reliability])
 
 
 pointer = True
