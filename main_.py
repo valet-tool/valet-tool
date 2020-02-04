@@ -120,6 +120,9 @@ def grep_file(url):
             for line in f.readlines():
                 if 'Installation' in line:
                     print("File grep complete")
+        for i in range(1, 100000):
+            for j in (1, 100000):
+                k = i * j
         endtime = time.time()
         dateTimeObj = datetime.now()
 
