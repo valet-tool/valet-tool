@@ -2,3 +2,4 @@
 2. It generates output similar to document1.csv
 3. Run Data_fixing script to fix the data file
 4. It generates output similar to Corrected_Data.csv
+5. Use the Data_Compliance script to normalise the data.
