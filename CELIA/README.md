@@ -11,7 +11,7 @@ Arguments:
 ### How to run the script:
 option 1
 e.g.
-python utilityScript.py data.csv realCost realLatency realReliability prefCost predLatency predReliability outputUtilityFile.csv
+python utilityScript.py data.csv realCost realLatency realReliability predCost predLatency predReliability outputUtilityFile.csv
 
 option 2 (will default to hard coded col names)
 e.g.
