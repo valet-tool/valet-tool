@@ -1,3 +1,4 @@
+import shutil
 from datetime import datetime
 import os
 import time as time
@@ -11,13 +12,14 @@ def delete_file(url):
     starttime = time.time()
     os.remove("zip_file.tar.gz")
     os.remove("myzipfile.tar.gz")
+    shutil.rmtree('LibreOffice_6.2.8.2_Linux_x86_deb')
     print("Files deleted")
     endtime = time.time()
     dateTimeObj = datetime.now()
 
     if (url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 1
-    elif (url == 'http://ftp-srv2.kddilabs.jp/office/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 2
     elif (url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 3
@@ -37,7 +39,7 @@ def delete_file(url):
     reliability =1
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
-        writer.writerow([dateTimeObj, flag, "4", (str)(endtime - starttime),psutil.cpu_percent(),reliability])
+        writer.writerow([dateTimeObj, flag, "5", (str)(endtime - starttime),psutil.cpu_percent(),reliability])
 
 
 
