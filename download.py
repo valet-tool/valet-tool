@@ -6,25 +6,21 @@ import csv
 import psutil
 
 
-def grep_file(url):
+
+def download_file(url):
     starttime = time.time()
-    with open('LibreOffice_6.2.8.2_Linux_x86_deb/readmes/README_en-US', 'r') as f:
-        for line in f.readlines():
-            if 'LibreOffice' in line:
-                print("File grep complete")
-    for i in range(1,1000):
-        for j in (1,1000):
-            k = i*j
+    results = requests.get(url)
+    open('/Users/sakshikarnawat/PycharmProjects/data/zip_file.tar.gz', 'wb').write(results.content)
+    print("File downloaded")
     endtime = time.time()
     final_time = endtime - starttime
     dateTimeObj = datetime.now()
-
 
     if (
             url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 1
     elif (
-            url == 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == 'http://ftp-srv2.kddilabs.jp/office/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 2
     elif (url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 3
@@ -56,5 +52,5 @@ def grep_file(url):
 
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
-        writer.writerow([dateTimeObj, flag, "3", (str)(final_time), psutil.cpu_percent(),reliability])
+        writer.writerow([dateTimeObj, flag, "1", (str)(final_time), psutil.cpu_percent(),reliability])
 

@@ -1,29 +1,27 @@
 from datetime import datetime
-import tarfile
 import time as time
+import os
+import tarfile
 import csv
 
 import psutil
 
 
-def unzipfile(url):
+def zip_file(url):
     starttime = time.time()
-    fname = 'zip_file.tar.gz'
-    if (fname.endswith("tar.gz")):
-        tar = tarfile.open(fname, "r:gz")
-        tar.extractall()
-        tar.close()
-    elif (fname.endswith("tar")):
-        tar = tarfile.open(fname, "r:")
-        tar.extractall()
-        tar.close()
-    print("File unzipped")
+    tar = tarfile.open("myzipfile.tar.gz", "w:gz")
+    for dirname, subdirs, files in os.walk('LibreOffice_6.2.8.2_Linux_x86_deb'):
+        tar.add(dirname)
+        for filename in files:
+            tar.add(os.path.join(dirname, filename))
+    tar.close()
+    print("File Zipped")
     endtime = time.time()
     dateTimeObj = datetime.now()
 
     if (url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 1
-    elif (url == 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == 'http://ftp-srv2.kddilabs.jp/office/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 2
     elif (url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
         flag = 3
@@ -41,12 +39,9 @@ def unzipfile(url):
         flag = 9
 
     reliability = 1
-
     with open('document1.csv', 'a') as fd:
         writer = csv.writer(fd)
-        writer.writerow([dateTimeObj, flag, "2" , (str)(endtime - starttime),psutil.cpu_percent(),reliability])
-
-
+        writer.writerow([dateTimeObj, flag, "3", (str)(endtime - starttime),psutil.cpu_percent(),reliability])
 
 
 
