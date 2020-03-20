@@ -300,7 +300,7 @@ while pointer:
         counter = False
 
     operating_sys = platform.system()
-    host = 'http://tdf.mirror.rafal.ca'
+    host = 'tdf.mirror.rafal.ca'
 
     try:
 
@@ -351,7 +351,7 @@ while pointer:
 
     # host = 'location7'
 
-    host = 'https://tdf.mirror.liteserver.nl'
+    host = 'tdf.mirror.liteserver.nl'
     operating_sys = platform.system()
 
     try:
@@ -404,7 +404,7 @@ while pointer:
 
     # host = 'location8'
 
-    host = 'https://mirrors.ukfast.co.uk'
+    host = 'mirrors.ukfast.co.uk'
 
     try:
 
@@ -455,7 +455,7 @@ while pointer:
 
     # host = 'location1'
 
-    host = 'https://mirror.init7.net'
+    host = 'mirror.init7.net'
 
     try:
 
@@ -503,7 +503,7 @@ while pointer:
         counter = False
 
     # host = location2
-    host = 'https://mirror.dkm.cz'
+    host = 'mirror.dkm.cz'
 
     try:
 
@@ -552,7 +552,7 @@ while pointer:
         counter = False
 
     # host = location3
-    host = 'http://ftp.linux.org.tr'
+    host = 'ftp.linux.org.tr'
 
     try:
 
@@ -602,7 +602,7 @@ while pointer:
     # host = location4
     operating_sys = platform.system()
 
-    host = 'https://tdf.c3sl.ufpr.br'
+    host = 'tdf.c3sl.ufpr.br'
     try:
 
         start = time.time()
@@ -651,7 +651,7 @@ while pointer:
 
     # host = location5
 
-    host = 'https://mirror.clarkson.edu'
+    host = 'mirror.clarkson.edu'
 
     try:
 
