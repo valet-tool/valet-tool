@@ -16,7 +16,7 @@ counter = False
 
 location1 = 'https://mirror.init7.net/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
 location2 = 'https://mirror.dkm.cz/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
-location3 = 'http://ftp.linux.org.tr/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+location3 = 'https://libreoffice.mirror.garr.it/mirrors/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
 location4 = 'https://tdf.c3sl.ufpr.br/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
 location5 = 'https://mirror.clarkson.edu/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
 location6 = 'http://tdf.mirror.rafal.ca/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
@@ -554,7 +554,7 @@ while pointer:
         counter = False
 
     # host = location3
-    host = 'ftp.linux.org.tr'
+    host = 'libreoffice.mirror.garr.it'
 
     try:
 
