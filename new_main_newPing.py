@@ -316,7 +316,7 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 6, 1,  pingValue])
+            writer.writerow([datetime.now(), 6, 1,  pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -367,7 +367,7 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 7, 1, pingValue])
+            writer.writerow([datetime.now(), 7, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -419,7 +419,7 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 8, 1, pingValue])
+            writer.writerow([datetime.now(), 8, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -471,7 +471,7 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 1, 1, pingValue])
+            writer.writerow([datetime.now(), 1, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -520,7 +520,7 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 2, 1, pingValue])
+            writer.writerow([datetime.now(), 2, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -570,7 +570,7 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 3, 1, pingValue])
+            writer.writerow([datetime.now(), 3, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -619,7 +619,7 @@ while pointer:
         pingValue = x[0]
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 4, 1, pingValue])
+            writer.writerow([datetime.now(), 4, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -670,7 +670,7 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 5, 1, pingValue])
+            writer.writerow([datetime.now(), 5, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
