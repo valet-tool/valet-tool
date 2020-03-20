@@ -233,6 +233,7 @@ def zip_file(url):
 def delete_file(url):
     starttime = time.time()
     os.remove("libreoffice-6.4.2.2.tar.xz")
+    os.remove("myzipfile.tar.xz")
     shutil.rmtree('libreoffice-6.4.2.2')
     print("Files deleted")
     endtime = time.time()
