@@ -293,13 +293,13 @@ while pointer:
                 dateTimeObj = datetime.now()
                 with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 1, 1, 0, psutil.cpu_percent(), 0, ""])
+                    writer.writerow(["", dateTimeObj, 1, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
             with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 1, 1, 0, psutil.cpu_percent(), 0, ""])
+                writer.writerow(["", dateTimeObj, 1, 0, psutil.cpu_percent(), 0, ""])
 
         flag = False
         counter = False
@@ -314,12 +314,12 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 6, 1, 1, end - start])
+            writer.writerow([datetime.now(), 6, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 6, 1, 0, 0])
+            writer.writerow([datetime.now(), 6, 0, 0])
 
     flag = True
     print("Location 2")
@@ -341,13 +341,13 @@ while pointer:
                 dateTimeObj = datetime.now()
                 with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 2, 1, 0, psutil.cpu_percent(), 0, ""])
+                    writer.writerow(["", dateTimeObj, 2, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
             with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 2, 1, 0, psutil.cpu_percent(), 0, ""])
+                writer.writerow(["", dateTimeObj, 2, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
@@ -365,12 +365,12 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 7, 1, 1, end - start])
+            writer.writerow([datetime.now(), 7, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 7, 1, 0, 0])
+            writer.writerow([datetime.now(), 7, 0, 0])
 
 
 
@@ -394,13 +394,13 @@ while pointer:
                 dateTimeObj = datetime.now()
                 with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 3, 1, 0, psutil.cpu_percent(), 0, ""])
+                    writer.writerow(["", dateTimeObj, 3, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
             with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 3, 1, 0, psutil.cpu_percent(), 0, ""])
+                writer.writerow(["", dateTimeObj, 3, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
@@ -416,12 +416,12 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 8, 1, 1, end - start])
+            writer.writerow([datetime.now(), 8, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 8, 1, 0, 0])
+            writer.writerow([datetime.now(), 8, 0, 0])
 
 
 
@@ -445,13 +445,13 @@ while pointer:
                 dateTimeObj = datetime.now()
                 with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 4, 1, 0, psutil.cpu_percent(), 0, ""])
+                    writer.writerow(["", dateTimeObj, 4, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
             with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 4, 1, 0, psutil.cpu_percent(), 0, ""])
+                writer.writerow(["", dateTimeObj, 4, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
@@ -467,12 +467,12 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 1, 1, 1, end - start])
+            writer.writerow([datetime.now(), 1, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 1, 1, 0, 0])
+            writer.writerow([datetime.now(), 1, 0, 0])
 
 
     print("Location 5")
@@ -494,13 +494,13 @@ while pointer:
                 dateTimeObj = datetime.now()
                 with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 5, 1, 0, psutil.cpu_percent(), 0, ""])
+                    writer.writerow(["", dateTimeObj, 5, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
             with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 5, 1, 0, psutil.cpu_percent(), 0, ""])
+                writer.writerow(["", dateTimeObj, 5, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
@@ -515,12 +515,12 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 2, 1, 1, end - start])
+            writer.writerow([datetime.now(), 2, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 2, 1, 0, 0])
+            writer.writerow([datetime.now(), 2, 0, 0])
 
 
     print("Location 6")
@@ -543,13 +543,13 @@ while pointer:
                 dateTimeObj = datetime.now()
                 with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 6, 1, 0, psutil.cpu_percent(), 0, ""])
+                    writer.writerow(["", dateTimeObj, 6, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
             with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 6, 1, 0, psutil.cpu_percent(), 0, ""])
+                writer.writerow(["", dateTimeObj, 6, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
@@ -564,12 +564,12 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 3, 1, 1, end - start])
+            writer.writerow([datetime.now(), 3, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 3, 1, 0, 0])
+            writer.writerow([datetime.now(), 3, 0, 0])
 
     print("Location 7")
     flag = True
@@ -591,13 +591,13 @@ while pointer:
                 dateTimeObj = datetime.now()
                 with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 7, 1, 0, psutil.cpu_percent(), 0, ""])
+                    writer.writerow(["", dateTimeObj, 7, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
             with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 7, 1, 0, psutil.cpu_percent(), 0, ""])
+                writer.writerow(["", dateTimeObj, 7, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
@@ -613,12 +613,12 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 4, 1, 1, end - start])
+            writer.writerow([datetime.now(), 4, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 4, 1, 0, 0])
+            writer.writerow([datetime.now(), 4, 0, 0])
 
 
     print("Location 8")
@@ -640,14 +640,14 @@ while pointer:
                 dateTimeObj = datetime.now()
                 with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 8, 1, 0, psutil.cpu_percent(), 0, ""])
+                    writer.writerow(["", dateTimeObj, 8, 0, psutil.cpu_percent(), 0, ""])
 
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
             with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 8, 1, 0, psutil.cpu_percent(), 0, ""])
+                writer.writerow(["", dateTimeObj, 8, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
@@ -663,10 +663,10 @@ while pointer:
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 5, 1, 1, end - start])
+            writer.writerow([datetime.now(), 5, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 5, 1, 0, 0])
+            writer.writerow([datetime.now(), 5, 0, 0])
 
