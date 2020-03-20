@@ -30,7 +30,7 @@ with open('tva_output.csv', 'a') as fd:
 
 with open('ping.csv', 'a') as fd:
     writer = csv.writer(fd)
-    writer.writerow(["Server", "Tactic", "PingSuccess", "PingTime"])
+    writer.writerow(["Timestamp", "Server", "Tactic", "PingSuccess", "PingTime"])
 
 
 def download_file(url, location):
