@@ -14,7 +14,17 @@ global counter
 
 counter = False
 
-with open('document1.csv', 'a') as fd:
+location1 = 'https://mirror.init7.net/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+location2 = 'https://mirror.dkm.cz/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+location3 = 'http://ftp.linux.org.tr/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+location4 = 'https://tdf.c3sl.ufpr.br/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+location5 = 'https://mirror.clarkson.edu/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+location6 = 'http://tdf.mirror.rafal.ca/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+location7 = 'https://tdf.mirror.liteserver.nl/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+location8 = 'https://mirrors.ukfast.co.uk/sites/documentfoundation.org/tdf/libreoffice/src/6.4.2/libreoffice-6.4.2.2.tar.xz'
+
+
+with open('tva_output.csv', 'a') as fd:
     writer = csv.writer(fd)
     writer.writerow(["", "Timestamp", "Server", "Tactic", "Latency", "Cost", "Reliability", ""])
 
@@ -27,36 +37,35 @@ def download_file(url, location):
     try:
         starttime = time.time()
         results = requests.get(url)
-        open('/Users/sakshikarnawat/PycharmProjects/data/zip_file.tar.gz', 'wb').write(results.content)
+        open('/Users/sakshikarnawat/PycharmProjects/data/zip_file.tar.xz', 'wb').write(results.content)
         print("File downloaded")
         endtime = time.time()
         final_time = endtime - starttime
         dateTimeObj = datetime.now()
 
         if (
-                url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+                url == location1):
             flag = 1
         elif (
-                url == 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+                url == location2):
             flag = 2
-        elif (
-                url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+        elif (url == location3):
             flag = 3
         elif (
-                url == 'https://mirrors.syringanetworks.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+                url == location4):
             flag = 4
-        elif (
-                url == 'http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+        elif (url == location5):
             flag = 5
         elif (
-                url == 'https://mirror-hk.koddos.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+                url == location6):
             flag = 6
         elif (
-                url == 'http://mirrors.coreix.net/thedocumentfoundation/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+                url == location7):
             flag = 7
         elif (
-                url == 'https://mirror.aarnet.edu.au/pub/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+                url == location8):
             flag = 8
+
 
         if final_time > 120.00:
             final_time = 0
@@ -66,7 +75,7 @@ def download_file(url, location):
         if final_time == 0:
             reliability = 0
 
-        with open('document1.csv', 'a') as fd:
+        with open('tva_output.csv', 'a') as fd:
             writer = csv.writer(fd)
             writer.writerow(["", dateTimeObj, flag, "1", (str)(final_time), psutil.cpu_percent(), reliability, ""])
 
@@ -77,7 +86,7 @@ def download_file(url, location):
     except Exception:
         counter = True
         # dateTimeObj = datetime.now()
-        with open('document1.csv', 'a') as fd:
+        with open('tva_output.csv', 'a') as fd:
             writer = csv.writer(fd)
             writer.writerow(["", dateTimeObj, location, "1", "-1", psutil.cpu_percent(), 0, ""])
         return counter
@@ -85,9 +94,9 @@ def download_file(url, location):
 
 def unzipfile(url):
     starttime = time.time()
-    fname = 'zip_file.tar.gz'
-    if fname.endswith("tar.gz"):
-        tar = tarfile.open(fname, "r:gz")
+    fname = 'zip_file.tar.xz'
+    if fname.endswith("tar.xz"):
+        tar = tarfile.open(fname, "r:xz")
         tar.extractall()
         tar.close()
     elif (fname.endswith("tar")):
@@ -100,40 +109,40 @@ def unzipfile(url):
     final_time = endtime - starttime
     dateTimeObj = datetime.now()
     if (
-            url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location1):
         flag = 1
     elif (
-            url == 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location2):
         flag = 2
-    elif (url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == location3):
         flag = 3
     elif (
-            url == 'https://mirrors.syringanetworks.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location4):
         flag = 4
-    elif (url == 'http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == location5):
         flag = 5
     elif (
-            url == 'https://mirror-hk.koddos.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location6):
         flag = 6
     elif (
-            url == 'http://mirrors.coreix.net/thedocumentfoundation/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location7):
         flag = 7
     elif (
-            url == 'https://mirror.aarnet.edu.au/pub/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location8):
         flag = 8
 
     reliability = 1
 
-    with open('document1.csv', 'a') as fd:
+    with open('tva_output.csv', 'a') as fd:
         writer = csv.writer(fd)
         writer.writerow(["", dateTimeObj, flag, "2", (str)(final_time), psutil.cpu_percent(), reliability, ""])
 
 
 def grep_file(url):
     starttime = time.time()
-    with open('LibreOffice_6.2.8.2_Linux_x86_deb/readmes/README_en-US', 'r') as f:
+    with open('libreoffice-6.4.2.2/README.md', 'r') as f:
         for line in f.readlines():
-            if 'Installation' in line:
+            if 'overview' in line:
                 print("File grep complete")
     for i in range(1, 100000):
         for j in (1, 100000):
@@ -143,39 +152,39 @@ def grep_file(url):
     dateTimeObj = datetime.now()
 
     if (
-            url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location1):
         flag = 1
     elif (
-            url == 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location2):
         flag = 2
-    elif (url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == location3):
         flag = 3
     elif (
-            url == 'https://mirrors.syringanetworks.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location4):
         flag = 4
-    elif (url == 'http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == location5):
         flag = 5
     elif (
-            url == 'https://mirror-hk.koddos.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location6):
         flag = 6
     elif (
-            url == 'http://mirrors.coreix.net/thedocumentfoundation/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location7):
         flag = 7
     elif (
-            url == 'https://mirror.aarnet.edu.au/pub/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location8):
         flag = 8
 
     reliability = 1
 
-    with open('document1.csv', 'a') as fd:
+    with open('tva_output.csv', 'a') as fd:
         writer = csv.writer(fd)
         writer.writerow(["", dateTimeObj, flag, "3", (str)(final_time), psutil.cpu_percent(), reliability, ""])
 
 
 def zip_file(url):
     starttime = time.time()
-    tar = tarfile.open("myzipfile.tar.gz", "w:gz")
-    for dirname, subdirs, files in os.walk('LibreOffice_6.2.8.2_Linux_x86_deb'):
+    tar = tarfile.open("myzipfile.tar.xz", "w:xz")
+    for dirname, subdirs, files in os.walk('libreoffice-6.4.2.2'):
         tar.add(dirname)
         for filename in files:
             tar.add(os.path.join(dirname, filename))
@@ -186,86 +195,76 @@ def zip_file(url):
     dateTimeObj = datetime.now()
 
     if (
-            url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location1):
         flag = 1
     elif (
-            url == 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location2):
         flag = 2
-    elif (url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == location3):
         flag = 3
     elif (
-            url == 'https://mirrors.syringanetworks.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location4):
         flag = 4
-    elif (url == 'http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == location5):
         flag = 5
     elif (
-            url == 'https://mirror-hk.koddos.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location6):
         flag = 6
     elif (
-            url == 'http://mirrors.coreix.net/thedocumentfoundation/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location7):
         flag = 7
     elif (
-            url == 'https://mirror.aarnet.edu.au/pub/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location8):
         flag = 8
 
     reliability = 1
 
-    with open('document1.csv', 'a') as fd:
+    with open('tva_output.csv', 'a') as fd:
         writer = csv.writer(fd)
         writer.writerow(["", dateTimeObj, flag, "4", (str)(final_time), psutil.cpu_percent(), reliability, ""])
 
 
 def delete_file(url):
     starttime = time.time()
-    os.remove("zip_file.tar.gz")
-    os.remove("myzipfile.tar.gz")
-    shutil.rmtree('LibreOffice_6.2.8.2_Linux_x86_deb')
+    os.remove("zip_file.tar.xz")
+    os.remove("myzipfile.tar.xz")
+    shutil.rmtree('libreoffice-6.4.2.2')
     print("Files deleted")
     endtime = time.time()
     final_time = endtime - starttime
     dateTimeObj = datetime.now()
 
     if (
-            url == 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location1):
         flag = 1
     elif (
-            url == 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location2):
         flag = 2
-    elif (
-            url == 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == location3):
         flag = 3
     elif (
-            url == 'https://mirrors.syringanetworks.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location4):
         flag = 4
-    elif (
-            url == 'http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+    elif (url == location5):
         flag = 5
     elif (
-            url == 'https://mirror-hk.koddos.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location6):
         flag = 6
     elif (
-            url == 'http://mirrors.coreix.net/thedocumentfoundation/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location7):
         flag = 7
     elif (
-            url == 'https://mirror.aarnet.edu.au/pub/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'):
+            url == location8):
         flag = 8
 
     reliability = 1
 
-    with open('document1.csv', 'a') as fd:
+    with open('tva_output.csv', 'a') as fd:
         writer = csv.writer(fd)
         writer.writerow(["", dateTimeObj, flag, "5", (str)(final_time), psutil.cpu_percent(), reliability, ""])
 
 
 pointer = True
-location1 = 'http://ftp.utexas.edu/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'
-location2 = 'https://mirror.init7.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'
-location3 = 'http://tdf.mirror.rafal.ca/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'
-location4 = 'https://mirrors.syringanetworks.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'
-location5 = 'http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'
-location6 = 'https://mirror-hk.koddos.net/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'
-location7 = 'http://mirrors.coreix.net/thedocumentfoundation/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'
-location8 = 'https://mirror.aarnet.edu.au/pub/tdf/libreoffice/stable/6.2.8/deb/x86/LibreOffice_6.2.8_Linux_x86_deb.tar.gz'
 
 while pointer:
 
@@ -287,13 +286,13 @@ while pointer:
 
             else:
                 dateTimeObj = datetime.now()
-                with open('document1.csv', 'a') as fd:
+                with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
                     writer.writerow(["", dateTimeObj, 1, 1, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
-            with open('document1.csv', 'a') as fd:
+            with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
                 writer.writerow(["", dateTimeObj, 1, 1, 0, psutil.cpu_percent(), 0, ""])
 
@@ -301,28 +300,22 @@ while pointer:
         counter = False
 
     operating_sys = platform.system()
-    host = '103.109.101.20'
+    host = 'http://tdf.mirror.rafal.ca'
 
     try:
-        ping_command = ['ping', host, '-n', '1'] if operating_sys == 'Windows' else ['ping', host, '-c 1']
-        shell_needed = True if operating_sys == 'Windows' else False
+
         start = time.time()
-        ping_output = subprocess.run(ping_command, shell=shell_needed, stdout=subprocess.PIPE)
-        success = ping_output.returncode
+        subprocess.check_output(["ping", "-c", "1", host])
         end = time.time()
-        if success == 0:
-            print("success")
-        else:
-            print("fail")
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([6, 1, 1, end - start])
+            writer.writerow([datetime.now(), 6, 1, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([6, 1, 0, 0])
+            writer.writerow([datetime.now(), 6, 1, 0, 0])
 
 
 
@@ -344,13 +337,13 @@ while pointer:
 
             else:
                 dateTimeObj = datetime.now()
-                with open('document1.csv', 'a') as fd:
+                with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
                     writer.writerow(["", dateTimeObj, 2, 1, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
-            with open('document1.csv', 'a') as fd:
+            with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
                 writer.writerow(["", dateTimeObj, 2, 1, 0, psutil.cpu_percent(), 0, ""])
         flag = False
@@ -358,31 +351,24 @@ while pointer:
 
     # host = 'location7'
 
-    host = '85.13.241.50'
+    host = 'https://tdf.mirror.liteserver.nl'
     operating_sys = platform.system()
 
     try:
-        ping_command = ['ping', host, '-n', '1'] if operating_sys == 'Windows' else ['ping', host, '-c 1']
-        shell_needed = True if operating_sys == 'Windows' else False
 
         start = time.time()
-        ping_output = subprocess.run(ping_command, shell=shell_needed, stdout=subprocess.PIPE)
-        success = ping_output.returncode
-        end = time.time()
+        subprocess.check_output(["ping", "-c", "1", host])
 
-        if success == 0:
-            print("success")
-        else:
-            print("fail")
+        end = time.time()
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([7, 1, 1, end - start])
+            writer.writerow([datetime.now(), 7, 1, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([7, 1, 0, 0])
+            writer.writerow([datetime.now(), 7, 1, 0, 0])
 
 
 
@@ -404,13 +390,13 @@ while pointer:
 
             else:
                 dateTimeObj = datetime.now()
-                with open('document1.csv', 'a') as fd:
+                with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
                     writer.writerow(["", dateTimeObj, 3, 1, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
-            with open('document1.csv', 'a') as fd:
+            with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
                 writer.writerow(["", dateTimeObj, 3, 1, 0, psutil.cpu_percent(), 0, ""])
         flag = False
@@ -418,28 +404,22 @@ while pointer:
 
     # host = 'location8'
 
-    host = '202.158.214.106'
-    operating_sys = platform.system()
+    host = 'https://mirrors.ukfast.co.uk'
 
     try:
-        ping_command = ['ping', host, '-n', '1'] if operating_sys == 'Windows' else ['ping', host, '-c 1']
-        shell_needed = True if operating_sys == 'Windows' else False
+
         start = time.time()
-        ping_output = subprocess.run(ping_command, shell=shell_needed, stdout=subprocess.PIPE)
-        success = ping_output.returncode
+        subprocess.check_output(["ping", "-c", "1", host])
         end = time.time()
-        if success == 0:
-            print("success")
-        else:
-            print("fail")
+
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([8, 1, 1, end - start])
+            writer.writerow([datetime.now(), 8, 1, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([8, 1, 0, 0])
+            writer.writerow([datetime.now(), 8, 1, 0, 0])
 
 
 
@@ -461,13 +441,13 @@ while pointer:
 
             else:
                 dateTimeObj = datetime.now()
-                with open('document1.csv', 'a') as fd:
+                with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
                     writer.writerow(["", dateTimeObj, 4, 1, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
-            with open('document1.csv', 'a') as fd:
+            with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
                 writer.writerow(["", dateTimeObj, 4, 1, 0, psutil.cpu_percent(), 0, ""])
         flag = False
@@ -475,30 +455,22 @@ while pointer:
 
     # host = 'location1'
 
-    host = '146.6.15.16'
-    operating_sys = platform.system()
+    host = 'https://mirror.init7.net'
 
     try:
-        ping_command = ['ping', host, '-n', '1'] if operating_sys == 'Windows' else ['ping', host, '-c 1']
-        shell_needed = True if operating_sys == 'Windows' else False
 
         start = time.time()
-        ping_output = subprocess.run(ping_command, shell=shell_needed, stdout=subprocess.PIPE)
-        success = ping_output.returncode
+        subprocess.check_output(["ping", "-c", "1", host])
         end = time.time()
 
-        if success == 0:
-            print("success")
-        else:
-            print("fail")
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([1, 1, 1, end - start])
+            writer.writerow([datetime.now(), 1, 1, 1, end - start])
+
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([1, 1, 0, 0])
-
+            writer.writerow([datetime.now(), 1, 1, 0, 0])
 
 
     print("Location 5")
@@ -518,44 +490,35 @@ while pointer:
 
             else:
                 dateTimeObj = datetime.now()
-                with open('document1.csv', 'a') as fd:
+                with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
                     writer.writerow(["", dateTimeObj, 5, 1, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
-            with open('document1.csv', 'a') as fd:
+            with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
                 writer.writerow(["", dateTimeObj, 5, 1, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
     # host = location2
-    host = '109.202.202.202'
-    operating_sys = platform.system()
+    host = 'https://mirror.dkm.cz'
 
     try:
-        ping_command = ['ping', host, '-n', '1'] if operating_sys == 'Windows' else ['ping', host, '-c 1']
-        shell_needed = True if operating_sys == 'Windows' else False
 
         start = time.time()
-        ping_output = subprocess.run(ping_command, shell=shell_needed, stdout=subprocess.PIPE)
-        success = ping_output.returncode
+        subprocess.check_output(["ping", "-c", "1", host])
         end = time.time()
-
-        if success == 0:
-            print("success")
-        else:
-            print("fail")
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([2, 1, 1, end - start])
+            writer.writerow([datetime.now(), 2, 1, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([2, 1, 0, 0])
+            writer.writerow([datetime.now(), 2, 1, 0, 0])
 
 
     print("Location 6")
@@ -576,42 +539,35 @@ while pointer:
 
             else:
                 dateTimeObj = datetime.now()
-                with open('document1.csv', 'a') as fd:
+                with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
                     writer.writerow(["", dateTimeObj, 6, 1, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
-            with open('document1.csv', 'a') as fd:
+            with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
                 writer.writerow(["", dateTimeObj, 6, 1, 0, psutil.cpu_percent(), 0, ""])
         flag = False
         counter = False
 
     # host = location3
-    host = '207.210.46.249'
-    operating_sys = platform.system()
+    host = 'http://ftp.linux.org.tr'
 
     try:
-        ping_command = ['ping', host, '-n', '1'] if operating_sys == 'Windows' else ['ping', host, '-c 1']
-        shell_needed = True if operating_sys == 'Windows' else False
 
         start = time.time()
-        ping_output = subprocess.run(ping_command, shell=shell_needed, stdout=subprocess.PIPE)
-        success = ping_output.returncode
+        subprocess.check_output(["ping", "-c", "1", host])
         end = time.time()
 
-        if success == 0:
-            print("success")
-        else:
-            print("fail")
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([3, 1, 1, end - start])
+            writer.writerow([datetime.now(), 3, 1, 1, end - start])
+
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([3, 1, 0,0])
+            writer.writerow([datetime.now(), 3, 1, 0, 0])
 
     print("Location 7")
     flag = True
@@ -631,13 +587,13 @@ while pointer:
 
             else:
                 dateTimeObj = datetime.now()
-                with open('document1.csv', 'a') as fd:
+                with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
                     writer.writerow(["", dateTimeObj, 7, 1, 0, psutil.cpu_percent(), 0, ""])
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
-            with open('document1.csv', 'a') as fd:
+            with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
                 writer.writerow(["", dateTimeObj, 7, 1, 0, psutil.cpu_percent(), 0, ""])
         flag = False
@@ -646,28 +602,21 @@ while pointer:
     # host = location4
     operating_sys = platform.system()
 
-    host = '66.232.64.7'
+    host = 'https://tdf.c3sl.ufpr.br'
     try:
-        ping_command = ['ping', host, '-n', '1'] if operating_sys == 'Windows' else ['ping', host, '-c 1']
-        shell_needed = True if operating_sys == 'Windows' else False
 
         start = time.time()
-        ping_output = subprocess.run(ping_command, shell=shell_needed, stdout=subprocess.PIPE)
-        success = ping_output.returncode
+        subprocess.check_output(["ping", "-c", "1", host])
         end = time.time()
 
-        if success == 0:
-            print("success")
-        else:
-            print("fail")
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([4, 1, 1, end - start])
+            writer.writerow([datetime.now(), 4, 1, 1, end - start])
+
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([4, 1, 0,0])
-
+            writer.writerow([datetime.now(), 4, 1, 0, 0])
 
 
     print("Location 8")
@@ -687,14 +636,14 @@ while pointer:
 
             else:
                 dateTimeObj = datetime.now()
-                with open('document1.csv', 'a') as fd:
+                with open('tva_output.csv', 'a') as fd:
                     writer = csv.writer(fd)
                     writer.writerow(["", dateTimeObj, 8, 1, 0, psutil.cpu_percent(), 0, ""])
 
         except Exception:
             print("Error")
             dateTimeObj = datetime.now()
-            with open('document1.csv', 'a') as fd:
+            with open('tva_output.csv', 'a') as fd:
                 writer = csv.writer(fd)
                 writer.writerow(["", dateTimeObj, 8, 1, 0, psutil.cpu_percent(), 0, ""])
         flag = False
@@ -702,30 +651,20 @@ while pointer:
 
     # host = location5
 
-    host = '80.68.250.218'
-    operating_sys = platform.system()
-
+    host = 'https://mirror.clarkson.edu'
 
     try:
-        ping_command = ['ping', host, '-n', '1'] if operating_sys == 'Windows' else ['ping', host, '-c 1']
-        shell_needed = True if operating_sys == 'Windows' else False
 
         start = time.time()
-        ping_output = subprocess.run(ping_command, shell=shell_needed, stdout=subprocess.PIPE)
-        success = ping_output.returncode
+        subprocess.check_output(["ping", "-c", "1", host])
         end = time.time()
 
-        if success == 0:
-            print("success")
-        else:
-            print("fail")
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([5, 1, 1, end - start])
+            writer.writerow([datetime.now(), 5, 1, 1, end - start])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([5, 1, 0,0])
-
+            writer.writerow([datetime.now(), 5, 1, 0, 0])
 
