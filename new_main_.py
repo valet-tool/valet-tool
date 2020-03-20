@@ -37,7 +37,7 @@ def download_file(url, location):
     try:
         starttime = time.time()
         results = requests.get(url)
-        open('zip_file.tar.xz', 'wb').write(results.content)
+        open('libreoffice-6.4.2.2.tar.xz', 'wb').write(results.content)
         print("File downloaded")
         endtime = time.time()
         final_time = endtime - starttime
@@ -94,15 +94,17 @@ def download_file(url, location):
 
 def unzipfile(url):
     starttime = time.time()
-    fname = 'zip_file.tar.xz'
-    if fname.endswith("tar.xz"):
-        tar = tarfile.open(fname, "r:xz")
-        tar.extractall()
-        tar.close()
-    elif (fname.endswith("tar")):
-        tar = tarfile.open(fname, "r:")
-        tar.extractall()
-        tar.close()
+    # fname = 'libreoffice-6.4.2.2.tar.xz'
+    # if fname.endswith("tar.xz"):
+    #     tar = tarfile.open(fname, "r:xz")
+    #     tar.extractall()
+    #     tar.close()
+    # elif (fname.endswith("tar")):
+    #     tar = tarfile.open(fname, "r:")
+    #     tar.extractall()
+    #     tar.close()
+    with tarfile.open('libreoffice-6.4.2.2.tar.xz') as f:
+        f.extractall('.')
 
     print("File unzipped")
     endtime = time.time()
@@ -183,12 +185,15 @@ def grep_file(url):
 
 def zip_file(url):
     starttime = time.time()
-    tar = tarfile.open("myzipfile.tar.xz", "w:xz")
-    for dirname, subdirs, files in os.walk('libreoffice-6.4.2.2'):
-        tar.add(dirname)
-        for filename in files:
-            tar.add(os.path.join(dirname, filename))
-    tar.close()
+    # tar = tarfile.open("myzipfile.tar.xz", "w:xz")
+    # for dirname, subdirs, files in os.walk('libreoffice-6.4.2.2'):
+    #     tar.add(dirname)
+    #     for filename in files:
+    #         tar.add(os.path.join(dirname, filename))
+    # tar.close()
+
+    subprocess.call(['tar', '-czf', 'myzipfile.tar.xz', 'libreoffice-6.4.2.2'])
+
     print("File Zipped")
     endtime = time.time()
     final_time = endtime - starttime
@@ -226,7 +231,7 @@ def zip_file(url):
 
 def delete_file(url):
     starttime = time.time()
-    os.remove("zip_file.tar.xz")
+    os.remove("libreoffice-6.4.2.2.tar.xz")
     os.remove("myzipfile.tar.xz")
     shutil.rmtree('libreoffice-6.4.2.2')
     print("Files deleted")
@@ -299,7 +304,6 @@ while pointer:
         flag = False
         counter = False
 
-    operating_sys = platform.system()
     host = 'tdf.mirror.rafal.ca'
 
     try:
@@ -316,8 +320,6 @@ while pointer:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
             writer.writerow([datetime.now(), 6, 1, 0, 0])
-
-
 
     flag = True
     print("Location 2")
