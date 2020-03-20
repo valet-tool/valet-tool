@@ -8,7 +8,8 @@ import time as time
 import csv
 import psutil
 import tarfile
-import os
+import re
+
 
 global counter
 
@@ -308,13 +309,14 @@ while pointer:
 
     try:
 
-        start = time.time()
-        subprocess.check_output(["ping", "-c", "1", host])
-        end = time.time()
+        output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
+        outputStr = str(output)
+        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        pingValue = x[0]
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 6, end - start])
+            writer.writerow([datetime.now(), 6, 1,  pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -358,14 +360,14 @@ while pointer:
 
     try:
 
-        start = time.time()
-        subprocess.check_output(["ping", "-c", "1", host])
-
-        end = time.time()
+        output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
+        outputStr = str(output)
+        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        pingValue = x[0]
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 7, 1, end - start])
+            writer.writerow([datetime.now(), 7, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -410,13 +412,14 @@ while pointer:
 
     try:
 
-        start = time.time()
-        subprocess.check_output(["ping", "-c", "1", host])
-        end = time.time()
+        output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
+        outputStr = str(output)
+        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        pingValue = x[0]
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 8, 1, end - start])
+            writer.writerow([datetime.now(), 8, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -461,13 +464,14 @@ while pointer:
 
     try:
 
-        start = time.time()
-        subprocess.check_output(["ping", "-c", "1", host])
-        end = time.time()
+        output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
+        outputStr = str(output)
+        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        pingValue = x[0]
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 1, 1, end - start])
+            writer.writerow([datetime.now(), 1, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -509,13 +513,14 @@ while pointer:
 
     try:
 
-        start = time.time()
-        subprocess.check_output(["ping", "-c", "1", host])
-        end = time.time()
+        output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
+        outputStr = str(output)
+        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        pingValue = x[0]
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 2, 1, end - start])
+            writer.writerow([datetime.now(), 2, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -558,13 +563,14 @@ while pointer:
 
     try:
 
-        start = time.time()
-        subprocess.check_output(["ping", "-c", "1", host])
-        end = time.time()
+        output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
+        outputStr = str(output)
+        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        pingValue = x[0]
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 3, 1, end - start])
+            writer.writerow([datetime.now(), 3, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -607,13 +613,13 @@ while pointer:
     host = 'tdf.c3sl.ufpr.br'
     try:
 
-        start = time.time()
-        subprocess.check_output(["ping", "-c", "1", host])
-        end = time.time()
-
+        output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
+        outputStr = str(output)
+        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        pingValue = x[0]
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 4, 1, end - start])
+            writer.writerow([datetime.now(), 4, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -657,13 +663,14 @@ while pointer:
 
     try:
 
-        start = time.time()
-        subprocess.check_output(["ping", "-c", "1", host])
-        end = time.time()
+        output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
+        outputStr = str(output)
+        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        pingValue = x[0]
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 5, 1, end - start])
+            writer.writerow([datetime.now(), 5, 1, pingValue/1000])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
