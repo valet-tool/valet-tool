@@ -9,7 +9,7 @@ import csv
 import psutil
 import tarfile
 import re
-
+import os
 
 global counter
 
@@ -235,7 +235,6 @@ def delete_file(url):
     os.remove("libreoffice-6.4.2.2.tar.xz")
     os.remove("myzipfile.tar.xz")
     shutil.rmtree('libreoffice-6.4.2.2')
-    print("Files deleted")
     endtime = time.time()
     final_time = endtime - starttime
     dateTimeObj = datetime.now()
