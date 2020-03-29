@@ -20,36 +20,54 @@ public class CreateExammCSV {
     //use this for date conversions
     public static DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss.SSSSSS");
 
+    public static BufferedWriter[][] getOutfiles(String outfileType) throws IOException {
+        BufferedWriter[][] outfiles = new BufferedWriter[8][5];
+        for (int server = 1; server <= 8; server++) {
+            for (int tactic = 1; tactic <= 5; tactic++) {
+                BufferedWriter writer = outfiles[server-1][tactic-1];
+                if (writer == null) {
+                    String filename = "tva_server_" + server + "_tactic_" + tactic + "_" + outfileType + ".csv";
+                    System.out.println("Making new outfile: '" + filename + "'");
+
+                    writer = new BufferedWriter(new FileWriter(filename));
+                    outfiles[server-1][tactic-1] = writer;
+
+                    writer.write("time_since_last_recording,latency,cost,reliability");
+
+                    if (tactic == 1) writer.write(",time_since_last_ping,last_ping");
+                    writer.write("\n");
+                    writer.flush();
+                } else {
+                    String filename = "tva_server_" + server + "_tactic_" + tactic + "_" + outfileType + ".csv";
+                    System.out.println("Making new outfile: '" + filename + "'");
+
+                    writer.flush();
+                    writer.close();
+                    writer = new BufferedWriter(new FileWriter(filename));
+                }
+            }
+        }
+
+        return outfiles;
+    }
+
+
     public static void main(String[] arguments) {
-        if (arguments.length != 2) {
+        if (arguments.length != 3) {
             System.err.println("Incorrect arguments, usage:");
-            System.err.println("java CreateExammCSV <ping filename> <tva output filename>");
+            System.err.println("java CreateExammCSV <ping filename> <tva output filename> <training file rows>");
             System.exit(1);
         }
 
         PingFile ping = new PingFile(arguments[0]);
         TVAFile tva = new TVAFile(arguments[1]);
+        int trainingRows = Integer.parseInt(arguments[2]);
 
         //make an output file for each server and tactic
-        BufferedWriter[][] outfiles = new BufferedWriter[8][5];
 
         try {
+            BufferedWriter[][] outfiles = getOutfiles("train");
             //there are 8 different servers and 5 different tactics
-            for (int server = 1; server <= 8; server++) {
-                for (int tactic = 1; tactic <= 5; tactic++) {
-                    if (outfiles[server-1][tactic-1] == null) {
-                        BufferedWriter writer = new BufferedWriter(new FileWriter("tva_server_" + server + "_tactic_" + tactic + ".csv"));
-                        outfiles[server-1][tactic-1] = writer;
-
-                        writer.write("time_since_last_recording,latency,cost,reliability");
-                        
-                        if (tactic == 1) writer.write(",time_since_last_ping,last_ping");
-                        writer.write("\n");
-                    }
-
-                    BufferedWriter writer = outfiles[server-1][tactic-1];
-                }
-            }
 
             Date[][] lastRecordingTime = new Date[8][5];
 
@@ -58,6 +76,11 @@ public class CreateExammCSV {
             for (int i = 0; i < 8; i++) lastPingIndex[i] = 0;
 
             for (int i = 0; i < tva.length; i++) {
+                if (i == (40 * trainingRows)) {
+                    System.out.println("setting outfiles at i: " + i);
+                    outfiles = getOutfiles("test");
+                }
+
                 Date timestamp = tva.timestamps[i];
                 int server = tva.servers[i];
                 int tactic = tva.tactics[i];
@@ -111,6 +134,7 @@ public class CreateExammCSV {
                 }
 
                 writer.write("\n");
+                writer.flush();
             }
 
             for (int server = 1; server <= 8; server++) {
