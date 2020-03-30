@@ -53,15 +53,16 @@ public class CreateExammCSV {
 
 
     public static void main(String[] arguments) {
-        if (arguments.length != 3) {
+        if (arguments.length != 4) {
             System.err.println("Incorrect arguments, usage:");
-            System.err.println("java CreateExammCSV <ping filename> <tva output filename> <training file rows>");
+            System.err.println("java CreateExammCSV <ping filename> <tva output filename> <training file rows> <testing file rows>");
             System.exit(1);
         }
 
         PingFile ping = new PingFile(arguments[0]);
         TVAFile tva = new TVAFile(arguments[1]);
         int trainingRows = Integer.parseInt(arguments[2]);
+        int validationRows = Integer.parseInt(arguments[3]);
 
         //make an output file for each server and tactic
 
@@ -79,6 +80,9 @@ public class CreateExammCSV {
                 if (i == (40 * trainingRows)) {
                     System.out.println("setting outfiles at i: " + i);
                     outfiles = getOutfiles("test");
+                } else if (i == ((40 * trainingRows) + (40 * validationRows))) {
+                    System.out.println("setting outfiles at i: " + i);
+                    outfiles = getOutfiles("validate");
                 }
 
                 Date timestamp = tva.timestamps[i];
@@ -130,7 +134,7 @@ public class CreateExammCSV {
                         seconds = (lastRecordingTime[server-1][tactic-1].getTime() - lastPingTime.getTime()) /1000;
                     }
 
-                    writer.write(seconds + "," + ping.pingTime[lastPingIndex[server-1]]);
+                    writer.write("," + seconds + "," + ping.pingTime[lastPingIndex[server-1]]);
                 }
 
                 writer.write("\n");
