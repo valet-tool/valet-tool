@@ -15,9 +15,9 @@ global counter
 
 counter = False
 
-location1 = 'https://downloads.apache.org/httpd/httpd-2.4.43.tar.gz'
-location2 = 'http://mirror.23media.de/apache/httpd/httpd-2.4.43.tar.gz'
-location3 = 'http://mirrors.estointernet.in/apache//httpd/httpd-2.4.43.tar.gz'
+location1 = 'https://downloads.apache.org/httpd/httpd-2.4.43.tar.gzA'
+location2 = 'http://mirror.23media.de/apache/httpd/httpd-2.4.43.tar.gzA'
+location3 = 'http://mirrors.estointernet.in/apache//httpd/httpd-2.4.43.tar.gz1'
 
 
 with open('tva_output.csv', 'a') as fd:
@@ -189,13 +189,13 @@ pointer = True
 while pointer:
 
     flag = True
-    print("Location 1")
+#    print("Location 1")
 
     while flag:
 
         try:
             r = requests.get(location1)
-            print(r.status_code)
+#            print(r.status_code)
             if r.status_code == 200:
                 counter = download_file(location1, 1)
                 if not counter:
@@ -220,18 +220,69 @@ while pointer:
         counter = False
 
     host = 'estointernet.in'
-    print("pinging server 3")
+#    print("pinging server 3")
     try:
+
+
+        ##########################
+
+
+        # https://stackoverflow.com/questions/48738684/output-only-the-ping-latency-when-using-the-ping-command-in-python
+
+    # b'\r\nPinging estointernet.in [104.24.102.222] with 32 bytes of data:
+    #\r\nReply from 104.24.102.222: bytes=32 time=8ms TTL=60\r\n\r\nPing statistics for 104.24.102.222:\r\n    
+    #Packets: Sent = 1, Received = 1, Lost = 0 (0% loss),\r\nApproximate round trip times in milli-seconds:\r\n 
+    #   Minimum = 8ms, Maximum = 8ms, Average = 8ms\r\n'
+
+
+
+        ping = subprocess.Popen(["ping", host, "-n", "1"], stdout = subprocess.PIPE,stderr = subprocess.PIPE, shell=True)
+        output = ping.communicate()
+
+
+        #output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
+        #outputStr = str(output)
+
+        pattern = r"Average = (\d+\S+)"
+        pingValue = re.findall(pattern, output[0].decode())[0].replace("ms","")
+       # ping = "" # not sure if this needed
+
+        print(pingValue)
+
+     #   exit()
+     #   print(outputStr)
+     #   print("----------------") 
+     #   s = 'Denver.dwg Group Layer/Denver.dwg Annotation"'
+
+        # this returns lowest index of first occurence of dwg
+        # in this case 7
+     #   idx =outputStr.find('Average =')
+     #   print(idx)
+
+        # take this index and add 3 for 'dwg'
+        # get desired string
+      #  subs = outputStr[:idx+15]
+      #  print(subs)
+
+#        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+#        pingValue = x[0]
+#        print(pingValue)
+      #  exit()
+
+
+        ##########################
 
         # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
         output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
         outputStr = str(output)
         x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
         pingValue = x[0]
+#        print("hereA")
+#        print(pingValue)
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 3, 1,  pingValue/1000])
+            writer.writerow([datetime.now(), 3, 1,  pingValue/1])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -239,111 +290,6 @@ while pointer:
             writer.writerow([datetime.now(), 3, 0, 0])
 
     flag = True
-    print("Location 2")
+ 
 
-    while flag:
-
-        try:
-            r = requests.get(location2)
-            print(r.status_code)
-            if r.status_code == 200:
-                counter = download_file(location2, 1)
-                if not counter:
-                    unzipfile(location2)
-                    grep_file(location2)
-                    zip_file(location2)
-                    delete_file(location2)
-
-            else:
-                dateTimeObj = datetime.now()
-                with open('tva_output.csv', 'a') as fd:
-                    writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 2, 1,  0, psutil.cpu_percent(), 0, ""])
-        except Exception:
-            print("Error")
-            dateTimeObj = datetime.now()
-            with open('tva_output.csv', 'a') as fd:
-                writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 2, 1, 0, psutil.cpu_percent(), 0, ""])
-        flag = False
-        counter = False
-
-
-
-    host = 'apache.org'
-    print("pinging server 1")
-    operating_sys = platform.system()
-
-    try:
-
-        # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
-        output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower()=="windows" else 'c', host), shell=True)
-        outputStr = str(output)
-        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-        pingValue = x[0]
-
-        with open('ping.csv', 'a') as fd:
-            writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 1, 1, pingValue/1000])
-
-    except Exception as e:
-        with open('ping.csv', 'a') as fd:
-            writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 1, 0, 0])
-
-
-
-    print("Location 3")
-    flag = True
-
-    while flag:
-
-        try:
-            r = requests.get(location3)
-            print(r.status_code)
-            if r.status_code == 200:
-                counter = download_file(location3, 1)
-                if not counter:
-                    unzipfile(location3)
-                    grep_file(location3)
-                    zip_file(location3)
-                    delete_file(location3)
-
-            else:
-                dateTimeObj = datetime.now()
-                with open('tva_output.csv', 'a') as fd:
-                    writer = csv.writer(fd)
-                    writer.writerow(["", dateTimeObj, 3, 1, 0, psutil.cpu_percent(), 0, ""])
-        except Exception:
-            print("Error")
-            dateTimeObj = datetime.now()
-            with open('tva_output.csv', 'a') as fd:
-                writer = csv.writer(fd)
-                writer.writerow(["", dateTimeObj, 3, 1, 0, psutil.cpu_percent(), 0, ""])
-        flag = False
-        counter = False
-
-    # host = 'location8'
-
-    host = '23media.de'
-    print("pinging server 1")
-
-    try:
-
-        # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
-        output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
-        outputStr = str(output)
-        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-        pingValue = x[0]
-
-        with open('ping.csv', 'a') as fd:
-            writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 2, 1, pingValue/1000])
-
-    except Exception as e:
-        with open('ping.csv', 'a') as fd:
-            writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 2, 0, 0])
-
-
-
+   
