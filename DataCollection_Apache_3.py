@@ -227,56 +227,23 @@ while pointer:
         ##########################
 
 
-        # https://stackoverflow.com/questions/48738684/output-only-the-ping-latency-when-using-the-ping-command-in-python
-
-    # b'\r\nPinging estointernet.in [104.24.102.222] with 32 bytes of data:
-    #\r\nReply from 104.24.102.222: bytes=32 time=8ms TTL=60\r\n\r\nPing statistics for 104.24.102.222:\r\n    
-    #Packets: Sent = 1, Received = 1, Lost = 0 (0% loss),\r\nApproximate round trip times in milli-seconds:\r\n 
-    #   Minimum = 8ms, Maximum = 8ms, Average = 8ms\r\n'
-
-
 
         ping = subprocess.Popen(["ping", host, "-n", "1"], stdout = subprocess.PIPE,stderr = subprocess.PIPE, shell=True)
         output = ping.communicate()
-
-
-        #output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
-        #outputStr = str(output)
-
         pattern = r"Average = (\d+\S+)"
         pingValue = re.findall(pattern, output[0].decode())[0].replace("ms","")
        # ping = "" # not sure if this needed
 
         print(pingValue)
 
-     #   exit()
-     #   print(outputStr)
-     #   print("----------------") 
-     #   s = 'Denver.dwg Group Layer/Denver.dwg Annotation"'
-
-        # this returns lowest index of first occurence of dwg
-        # in this case 7
-     #   idx =outputStr.find('Average =')
-     #   print(idx)
-
-        # take this index and add 3 for 'dwg'
-        # get desired string
-      #  subs = outputStr[:idx+15]
-      #  print(subs)
-
-#        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-#        pingValue = x[0]
-#        print(pingValue)
-      #  exit()
-
-
+ 
         ##########################
 
         # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
-        output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
-        outputStr = str(output)
-        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-        pingValue = x[0]
+      #  output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
+      #  outputStr = str(output)
+      #  x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+      #  pingValue = x[0]
 #        print("hereA")
 #        print(pingValue)
 
