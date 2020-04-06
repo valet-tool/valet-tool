@@ -244,7 +244,7 @@ while pointer:
         #outputStr = str(output)
 
         pattern = r"Average = (\d+\S+)"
-        print(re.findall(pattern, output[0].decode())[0])
+        print(re.findall(pattern, output[0].decode())[0].replace("ms",""))
         #ping = ""
 
 
