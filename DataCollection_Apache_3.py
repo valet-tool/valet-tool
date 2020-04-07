@@ -447,6 +447,7 @@ while pointer:
 #        parsePing(outputStr)
         exit()
 
+        
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
