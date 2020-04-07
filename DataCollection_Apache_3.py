@@ -441,13 +441,12 @@ while pointer:
 
     #    print(outputStr)
 
-    # {'type': 'rtt', 'min': '65.990', 'avg': '65.990', 'max': '65.990', 'mdev': '0.000', 'total': 'packets', 'loss': '0.0%'}
+    # 
 
-        print(getPing(host)[3])
+        print(getPing(host))
 #        parsePing(outputStr)
         exit()
 
-        
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
