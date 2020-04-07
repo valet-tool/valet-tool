@@ -75,34 +75,7 @@ def download_file(url, location):
 
 ################################
 
-
-def ping(server='example.com', count=1, wait_sec=1):
-    """
-    :rtype: dict or None
-    """
-    cmd = "ping -c {} -W {} {}".format(count, wait_sec, server).split(' ')
-    try:
-        output = subprocess.check_output(cmd).decode().strip()
-        lines = output.split("\n")
-        total = lines[-2].split(',')[3].split()[1]
-        loss = lines[-2].split(',')[2].split()[0]
-        timing = lines[-1].split()[3].split('/')
-        return {
-            'type': 'rtt',
-            'min': timing[0],
-            'avg': timing[1],
-            'max': timing[2],
-            'mdev': timing[3],
-            'total': total,
-            'loss': loss,
-        }
-    except Exception as e:
-        print(e)
-        return None
-
-
 def getPing(host):    
-#    print(host)
 
 
     cmd = "ping -c {} -W {} {}".format(1, 1, host).split(' ')
@@ -112,120 +85,21 @@ def getPing(host):
         total = lines[-2].split(',')[3].split()[1]
         loss = lines[-2].split(',')[2].split()[0]
         timing = lines[-1].split()[3].split('/')
-        print(timing[1])
+#        print(timing[1])
+        return(timing[1])
 
-        return {
-            'type': 'rtt',
-            'min': timing[0],
-            'avg': timing[1],
-            'max': timing[2],
-            'mdev': timing[3],
-            'total': total,
-            'loss': loss,
-        }
+#        return {
+#            'type': 'rtt',
+#            'min': timing[0],
+#            'avg': timing[1],
+#            'max': timing[2],
+#            'mdev': timing[3],
+#            'total': total,
+#            'loss': loss,
+#        }
     except Exception as e:
         print(e)
         return None
-
-
-
-
-
-    quit()
-
-
-
-
-    output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
-    #outputStr = str(output)
-
-    #output = subprocess.check_output("ping " + ("-n 1 " if  sys.platform().lower()=="win32" else "-c 1 ") + host)
-    #output = os.system("ping -c 1 " + host)
-    outputStr = str(output)
-
-
-
-
-
-
-
-#    x = output.split("/")
-    print("--------------------")
-#    print(output.split('/')) 
-#    print([output[i:i+3] for i in range(0, len(output), 3)])
-
-
-  
-
-    word = 'geeks, for, geeks, pawan'
-
-    # maxsplit: 0 
-    print(word.split(', ', 0)) 
-      
-    # maxsplit: 4 
-    print(word.split(', ', 4)) 
-      
-    # maxsplit: 1 
-    print(word.split(', ', 1)) 
-
-
-    print(outputStr)
-
-
- #   pingavg
- #   print(pingavg)
-#    print(x)
-#    print("-----")
-
-
-    #output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower()=="windows" else 'c', host), shell=True)
-    #outputStr = str(output)
-    #outputStr = subprocess.check_output(cmd).decode().strip()
-
-
-    #output = subprocess.check_output(cmd).decode().strip()
-    #lines = output.split("\n")
-#    print(output[-2].split(',')[2].split()[0])
-
-
- #   exit()
- #   quit()
- #   count=1
- #   wait_sec=1
- #   server=host
- #   cmd = "ping -c {} -W {} {}".format(count, wait_sec, server).split(' ')
- #   print(cmd)
- #   try:
- #       output = subprocess.check_output(cmd).decode().strip()
- #       lines = output.split("\n")
- #       total = lines[-2].split(',')[3].split()[1]
- #       loss = lines[-2].split(',')[2].split()[0]
- #       timing = lines[-1].split()[3].split('/')
- #       print(output)
- #       return {
- #           'type': 'rtt',
- #           'min': timing[0],
- #           'avg': timing[1],
- #           'max': timing[2],
- #           'mdev': timing[3],
- #           'total': total,
- #           'loss': loss,
- #       }
- #   except Exception as e:
- #       print(e)
- #       return None
-
-
-
-#    os.system("ping " + ("-n 1 " if  sys.platform().lower()=="win32" else "-c 1 ") + host)
-#    print("Get the ping value")
-
-    #    parsePing(outputStr)
-
-
-
-def parsePing(outputStr):
-    print("parse the ping!")
 
 
 ##############################
@@ -383,14 +257,17 @@ while pointer:
     try:
 
         # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
-        output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
-        outputStr = str(output)
-        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-        pingValue = x[0]
+       # output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
+       # outputStr = str(output)
+       # x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+       # pingValue = x[0]
+
+        print(getPing(host))
+        pingValue=getPing(host)
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 3, 1,  pingValue/1000])
+            writer.writerow([datetime.now(), 3, 1,  pingValue])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -430,38 +307,24 @@ while pointer:
 
 
     host = 'apache.org'
-#    print("pinging server 1")
+    print("pinging server 1")
     operating_sys = platform.system()
 
     try:
 
-        # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
-#        output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower()=="windows" else 'c', host), shell=True)
-#        outputStr = str(output)
-#        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-#        pingValue = x[0]
-
-    #    print(outputStr)
-
-    # 
-
         print(getPing(host))
-#        parsePing(outputStr)
-        exit()
-
+        pingValue=getPing(host)
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 1, 1, pingValue/1000])
+            writer.writerow([datetime.now(), 1, 1, pingValue])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
             writer.writerow([datetime.now(), 1, 0, 0])
 
-
-
-#    print("Location 3")
+    print("Location 3")
     flag = True
 
     while flag:
@@ -494,19 +357,21 @@ while pointer:
     # host = 'location8'
 
     host = '23media.de'
-#    print("pinging server 1")
+    print("pinging server 1")
 
     try:
 
         # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
-        output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
-        outputStr = str(output)
-        x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-        pingValue = x[0]
+        #output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
+        #outputStr = str(output)
+        #x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
+        #pingValue = x[0]
+        print(getPing(host))
+        pingValue=getPing(host)
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 2, 1, pingValue/1000])
+            writer.writerow([datetime.now(), 2, 1, pingValue])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
