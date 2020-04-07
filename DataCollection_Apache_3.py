@@ -15,9 +15,9 @@ global counter
 
 counter = False
 
-location1 = 'https://downloads.apache.org/httpd/httpd-2.4.43.tar.gz1'
-location2 = 'http://mirror.23media.de/apache/httpd/httpd-2.4.43.tar.gz1'
-location3 = 'http://mirrors.estointernet.in/apache//httpd/httpd-2.4.43.tar.gz1'
+location1 = 'https://downloads.apache.org/httpd/httpd-2.4.43.tar.gz'
+location2 = 'http://mirror.23media.de/apache/httpd/httpd-2.4.43.tar.gz'
+location3 = 'http://mirrors.estointernet.in/apache//httpd/httpd-2.4.43.tar.gz'
 
 
 with open('tva_output.csv', 'a') as fd:
@@ -75,9 +75,9 @@ def download_file(url, location):
 
 ################################
 
+
+# Get the ping response times
 def getPing(host):    
-
-
     cmd = "ping -c {} -W {} {}".format(1, 1, host).split(' ')
     try:
         output = subprocess.check_output(cmd).decode().strip()
@@ -228,7 +228,7 @@ while pointer:
 
         try:
             r = requests.get(location1)
-#            print(r.status_code)
+            print(r.status_code)
             if r.status_code == 200:
                 counter = download_file(location1, 1)
                 if not counter:
@@ -253,14 +253,9 @@ while pointer:
         counter = False
 
     host = 'estointernet.in'
-#    print("pinging server 3")
+    print("pinging server 3")
     try:
 
-        # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
-       # output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
-       # outputStr = str(output)
-       # x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-       # pingValue = x[0]
 
         print(getPing(host))
         pingValue=getPing(host)
@@ -275,13 +270,13 @@ while pointer:
             writer.writerow([datetime.now(), 3, 0, 0])
 
     flag = True
-#    print("Location 2")
+    print("Location 2")
 
     while flag:
 
         try:
             r = requests.get(location2)
- #           print(r.status_code)
+            print(r.status_code)
             if r.status_code == 200:
                 counter = download_file(location2, 1)
                 if not counter:
@@ -331,7 +326,7 @@ while pointer:
 
         try:
             r = requests.get(location3)
-#            print(r.status_code)
+            print(r.status_code)
             if r.status_code == 200:
                 counter = download_file(location3, 1)
                 if not counter:
@@ -361,11 +356,6 @@ while pointer:
 
     try:
 
-        # output = subprocess.check_output("ping -c 1 " + host + " | grep '^rtt'", shell=True)
-        #output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower() == "windows" else 'c', host), shell=True)
-        #outputStr = str(output)
-        #x = [int(s) for s in re.findall(r'\b\d+\b', outputStr)]
-        #pingValue = x[0]
         print(getPing(host))
         pingValue=getPing(host)
 
