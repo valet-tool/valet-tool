@@ -112,6 +112,8 @@ def getPing(host):
         total = lines[-2].split(',')[3].split()[1]
         loss = lines[-2].split(',')[2].split()[0]
         timing = lines[-1].split()[3].split('/')
+        print(timing[1])
+
         return {
             'type': 'rtt',
             'min': timing[0],
