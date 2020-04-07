@@ -26,7 +26,7 @@ with open('tva_output.csv', 'a') as fd:
 
 with open('ping.csv', 'a') as fd:
     writer = csv.writer(fd)
-    writer.writerow(["Timestamp", "Server", "Tactic", "PingSuccess", "PingTime"])
+    writer.writerow(["Timestamp", "Server", "Tactic", "PingSuccess", "PingMin", "PingAvg", "PingMax", "Pingstdev"])
 
 
 def download_file(url, location):
@@ -78,7 +78,11 @@ def download_file(url, location):
 
 # Get the ping response times
 def getPing(host):    
-    cmd = "ping -c {} -W {} {}".format(1, 1, host).split(' ')
+#    print("ping called")
+    cmd = "ping -c {} -W {} {}".format(4, 1, host).split(' ') # format(-c = number of times to ping, -W)
+#    print(cmd)
+
+#    quit()
     try:
         output = subprocess.check_output(cmd).decode().strip()
         lines = output.split("\n")
@@ -86,7 +90,12 @@ def getPing(host):
         loss = lines[-2].split(',')[2].split()[0]
         timing = lines[-1].split()[3].split('/')
 #        print(timing[1])
-        return(timing[1])
+#        return(timing[1])
+#        print(cmd)
+#        print(output)
+#        quit()
+        # min/avg/max/stddev the format of the output
+        return(timing)
 
 #        return {
 #            'type': 'rtt',
@@ -228,7 +237,7 @@ while pointer:
 
         try:
             r = requests.get(location1)
-            print(r.status_code)
+#            print(r.status_code)
             if r.status_code == 200:
                 counter = download_file(location1, 1)
                 if not counter:
@@ -256,13 +265,12 @@ while pointer:
     print("pinging server 3")
     try:
 
-
-        print(getPing(host))
+        # min/avg/max/stddev the format of the output
         pingValue=getPing(host)
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 3, 1,  pingValue])
+            writer.writerow([datetime.now(), 3, 1,  pingValue[0],  pingValue[1],  pingValue[2],  pingValue[3]])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -276,7 +284,7 @@ while pointer:
 
         try:
             r = requests.get(location2)
-            print(r.status_code)
+#            print(r.status_code)
             if r.status_code == 200:
                 counter = download_file(location2, 1)
                 if not counter:
@@ -307,12 +315,12 @@ while pointer:
 
     try:
 
-        print(getPing(host))
+        # min/avg/max/stddev the format of the output
         pingValue=getPing(host)
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 1, 1, pingValue])
+            writer.writerow([datetime.now(), 1, 1,  pingValue[0],  pingValue[1],  pingValue[2],  pingValue[3]])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
@@ -326,7 +334,7 @@ while pointer:
 
         try:
             r = requests.get(location3)
-            print(r.status_code)
+#            print(r.status_code)
             if r.status_code == 200:
                 counter = download_file(location3, 1)
                 if not counter:
@@ -349,19 +357,18 @@ while pointer:
         flag = False
         counter = False
 
-    # host = 'location8'
 
     host = '23media.de'
     print("pinging server 1")
 
     try:
 
-        print(getPing(host))
+        # min/avg/max/stddev the format of the output
         pingValue=getPing(host)
 
         with open('ping.csv', 'a') as fd:
             writer = csv.writer(fd)
-            writer.writerow([datetime.now(), 2, 1, pingValue])
+            writer.writerow([datetime.now(), 2, 1,  pingValue[0],  pingValue[1],  pingValue[2],  pingValue[3]])
 
     except Exception as e:
         with open('ping.csv', 'a') as fd:
