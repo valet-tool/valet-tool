@@ -19,11 +19,13 @@ import java.text.ParseException;
 public class CreateExammCSV {
     //use this for date conversions
     public static DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss.SSSSSS");
+    public static int numberServers = 3;
+    public static int numberTactics = 5;
 
     public static BufferedWriter[][] getOutfiles(String outfileType) throws IOException {
-        BufferedWriter[][] outfiles = new BufferedWriter[8][5];
-        for (int server = 1; server <= 8; server++) {
-            for (int tactic = 1; tactic <= 5; tactic++) {
+        BufferedWriter[][] outfiles = new BufferedWriter[numberServers][numberTactics];
+        for (int server = 1; server <= numberServers; server++) {
+            for (int tactic = 1; tactic <= numberTactics; tactic++) {
                 BufferedWriter writer = outfiles[server-1][tactic-1];
                 if (writer == null) {
                     String filename = "tva_server_" + server + "_tactic_" + tactic + "_" + outfileType + ".csv";
@@ -55,42 +57,47 @@ public class CreateExammCSV {
     public static void main(String[] arguments) {
         if (arguments.length != 4) {
             System.err.println("Incorrect arguments, usage:");
-            System.err.println("java CreateExammCSV <ping filename> <tva output filename> <training file rows> <testing file rows>");
+            System.err.println("java CreateExammCSV <ping filename> <tva output filename> <training file percent> <testing file percent>");
             System.exit(1);
         }
 
         PingFile ping = new PingFile(arguments[0]);
         TVAFile tva = new TVAFile(arguments[1]);
-        int trainingRows = Integer.parseInt(arguments[2]);
-        int validationRows = Integer.parseInt(arguments[3]);
+        double trainingPercent = Double.parseDouble(arguments[2]);
+        double validationPercent = Double.parseDouble(arguments[3]);
 
         //make an output file for each server and tactic
 
         try {
             BufferedWriter[][] outfiles = getOutfiles("train");
-            //there are 8 different servers and 5 different tactics
+            //there are numberServers different servers and numberTactics different tactics
 
-            Date[][] lastRecordingTime = new Date[8][5];
+            Date[][] lastRecordingTime = new Date[numberServers][numberTactics];
 
             //only use pings for tactic 1
-            int[] lastPingIndex = new int[8];
-            for (int i = 0; i < 8; i++) lastPingIndex[i] = 0;
+            int[] lastPingIndex = new int[numberServers];
+            for (int i = 0; i < numberServers; i++) lastPingIndex[i] = 0;
+
+            int trainingRows = (int)((double)tva.length * trainingPercent);
+            int validationRows = (int)((double)tva.length * validationPercent);
+
+            System.out.println("tva.length: " + tva.length + ", trainingRows: " + trainingRows + ", validationRows: " + validationRows);
 
             for (int i = 0; i < tva.length; i++) {
-                if (i == (40 * trainingRows)) {
+                if (i == trainingRows) {
                     System.out.println("setting outfiles at i: " + i);
                     outfiles = getOutfiles("test");
-                } else if (i == ((40 * trainingRows) + (40 * validationRows))) {
+                } else if (i == (trainingRows * validationRows)) {
                     System.out.println("setting outfiles at i: " + i);
                     outfiles = getOutfiles("validate");
                 }
 
-                Date timestamp = tva.timestamps[i];
-                int server = tva.servers[i];
-                int tactic = tva.tactics[i];
-                double latency = tva.latencies[i];
-                double cost = tva.costs[i];
-                int reliability = tva.reliabilities[i];
+                Date timestamp = tva.getTimestamp(i);
+                int server = tva.getServer(i);
+                int tactic = tva.getTactic(i);
+                double latency = tva.getLatency(i);
+                double cost = tva.getCost(i);
+                int reliability = tva.getReliability(i);
 
                 //System.out.println("getting writer for server: " + server + ", tactic: " + tactic);
 
@@ -102,7 +109,7 @@ public class CreateExammCSV {
                 } else {
                     double seconds = (timestamp.getTime() - lastRecordingTime[server-1][tactic-1].getTime())/1000;
 
-                    //System.out.println("last time: " + dateFormat.format(lastRecordingTime[server-1][tactic-1]) + ", current time: " + dateFormat.format(timestamp) + ", difference: " + seconds);
+                    System.out.println("last time: " + dateFormat.format(lastRecordingTime[server-1][tactic-1]) + ", current time: " + dateFormat.format(timestamp) + ", difference: " + seconds);
 
                     writer.write(Double.toString(seconds));
                 }
@@ -115,13 +122,13 @@ public class CreateExammCSV {
                     Date lastPingTime = null;
 
                     for (int j = lastPingIndex[server-1]; j < ping.length; j++) {
-                        if (ping.servers[j] != server) continue;
+                        if (ping.getServer(j) != server) continue;
 
-                        if (ping.timestamps[j].after(timestamp)) {
+                        if (ping.getTimestamp(j).after(timestamp)) {
                             break;
                         } else {
                             lastPingIndex[server-1] = j;
-                            lastPingTime = ping.timestamps[j];
+                            lastPingTime = ping.getTimestamp(j);
                         }
                     }
 
@@ -134,15 +141,15 @@ public class CreateExammCSV {
                         seconds = (lastRecordingTime[server-1][tactic-1].getTime() - lastPingTime.getTime()) /1000;
                     }
 
-                    writer.write("," + seconds + "," + ping.pingTime[lastPingIndex[server-1]]);
+                    writer.write("," + seconds + "," + ping.getPingTime(lastPingIndex[server-1]));
                 }
 
                 writer.write("\n");
                 writer.flush();
             }
 
-            for (int server = 1; server <= 8; server++) {
-                for (int tactic = 1; tactic <= 5; tactic++) {
+            for (int server = 1; server <= numberServers; server++) {
+                for (int tactic = 1; tactic <= numberTactics; tactic++) {
                     BufferedWriter writer = outfiles[server-1][tactic-1];
                     writer.close();
                 }
