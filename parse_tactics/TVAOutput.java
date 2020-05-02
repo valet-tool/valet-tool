@@ -246,9 +246,9 @@ public class TVAOutput {
         System.out.println("Making new outfile: '" + filename + "'");
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-        writer.write("time_since_last_recording,latency,cost,reliability");
+        writer.write("timestamp,time_since_last_recording,latency,cost,reliability");
 
-        if (tactic == 1) writer.write(",time_since_last_ping,last_ping");
+        if (tactic == 1) writer.write(",ping_timestamp,time_since_last_ping,ping_success,ping_time");
         writer.write("\n");
 
         return writer;
@@ -284,7 +284,7 @@ public class TVAOutput {
             double pingTime = row.pingTime;
 
 
-            writer.write(dateFormat.format(timestamp) +"," + latency + "," + cost + "," + reliability + "," + timeSinceLastRecording);
+            writer.write(dateFormat.format(timestamp) + "," + timeSinceLastRecording + "," + latency + "," + cost + "," + reliability);
 
             if (tactic == 1) {
                 if (pingTimestamp != null) {
