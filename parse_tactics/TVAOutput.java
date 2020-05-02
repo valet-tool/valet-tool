@@ -249,6 +249,7 @@ public class TVAOutput {
         writer.write("time_since_last_recording,latency,cost,reliability");
 
         if (tactic == 1) writer.write(",time_since_last_ping,last_ping");
+        writer.write("\n");
 
         return writer;
     }
