@@ -21,137 +21,173 @@ public class CreateExammCSV {
     public static DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss.SSSSSS");
     public static int numberServers = 3;
     public static int numberTactics = 5;
-
-    public static BufferedWriter[][] getOutfiles(String outfileType) throws IOException {
-        BufferedWriter[][] outfiles = new BufferedWriter[numberServers][numberTactics];
-        for (int server = 1; server <= numberServers; server++) {
-            for (int tactic = 1; tactic <= numberTactics; tactic++) {
-                BufferedWriter writer = outfiles[server-1][tactic-1];
-                if (writer == null) {
-                    String filename = "tva_server_" + server + "_tactic_" + tactic + "_" + outfileType + ".csv";
-                    System.out.println("Making new outfile: '" + filename + "'");
-
-                    writer = new BufferedWriter(new FileWriter(filename));
-                    outfiles[server-1][tactic-1] = writer;
-
-                    writer.write("time_since_last_recording,latency,cost,reliability");
-
-                    if (tactic == 1) writer.write(",time_since_last_ping,last_ping");
-                    writer.write("\n");
-                    writer.flush();
-                } else {
-                    String filename = "tva_server_" + server + "_tactic_" + tactic + "_" + outfileType + ".csv";
-                    System.out.println("Making new outfile: '" + filename + "'");
-
-                    writer.flush();
-                    writer.close();
-                    writer = new BufferedWriter(new FileWriter(filename));
-                }
-            }
-        }
-
-        return outfiles;
-    }
-
+    public static boolean normalize;
 
     public static void main(String[] arguments) {
-        if (arguments.length != 4) {
+        if (arguments.length != 5) {
             System.err.println("Incorrect arguments, usage:");
-            System.err.println("java CreateExammCSV <ping filename> <tva output filename> <training file percent> <testing file percent>");
+            System.err.println("java CreateExammCSV <ping filename> <tva output filename> <training file percent> <testing file percent> <normalize>");
             System.exit(1);
         }
 
-        PingFile ping = new PingFile(arguments[0]);
-        TVAFile tva = new TVAFile(arguments[1]);
+        String pingFilename = arguments[0];
+        String tvaFilename = arguments[1];
         double trainingPercent = Double.parseDouble(arguments[2]);
         double validationPercent = Double.parseDouble(arguments[3]);
+        normalize = Integer.parseInt(arguments[4]) != 0;
 
         //make an output file for each server and tactic
 
+        TVAOutput[][] tvas = new TVAOutput[numberServers][numberTactics];
+        for (int i = 0; i < tvas.length; i++) {
+            for (int j = 0; j < tvas[i].length; j++) {
+                tvas[i][j] = new TVAOutput(i + 1, j + 1);
+            }
+        }
+
         try {
-            BufferedWriter[][] outfiles = getOutfiles("train");
-            //there are numberServers different servers and numberTactics different tactics
+            //create a buffered reader given the filename (which requires creating a File and FileReader object beforehand)
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(tvaFilename)));
+            ArrayList<String> lines = new ArrayList<String>();
 
-            Date[][] lastRecordingTime = new Date[numberServers][numberTactics];
+            String line = bufferedReader.readLine(); //skip the first line
 
-            //only use pings for tactic 1
-            int[] lastPingIndex = new int[numberServers];
-            for (int i = 0; i < numberServers; i++) lastPingIndex[i] = 0;
+            int i = 1;
+            while ((line = bufferedReader.readLine()) != null) {
+                //System.out.println("read: '" + line + "'");
+                lines.add(line);
+                String[] parts = line.split(",", -1);
 
-            int trainingRows = (int)((double)tva.length * trainingPercent);
-            int validationRows = (int)((double)tva.length * validationPercent);
-
-            System.out.println("tva.length: " + tva.length + ", trainingRows: " + trainingRows + ", validationRows: " + validationRows);
-
-            for (int i = 0; i < tva.length; i++) {
-                if (i == trainingRows) {
-                    System.out.println("setting outfiles at i: " + i);
-                    outfiles = getOutfiles("test");
-                } else if (i == (trainingRows * validationRows)) {
-                    System.out.println("setting outfiles at i: " + i);
-                    outfiles = getOutfiles("validate");
+                //ignore the first and last entries because of the empty CSV values
+                Date timestamp = null;
+                try {
+                    timestamp = dateFormat.parse(parts[1]);
+                } catch (ParseException e) {
+                    System.err.println("Error parsing timestamp: " + e);
+                    e.printStackTrace();
+                    System.exit(1);
                 }
+                int server = Integer.parseInt(parts[2]);
+                int tactic = Integer.parseInt(parts[3]);
+                double latency = Double.parseDouble(parts[4]);
+                double cost = Double.parseDouble(parts[5]);
+                int reliability = Integer.parseInt(parts[6]);
 
-                Date timestamp = tva.getTimestamp(i);
-                int server = tva.getServer(i);
-                int tactic = tva.getTactic(i);
-                double latency = tva.getLatency(i);
-                double cost = tva.getCost(i);
-                int reliability = tva.getReliability(i);
-
-                //System.out.println("getting writer for server: " + server + ", tactic: " + tactic);
-
-                BufferedWriter writer = outfiles[server-1][tactic-1];
-
-                if (lastRecordingTime[server-1][tactic-1] == null) {
-                    //there is no time since last recording for the first entry
-                    writer.write("0");
-                } else {
-                    double seconds = (timestamp.getTime() - lastRecordingTime[server-1][tactic-1].getTime())/1000;
-
-                    System.out.println("last time: " + dateFormat.format(lastRecordingTime[server-1][tactic-1]) + ", current time: " + dateFormat.format(timestamp) + ", difference: " + seconds);
-
-                    writer.write(Double.toString(seconds));
-                }
-
-                lastRecordingTime[server-1][tactic-1] = timestamp;
-
-                writer.write("," + latency + "," + cost + "," + reliability);
-
-                if (tactic == 1) {
-                    Date lastPingTime = null;
-
-                    for (int j = lastPingIndex[server-1]; j < ping.length; j++) {
-                        if (ping.getServer(j) != server) continue;
-
-                        if (ping.getTimestamp(j).after(timestamp)) {
-                            break;
-                        } else {
-                            lastPingIndex[server-1] = j;
-                            lastPingTime = ping.getTimestamp(j);
-                        }
-                    }
-
-                    double seconds;
-                    if (lastPingTime == null) {
-                        System.out.println("lastPingTime == null for server: " + server + ", tactic: " + tactic + " and line: " + i);
-                        //if there was no last ping time (for the first downloads) the time since last ping == 0
-                        seconds = 0;
-                    } else {
-                        seconds = (lastRecordingTime[server-1][tactic-1].getTime() - lastPingTime.getTime()) /1000;
-                    }
-
-                    writer.write("," + seconds + "," + ping.getPingTime(lastPingIndex[server-1]));
-                }
-
-                writer.write("\n");
-                writer.flush();
+                TVAOutput tva = tvas[server - 1][tactic - 1];
+                tva.addTVARow(timestamp, server, tactic, latency, cost, reliability);
+                //System.out.println("line " + i + " " + tva.getLastTVARow().toString());
+                i++;
             }
 
-            for (int server = 1; server <= numberServers; server++) {
-                for (int tactic = 1; tactic <= numberTactics; tactic++) {
-                    BufferedWriter writer = outfiles[server-1][tactic-1];
-                    writer.close();
+        } catch (IOException e) {
+            System.err.println("ERROR opening TVAFile: '" + tvaFilename + "'");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        //sort and set the time since last recordings for each TVA file
+        for (int i = 0; i < tvas.length; i++) {
+            for (int j = 0; j < tvas[i].length; j++) {
+                tvas[i][j].setTimeSinceLastRecording();
+            }
+        }
+
+        //now read all the ping info
+
+        try {
+            //create a buffered reader given the filename (which requires creating a File and FileReader object beforehand)
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(pingFilename)));
+
+            String line = bufferedReader.readLine(); //ignore the first line
+
+            int i = 1;
+            while ((line = bufferedReader.readLine()) != null) {
+                //System.out.println("read: '" + line + "'");
+
+                String[] parts = line.split(",");
+
+                Date timestamp = null;
+                try {
+                    timestamp = dateFormat.parse(parts[0]);
+                } catch (ParseException e) {
+                    System.err.println("Error parsing timestamp: " + e);
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+
+                int server = Integer.parseInt(parts[1]);
+                int tactic = Integer.parseInt(parts[2]);
+                int pingSuccess = Integer.parseInt(parts[3]);
+
+                double pingTime = 0.0;
+                if (parts.length >= 5) {
+                    pingTime = Double.parseDouble(parts[4]);
+                }
+
+                //fix the bug where failed pings will report the tactic as 0
+                if (tactic == 0) tactic = 1;
+
+                TVAOutput tva = tvas[server - 1][tactic - 1];
+                tva.addPingRow(timestamp, server, tactic, pingSuccess, pingTime);
+
+                //System.out.println("line " + i + " " + tva.getLastPingRow().toString());
+                i++;
+            }
+
+        } catch (IOException e) {
+            System.err.println("ERROR opening PingFile: '" + pingFilename + "'");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+
+        //set the ping times for each row
+        for (int i = 0; i < tvas.length; i++) {
+            for (int j = 0; j < tvas[i].length; j++) {
+                tvas[i][j].mergePingTimes();
+            }
+        }
+
+        if (normalize) {
+            double[] mins = new double[7];
+            double[] maxs = new double[7];
+            for (int i = 0; i < 7; i++) {
+                mins[i] = Double.MAX_VALUE;
+                maxs[i] = -Double.MAX_VALUE;
+            }
+
+            for (int i = 0; i < tvas.length; i++) {
+                for (int j = 0; j < tvas[i].length; j++) {
+                    TVAOutput tva = tvas[i][j];
+
+                    tva.updateMinMax(mins, maxs);
+                }
+            }
+
+            System.out.println("latency range:                " + mins[0] + " to " + maxs[0]);
+            System.out.println("cost range:                   " + mins[1] + " to " + maxs[1]);
+            System.out.println("reliability range:            " + mins[2] + " to " + maxs[2]);
+            System.out.println("timeSinceLastRecording range: " + mins[3] + " to " + maxs[3]);
+            System.out.println("timeSinceLastPing range:      " + mins[4] + " to " + maxs[4]);
+            System.out.println("pingSuccess range:            " + mins[5] + " to " + maxs[5]);
+            System.out.println("pingTime range:               " + mins[6] + " to " + maxs[6]);
+
+            for (int i = 0; i < tvas.length; i++) {
+                for (int j = 0; j < tvas[i].length; j++) {
+                    TVAOutput tva = tvas[i][j];
+
+                    tva.normalize(mins, maxs);
+                }
+            }
+
+        }
+
+        try {
+            for (int i = 0; i < tvas.length; i++) {
+                for (int j = 0; j < tvas[i].length; j++) {
+                    TVAOutput tva = tvas[i][j];
+
+                    tva.writeToFile(trainingPercent, validationPercent);
                 }
             }
 
