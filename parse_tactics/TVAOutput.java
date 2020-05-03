@@ -265,7 +265,7 @@ public class TVAOutput {
                 writer.close();
                 System.out.println("setting outfiles at i: " + i);
                 writer = getWriter("test");
-            } else if (i == (trainingRows * validationRows)) {
+            } else if (i == (trainingRows + validationRows)) {
                 writer.close();
                 System.out.println("setting outfiles at i: " + i);
                 writer = getWriter("validation");
