@@ -18,7 +18,7 @@ import java.text.ParseException;
 
 public class CreateExammCSV {
     //use this for date conversions
-    public static DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss.SSSSSS");
+    public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
     public static int numberServers = 3;
     public static int numberTactics = 5;
     public static boolean normalize;

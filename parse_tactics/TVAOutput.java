@@ -16,7 +16,7 @@ import java.text.ParseException;
 
 public class TVAOutput {
     //use this for date conversions
-    public static DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss.SSSSSS");
+    public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
 
     int server;
     int tactic;
