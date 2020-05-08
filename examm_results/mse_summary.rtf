@@ -59,6 +59,8 @@ tva_server_3_latency\
 \
 \
 Network Sizes:\
+the following would have 4 inputs for noping, 6 inputs for ping, and 2 outputs (cost and latency)\
+\
 MLP\
 	noping	-	hidden nodes: 100, edges: 400 + 200, weights: 600\
 	ping 	-	hidden nodes: 100, edges: 600 + 200, weights: 800\
@@ -67,6 +69,8 @@ LSTM\
 	ping		-	hidden nodes: 1000, edges: 4000 + 2000, weights: 11000 + 6000\
 	noping	-	hidden nodes: 1000, edges: 6000 + 2000, weights: 11000 + 8000\
 \
+\
+the following would have 4 inputs for noping, 6 inputs for ping, and 1 output (cost or latency)\
 \
 tva_server1_cost\
 	noping	-	hidden nodes: 12, edges: 15, rec: 12, weights: 79\
