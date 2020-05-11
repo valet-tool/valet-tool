@@ -2,5 +2,4 @@ PiDUTSignal
 PiMonitor
 nohup\.out
 \.vscode/
-
-\.DS_Store
+.DS_Store
