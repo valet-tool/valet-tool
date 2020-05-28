@@ -1,31 +1,32 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2512
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;}
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 CourierNewPSMT;\f1\fmodern\fcharset0 CourierNewPS-BoldMT;\f2\fswiss\fcharset0 Helvetica;
+}
 {\colortbl;\red255\green255\blue255;}
 {\*\expandedcolortbl;;}
-\margl1440\margr1440\vieww21860\viewh15020\viewkind0
+\margl1440\margr1440\vieww36460\viewh21720\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\fs40 \cf0 tva_server_1_cost\
-	ping - min_mse:  0.000180276  in search  1 , avg mse:  
+\f0\fs28 \cf0 tva_server_1_cost\
+	ping - min_mse: 		0.000180276  in search  1 , avg mse:  
 \f1\b 0.0001820807
 \f0\b0 \
-	noping - min_mse:  
+	noping - min_mse: 	
 \f1\b 0.000179135
 \f0\b0   in search  5 , avg mse:  0.0001880016\
 tva_server_2_cost\
-	ping - min_mse:  
+	ping - min_mse:		
 \f1\b 0.000216051
 \f0\b0   in search  4 , avg mse:  
 \f1\b 0.000217759
 \f0\b0 \
-	noping - min_mse:  0.000217453  in search  5 , avg mse:  0.0002206007\
+	noping - min_mse:		0.000217453  in search  5 , avg mse:  0.0002206007\
 tva_server_3_cost\
-	ping - min_mse:  
+	ping - min_mse:		
 \f1\b 0.000173178
 \f0\b0   in search  3 , avg mse:  
 \f1\b 0.0001900311
 \f0\b0 \
-	noping - min_mse:  0.000186966  in search  6 , avg mse:  0.0001962382\
+	noping - min_mse:		0.000186966  in search  6 , avg mse:  0.0001962382\
 \
 tva_server_1_reliability\
 \
@@ -35,23 +36,85 @@ tva_server_3_reliability\
 \
 \
 tva_server_1_latency\
-	ping - min_mse:  
+	ping - min_mse:		
 \f1\b 1.02023e-05
 \f0\b0   in search  3 , avg mse:  
 \f1\b 1.565664e-05
 \f0\b0 \
-	noping - min_mse:  1.0427e-05  in search  0 , avg mse:  1.747266e-05\
+	noping - min_mse:		1.0427e-05   in search  0 , avg mse:  1.747266e-05\
 tva_server_2_latency\
-	ping - min_mse:  
+	ping - min_mse:		
 \f1\b 1.64214e-06
 \f0\b0   in search  8 , avg mse:  3.094147e-06\
-	noping - min_mse:  1.86784e-06  in search  1 , avg mse:  
+	noping - min_mse:		1.86784e-06  in search  1 , avg mse:  
 \f1\b 2.978521e-06
 \f0\b0 \
 tva_server_3_latency\
-	ping - min_mse:  0.00134484  in search  3 , avg mse:  
+	ping - min_mse:		0.00134484   in search  3 , avg mse:  
 \f1\b 0.001374067
 \f0\b0 \
-	noping - min_mse:  
+	noping - min_mse:		
 \f1\b 0.00133658
-\f0\b0   in search  4 , avg mse:  0.00138968}
+\f0\b0    in search  4 , avg mse:  0.00138968\
+\
+\
+Network Sizes:\
+the following would have 4 inputs for noping, 6 inputs for ping, and 2 outputs (cost and latency)\
+\
+MLP\
+	noping	-	hidden nodes: 100, edges: 400 + 200, weights: 600\
+	ping 	-	hidden nodes: 100, edges: 600 + 200, weights: 800\
+\
+LSTM\
+	ping		-	hidden nodes: 1000, edges: 4000 + 2000, weights: 11000 + 6000\
+	noping	-	hidden nodes: 1000, edges: 6000 + 2000, weights: 11000 + 8000\
+\
+\
+the following would have 4 inputs for noping, 6 inputs for ping, and 1 output (cost or latency)\
+\
+tva_server1_cost\
+	noping	-	hidden nodes: 12, edges: 15, rec: 12, weights: 79\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000180    0.008766    15 (26)     12 (15)     1 (7)       2 (2)                   1 (1)       2 (2)                               1 (1)       12 (13)     [clone:1]\
+	ping		-	hidden nodes: 16, edges: 54, rec: 25, weights: 156\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000179    0.008798    54 (66)     25 (29)     2 (9)                   1 (1)       1 (1)                   0 (1)       6 (6)                   16 (18)     [disable_node:1]\
+tva_server_1_latency\
+	noping	-	hidden nodes: 7, edges: 18, rec: 15, weights: 77\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000010    0.000924    18 (23)     15 (18)     0 (5)       1 (1)       2 (2)       0 (1)                                           2 (2)       7 (11)      [disable_node:1]\
+	ping		-	hidden nodes: 7, edges: 41, rec: 37, weights: 134\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000012    0.001309    41 (41)     37 (37)     0 (7)       2 (4)                   2 (5)                   0 (1)       1 (1)                   7 (18)      [crossover:1]\
+tva_server_2_cost\
+	noping	-	hidden nodes: 15, edges: 55, rec: 35, weights: 139\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000216    0.011775    55 (56)     35 (35)     2 (7)       2 (2)       1 (1)       2 (2)       1 (1)       1 (1)                   1 (1)       15 (15)     [clone:1]\
+	ping		-	hidden nodes: 17, edges: 69, rec: 49, weights: 170\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000217    0.011809    69 (73)     49 (50)     2 (9)       1 (1)       4 (4)       2 (2)       1 (1)       1 (1)       1 (1)                   17 (19)     [add_node(GRU):1]\
+tva_server_2_latency\
+	noping	-	hidden nodes: 4, edges: 3, rec: 0, weights: 20\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000002    0.001149    3 (6)       0 (0)       0 (5)                                                       1 (1)                               4 (6)       [add_node(GRU):1]\
+	ping		-	hidden nodes: 8, edges: 12, rec: 4, weights: 39\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000003    0.001211    12 (16)     4 (4)       0 (7)                               1 (1)                               1 (1)                   8 (9)       [clone:1]\
+\
+tva_server_3_cost\
+	noping	-	hidden nodes: 4, edges: 5, rec: 14, weights: 25\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000173    0.010380    5 (5)       14 (14)     0 (5)                   1 (1)                                                                   4 (6)       [clone:1]\
+	ping		-	hidden nodes: 29, edges: 62, rec: 47, weights: 351\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.000187    0.010679    62 (120)    47 (84)     1 (10)      2 (3)       5 (7)       1 (2)       1 (1)       4 (5)       7 (7)       1 (2)       29 (37)     [disable_edge:1]\
+\
+tva_server_3_latency\
+	noping	-	hidden nodes: 29, edges: 78, rec: 61, weights: 420\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.001365    0.024095    78 (144)    61 (91)     2 (10)      2 (3)       2 (2)       4 (5)       4 (4)       4 (4)       5 (6)       2 (4)       29 (38)     [disable_edge:1]\
+	ping		-	hidden nodes: 21, edges: 57, rec: 30, weights: 238\
+					MSE         MAE         Edges       Rec Edges   Simple      Jordan      Elman       UGRNN       MGU         GRU         Delta       LSTM        Total       Generated\
+					0.001397    0.023949    57 (80)     30 (42)     1 (8)       1 (1)       2 (4)       4 (4)       5 (6)       1 (1)       0 (2)       2 (2)       21 (28)     [disable_edge:1]
+\f2\fs40 \
+}
