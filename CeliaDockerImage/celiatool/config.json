@@ -1,0 +1,18 @@
+{
+ "inputDirectory": "./example-input/",
+ "multiFile": false,
+ "inputFileName": "data.csv",
+ "outputDirectory": "./example-output/",
+ "outputFileName": "output.csv",
+ "outputStatFileName": "stat.csv",
+ "headers": {
+  "timestamp": "timestamp",
+  "latency": "latency",
+  "cost": "cost",
+  "reliability": "reliability",
+  "predicted_latency": "predicted_latency",
+  "predicted_cost": "predicted_cost",
+  "predicted_reliability": "predicted_reliability"
+ },
+ "threshold": 1000
+}
