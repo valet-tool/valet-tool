@@ -1,0 +1,2 @@
+,predictionType,utilDif,reward,negativeReward,numOfUpdates,lostUtil,wrongDecisions,correctDecisions,decisionShouldHaveDid,decisionShouldHaveDidNot,decisionNotHaveDid,decisionNotHaveDidNot
+0,data.csv,0.0,99387.15621853672,0.0,27,0.0,0,2605,27,0,0,2578
