@@ -1,8 +1,8 @@
 {
- "inputDirectory": "./example-input/",
- "multiFile": false,
- "inputFileName": "data.csv",
- "outputDirectory": "./example-output/",
+ "inputDirectory": "./inputFiles/",
+ "multiFile": true,
+ "inputFileName": "predictions_LSTM_server_1_tactic_1_Normalized.csv",
+ "outputDirectory": "./output/",
  "outputFileName": "output.csv",
  "outputStatFileName": "stat.csv",
  "headers": {
@@ -10,9 +10,9 @@
   "latency": "latency",
   "cost": "cost",
   "reliability": "reliability",
-  "predicted_latency": "predicted_latency",
-  "predicted_cost": "predicted_cost",
-  "predicted_reliability": "predicted_reliability"
+  "predicted_latency": "predicted_Latency",
+  "predicted_cost": "predicted_Cost",
+  "predicted_reliability": "predicted_Reliability"
  },
  "threshold": 1000
 }
