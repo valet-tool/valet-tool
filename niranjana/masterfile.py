@@ -162,12 +162,15 @@ if __name__=="__main__":
     #first ieration is plain with ping data
     #second iteration is with all servers data
     #TODO: ADD other models
-    mlp_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers"])
-    lstm_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers"])
-    svr_rbf_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers"])
-    svr_linear_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers"])
-    kNN_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers"])
+    mlp_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers", "5 min Sampling Rate"])
+    lstm_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
+    svr_rbf_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
+    svr_linear_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
+    kNN_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
     for iterations in range(0,2):
+        #Iteration 0: Plain ping data
+        #Iteration 1: All servers ping data
+        #Iteration 2: 5 minute sampling rate
         tactics = [1]
         if iterations==0:
             
@@ -235,6 +238,17 @@ if __name__=="__main__":
             validation_master_dataframe = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
             test_master_dataframe = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
 
+        elif iterations==2:
+            servers = np.arange(2,4)
+            train_master_dataframe_temp, test_master_dataframe_temp, validation_master_dataframe_temp = createMasterFrame(servers, tactics)
+            
+            train_master_dataframe_original = pd.concat([reframed, train_master_dataframe_temp], axis = 1)
+            validation_master_dataframe_original = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
+            test_master_dataframe_original = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
+            
+            train_master_dataframe = train_master_dataframe_original.iloc[::5, :]
+            test_master_dataframe = test_master_dataframe_original.iloc[::5, :]
+            validation_master_dataframe = validation_master_dataframe_original.iloc[::5, :]
         #servers = np.arange(1,4)
         #tactics = [1]#np.arange(1,6)
         #cols_orig = ["timestamp", "time_since_last_recording", "latency", "cost", "reliability", "ping_timestamp", "time_since_last_ping", "ping_success", "ping_time"]
