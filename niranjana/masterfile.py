@@ -162,11 +162,23 @@ if __name__=="__main__":
     #first ieration is plain with ping data
     #second iteration is with all servers data
     #TODO: ADD other models
-    mlp_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers", "5 min Sampling Rate"])
-    lstm_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
-    svr_rbf_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
-    svr_linear_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
-    kNN_models_results = pd.DataFrame(columns = ["RMSE","MSE", "MAE"] , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
+    model_trials = 10
+    base_columns = ["RMSE","MSE", "MAE"]
+    columns_w_trials = []
+    
+    for i in range(0, model_trials):
+        #mod_columns = []
+        for j in range(0, len(base_columns)):
+            columns_w_trials.append(base_columns[j] +" " +str(i))
+        #columns_w_trials.append(mod_columns)
+    
+    
+    mlp_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers", "5 min Sampling Rate"])
+    lstm_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
+    
+    svr_rbf_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
+    svr_linear_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
+    kNN_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
     for iterations in range(0,2):
         #Iteration 0: Plain ping data
         #Iteration 1: All servers ping data
@@ -255,49 +267,53 @@ if __name__=="__main__":
         
 
        
-        # define MLP model
-        model = Sequential()
-        model.add(Dense(100, activation='relu', input_dim=n_input))
-        model.add(Dense(3))
-        model.compile(optimizer='adam', loss='mse')
-        history= model.fit(X, train_y, epochs=20, verbose=1)
-        # plot history
-        pyplot.plot(history.history['loss'], label='train')
-        pyplot.legend()
-        pyplot.show()
+
     
         
 
 
         ## For MLP use below line only
-        yhat = model.predict(testset_X)
-    
-        print(yhat)
-        dataset_results_mlp = pd.DataFrame({'predicted_Latency': yhat[:, 0], 'predicted_Cost': yhat[:, 1],
-                           'predicted_Reliability': yhat[:, 2]})
-        dataset_results_mlp['predicted_Reliability'].loc[dataset_results_mlp['predicted_Reliability'] >0.5] = 1
-        dataset_results_mlp['predicted_Reliability'].loc[dataset_results_mlp['predicted_Reliability'] <0.5] = 0
-    
-    
-        frames = [test_dataset, dataset_results_mlp]
-        result_mlp = pd.concat(frames,axis =1)
-    
-        ## Finding the root mean squared error of the model
-    
-        rmse = sqrt(mean_squared_error(yhat, testset_y))
-        print('Test RMSE for MLP: ' , rmse)
-    
-        mse = mean_squared_error(yhat, testset_y)
-        print('Test MSE for MLP: ',  mse)
-    
-        mae = mean_absolute_error(yhat, testset_y)
-        print('Test MAE for MLP: ',  mae)
         
-        mlp_models_results["RMSE"].iloc[iterations] = rmse
-        mlp_models_results["MSE"].iloc[iterations] = mse
-        mlp_models_results["MAE"].iloc[iterations] = mae
+        for z in range(0, model_trials):
+            # define MLP model
+            model = Sequential()
+            model.add(Dense(100, activation='relu', input_dim=n_input))
+            model.add(Dense(3))
+            model.compile(optimizer='adam', loss='mse')
+            history= model.fit(X, train_y, epochs=20, verbose=1)
+            # plot history
+            pyplot.plot(history.history['loss'], label='train')
+            pyplot.legend()
+            pyplot.show()
+        
+            yhat = model.predict(testset_X)
+        
+            #print(yhat)
+            dataset_results_mlp = pd.DataFrame({'predicted_Latency'+" "+str(z): yhat[:, 0], 'predicted_Cost'+" "+str(z): yhat[:, 1],
+                               'predicted_Reliability'+" "+str(z): yhat[:, 2]})
+            dataset_results_mlp['predicted_Reliability'+" "+str(z)].loc[dataset_results_mlp['predicted_Reliability'+" "+str(z)] >0.5] = 1
+            dataset_results_mlp['predicted_Reliability'+" "+str(z)].loc[dataset_results_mlp['predicted_Reliability'+" "+str(z)] <0.5] = 0
         
         
+            frames = [test_dataset, dataset_results_mlp]
+            result_mlp = pd.concat(frames,axis =1)
+
+            ## Finding the root mean squared error of the model
+        
+            rmse = sqrt(mean_squared_error(yhat, testset_y))
+            print('Test RMSE for MLP'+" "+str(z) , rmse)
+        
+            mse = mean_squared_error(yhat, testset_y)
+            print('Test MSE for MLP'+" "+str(z),  mse)
+        
+            mae = mean_absolute_error(yhat, testset_y)
+            print('Test MAE for MLP'+" "+str(z),  mae)
+            
+            mlp_models_results["RMSE"+" "+str(z)].iloc[iterations] = rmse
+            mlp_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
+            mlp_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
+            
+            result_mlp.to_pickle("results/raw_results_mlp"+" "+str(z)+".pkl")
         
         #################################################################################
         # design LSTM network with variable architectures, use adam optimizer and mse loss function
@@ -330,55 +346,50 @@ if __name__=="__main__":
                 model.add(LSTM(100))
                 model.add(Dense(3))
         
-            print(model.summary())
             
-            model.compile(loss='mse', optimizer='adam')
-            # fit network
-            history = model.fit(train_X, train_y, epochs=20, batch_size=72, validation_data=(test_X, test_y), verbose=1, shuffle=False)
-            # plot history
-            pyplot.plot(history.history['loss'], label='train')
-            pyplot.plot(history.history['val_loss'], label='test')
-            pyplot.legend()
-            pyplot.show()
-            
-#            test_dataset = test_master_dataframe
-##            test_dataset= test_dataset.drop(columns=["timestamp","ping_timestamp","ping_success"])
-#            #print(test_dataset.head())
-#            test_values = test_dataset.values
-#            reframed_test = series_to_supervised(test_values, 1, 1)
-#            reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
-#            testset = reframed_test.values
-#            testset_X, testset_y = testset[:, :-3], testset[:,-3:]
-#            testdataReshaped = testset_X.reshape((testset_X.shape[0], 1, testset_X.shape[1]))
-            
-            
-            yhat = model.predict(test_X)
-    
-            #print(yhat)
-            dataset_results_lstm = pd.DataFrame({'predicted_Latency': yhat[:, 0], 'predicted_Cost': yhat[:, 1],
-                                   'predicted_Reliability': yhat[:, 2]})
-            dataset_results_lstm['predicted_Reliability'].loc[dataset_results_lstm['predicted_Reliability'] >0.5] = 1
-            dataset_results_lstm['predicted_Reliability'].loc[dataset_results_lstm['predicted_Reliability'] <0.5] = 0
-            
-            frames = [test_dataset, dataset_results_mlp, dataset_results_lstm]
-            result_lstm = pd.concat(frames,axis =1)
+            base_model = model
+            for z in range(0, model_trials):
+                
+                #print("LSTM model summary",model.summary())
+                model = base_model
+                model.compile(loss='mse', optimizer='adam')
+                # fit network
+                history = model.fit(train_X, train_y, epochs=20, batch_size=72, validation_data=(test_X, test_y), verbose=1, shuffle=False)
+                # plot history
+                pyplot.plot(history.history['loss'], label='train')
+                pyplot.plot(history.history['val_loss'], label='test')
+                pyplot.legend()
+                pyplot.show()
+                
+                yhat = model.predict(test_X)
         
-            ## Finding the root mean squared error of the model
-        
-            rmse = sqrt(mean_squared_error(yhat, testset_y))
-            print('Test RMSE for LSTM ',str(idx),":" , rmse)
-        
-            mse = mean_squared_error(yhat, testset_y)
-            print('Test MSE for LSTM ', str(idx),":",  mse)
-        
-            mae = mean_absolute_error(yhat, testset_y)
-            print('Test MAE for LSTM ', str(idx),":",  mae)
+                #print(yhat)
+                dataset_results_lstm = pd.DataFrame({'predicted_Latency'+" "+str(z): yhat[:, 0], 'predicted_Cost'+" "+str(z): yhat[:, 1],
+                                       'predicted_Reliability'+" "+str(z): yhat[:, 2]})
+                dataset_results_lstm['predicted_Reliability'+" "+str(z)].loc[dataset_results_lstm['predicted_Reliability'+" "+str(z)] >0.5] = 1
+                dataset_results_lstm['predicted_Reliability'+" "+str(z)].loc[dataset_results_lstm['predicted_Reliability'+" "+str(z)] <0.5] = 0
+                
+                frames = [test_dataset, dataset_results_mlp, dataset_results_lstm]
+                result_lstm = pd.concat(frames,axis =1)
             
-            lstm_models_results["RMSE"].iloc[iterations] = rmse
-            lstm_models_results["MSE"].iloc[iterations] = mse
-            lstm_models_results["MAE"].iloc[iterations] = mae
-            name = "results/lstm_results"+str(idx)+".pkl"
+                ## Finding the root mean squared error of the model
+            
+                rmse = sqrt(mean_squared_error(yhat, testset_y))
+                print('Test RMSE for LSTM ',str(idx),":" , rmse)
+            
+                mse = mean_squared_error(yhat, testset_y)
+                print('Test MSE for LSTM ', str(idx),":",  mse)
+            
+                mae = mean_absolute_error(yhat, testset_y)
+                print('Test MAE for LSTM ', str(idx),":",  mae)
+                
+                lstm_models_results["RMSE"+" "+str(z)].iloc[iterations] = rmse
+                lstm_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
+                lstm_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
+            name = "results/lstm_results_model_"+str(idx)+".pkl"
             lstm_models_results.to_pickle(name)
+            result_lstm.to_pickle("results/raw_results_lstm_"+str(idx)+" "+str(z)+".pkl")
+
 
         
         
@@ -464,11 +475,12 @@ if __name__=="__main__":
         
     train_master_dataframe.to_pickle("results/train_master_dataframe.pkl")
     test_master_dataframe.to_pickle("results/test_master_dataframe.pkl")
+    
     svr_rbf_models_results.to_pickle("results/svr_rbf_results.pkl")
     svr_linear_models_results.to_pickle("results/svr_linear_results.pkl")
     kNN_models_results.to_pickle("results/kNN_results.pkl")
-    mlp_models_results.to_pickle("results/mlp_results.pkl")
 
+    mlp_models_results.to_pickle("results/mlp_results"+" "+str(z)+".pkl")
 
     #dataset = break_timestamp(dataset)
     #dataset= dataset.drop(columns=col_arr)#["ID"])
