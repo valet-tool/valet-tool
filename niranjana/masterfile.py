@@ -173,13 +173,13 @@ if __name__=="__main__":
         #columns_w_trials.append(mod_columns)
     
     
-    mlp_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers", "5 min Sampling Rate"])
-    lstm_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
+    mlp_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers", "5 sample Sampling Rate"])
+    lstm_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers","5 sample Sampling Rate"])
     
-    svr_rbf_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
-    svr_linear_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
-    kNN_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 min Sampling Rate"])
-    for iterations in range(0,2):
+    svr_rbf_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate"])
+    svr_linear_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate"])
+    kNN_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate"])
+    for iterations in range(0,3):
         #Iteration 0: Plain ping data
         #Iteration 1: All servers ping data
         #Iteration 2: 5 minute sampling rate
@@ -369,7 +369,7 @@ if __name__=="__main__":
                 dataset_results_lstm['predicted_Reliability'+" "+str(z)].loc[dataset_results_lstm['predicted_Reliability'+" "+str(z)] >0.5] = 1
                 dataset_results_lstm['predicted_Reliability'+" "+str(z)].loc[dataset_results_lstm['predicted_Reliability'+" "+str(z)] <0.5] = 0
                 
-                frames = [test_dataset, dataset_results_mlp, dataset_results_lstm]
+                frames = [test_dataset, dataset_results_lstm]
                 result_lstm = pd.concat(frames,axis =1)
             
                 ## Finding the root mean squared error of the model
