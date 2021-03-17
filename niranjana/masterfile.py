@@ -73,16 +73,25 @@ def getColumnNames(column_names, server, tactic):
         
     return columns_arr
 
-def createMasterFrame(num_servers, num_tactics):
+def createMasterFrame(num_servers, num_tactics, base_path_parts = None):
     cols = ["timestamp", "ping_timestamp", "ping_success"]
     count = -1
     for i in num_servers:
         for j in num_tactics:
             count = count + 1
             print("I:", i, "J", j)
-            train_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics/normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_train.csv"
-            test_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics/normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_test.csv"
-            validation_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics/normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_validation.csv"
+            
+            if base_path_parts:
+                train_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics_weekend_sample_rate/"+str(base_path_parts[0])+"normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_train_weekdayOneHot"+str(base_path_parts[1])+".csv"
+                
+                test_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics_weekend_sample_rate/"+str(base_path_parts[0])+"normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_test_weekdayOneHot"+str(base_path_parts[1])+".csv"
+                
+                validation_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics_weekend_sample_rate/"+str(base_path_parts[0])+"normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_validation_weekdayOneHot"+str(base_path_parts[1])+".csv"
+            else:
+                train_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_train_weekdayOneHot.csv"
+                #"/home/nd7896/data/TVA_E/valet-tool/parse_tactics/normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_train.csv"
+                test_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_test_weekdayOneHot.csv"
+                validation_filename = "/home/nd7896/data/TVA_E/valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_"+str(i)+"_tactic_"+str(j)+"_validation_weekdayOneHot.csv"
             
             if count==0:#i == 1 and j == 1:
 
@@ -173,16 +182,18 @@ if __name__=="__main__":
         #columns_w_trials.append(mod_columns)
     
     
-    mlp_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers", "5 sample Sampling Rate"])
-    lstm_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers","5 sample Sampling Rate"])
+    mlp_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers", "5 sample Sampling Rate", "10 sample Sampling Rate", "20 sample Sampling Rate"])
+    lstm_models_results = pd.DataFrame(columns = columns_w_trials , index = ["Plain Ping", "All Servers","5 sample Sampling Rate", "10 sample Sampling Rate", "20 sample Sampling Rate"])
     
-    svr_rbf_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate"])
-    svr_linear_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate"])
-    kNN_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate"])
-    for iterations in range(0,3):
+    svr_rbf_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate", "10 sample Sampling Rate", "20 sample Sampling Rate"])
+    svr_linear_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate", "10 sample Sampling Rate", "20 sample Sampling Rate"])
+    kNN_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate", "10 sample Sampling Rate", "20 sample Sampling Rate"])
+    for iterations in range(0,5):
         #Iteration 0: Plain ping data
         #Iteration 1: All servers ping data
-        #Iteration 2: 5 minute sampling rate
+        #Iteration 2: 5 sampling rate
+        #Iteration 3: 10 sampling rate
+        #Iteration 4: 20 sampling rate
         tactics = [1]
         if iterations==0:
             
@@ -197,18 +208,26 @@ if __name__=="__main__":
             values_test = test_master_dataframe.values
             
             
+            
+            temp=[]
+            original_indices = [0, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            columns_to_remove = [int(val + train_master_dataframe.shape[1]) for val in original_indices]
+            
             ## Calling the function to do the preprocessing the data and removing unwanted columns
             
-            
+            #0,4,5
+            #[13, 17, 18]
             # frame as supervised learning
             reframed = series_to_supervised(values, 1, 1)
             reframed_validation = series_to_supervised(values_validation, 1, 1)
             reframed_test = series_to_supervised(values_test, 1, 1)
             # drop columns we don't want to predict
-            reframed.drop(reframed.columns[[6,10,11]], axis=1, inplace=True)
-            reframed_validation.drop(reframed_validation.columns[[6,10,11]], axis=1, inplace=True)
-            reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
+            reframed.drop(reframed.columns[columns_to_remove], axis=1, inplace=True)
+            reframed_validation.drop(reframed_validation.columns[columns_to_remove], axis=1, inplace=True)
+            reframed_test.drop(reframed_test.columns[columns_to_remove], axis=1, inplace=True)
             print(reframed.head(1))
+            
+            
             
             ## Splitting the data into training and validation sets
             
@@ -216,13 +235,19 @@ if __name__=="__main__":
             train = reframed.values
             valid = reframed_validation.values
             test = reframed_test.values
+            
+            predict_columns = [13, 14, 15]
+            feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
+            
             # split into input and outputs
-            train_X, train_y = train[:, :-3], train[:,-3:]
-            valid_X, valid_y = valid[:, :-3], valid[:,-3:]
-            test_X, test_y = test[:, :-3], test[:,-3:]
+            train_X, train_y = train[:, feature_columns], train[:,predict_columns]
+            valid_X, valid_y = valid[:, feature_columns], valid[:,predict_columns]
+            test_X, test_y = test[:, feature_columns], test[:,predict_columns]
             # reshape input to be 3D [samples, timesteps, features]
             train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
             valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
+            test_X_prior = test_X
+
             test_X = test_X.reshape((test_X.shape[0], 1, test_X.shape[1]))
             print(train_X.shape, train_y.shape, valid_X.shape, valid_y.shape, test_X.shape, test_y.shape)
             
@@ -233,34 +258,131 @@ if __name__=="__main__":
             X = train_X.reshape((train_X.shape[0], n_input))
             
             test_dataset = test_master_dataframe #test_dataset.drop(columns=["timestamp","ping_timestamp","ping_success"])
-            test_values = test_dataset.values
+            # test_values = test_dataset.values
             
-            reframed_test = series_to_supervised(test_values, 1, 1)
-            reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
-            testset = reframed_test.values
-            testset_X, testset_y = testset[:, :-3], testset[:,-3:]
-            testdataReshaped = testset_X.reshape((testset_X.shape[0], 1, testset_X.shape[1]))
+            # reframed_test = series_to_supervised(test_values, 1, 1)
+            # reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
+            # testset = reframed_test.values
+            # testset_X, testset_y = testset[:, :-3], testset[:,-3:]
+            testdataReshaped = test_X
+            testset_X, testset_y = test_X_prior, test_y
+            #testset_X.reshape((testset_X.shape[0], 1, testset_X.shape[1]))
 
 
-        elif iterations==1:
+        else:
             
-            servers = np.arange(2,4)
-            train_master_dataframe_temp, test_master_dataframe_temp, validation_master_dataframe_temp = createMasterFrame(servers, tactics)
-            train_master_dataframe = pd.concat([reframed, train_master_dataframe_temp], axis = 1)
-            validation_master_dataframe = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
-            test_master_dataframe = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
+            servers = np.arange(1,4)
+            if iterations!=1:
+                if iterations==2:
+                    sample_rate = 5
+                elif iterations==3:
+                    sample_rate = 10
+                elif iterations==4:
+                    sample_rate = 20
+                
+                base_path_parts = ["sampleRate/","sample_rate_"+str(sample_rate)]
+            
+            # train_master_dataframe = pd.concat([reframed, train_master_dataframe_temp], axis = 1)
+            # validation_master_dataframe = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
+            # test_master_dataframe = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
+            # load dataset
+            train_master_dataframe, test_master_dataframe, validation_master_dataframe = createMasterFrame(servers, tactics)
+            
+            dataset = train_master_dataframe #.values
+            values = dataset.values
+            
+            values_validation = validation_master_dataframe.values#test_master_dataframe.values
+            
+            values_test = test_master_dataframe.values
+            
+            
+            ## Calling the function to do the preprocessing the data and removing unwanted columns
+            temp=[]
+            original_indices = [0, 4, 5, 6, 7, 8, 9, 10 , 11, 12]
+            #updating original indices for 3 servers
+            for i in range(0, len(servers)):
+                if i!=0:
+                    temp_indices = [val+i*(train_master_dataframe.shape[1]/len(servers)-1) for val in original_indices]
+                    temp+=temp_indices
+            original_indices+=temp
+            #pushing the original indices to remove in shifted frame    
+            columns_to_remove = [int(val + train_master_dataframe.shape[1]) for val in original_indices]
+            
+            
+                    
+                    
+            #+12, 3 times
+            #Original indices:[0, 4, 5, 13, 17, 18, 26, 30, 31, 37, 41, 42]
+            # frame as supervised learning
+            reframed = series_to_supervised(values, 1, 1)
+            reframed_validation = series_to_supervised(values_validation, 1, 1)
+            reframed_test = series_to_supervised(values_test, 1, 1)
+            # drop columns we don't want to predict
+            reframed.drop(reframed.columns[columns_to_remove], axis=1, inplace=True)
+            reframed_validation.drop(reframed_validation.columns[columns_to_remove], axis=1, inplace=True)
+            reframed_test.drop(reframed_test.columns[columns_to_remove], axis=1, inplace=True)
+            print(reframed.head(1))
+            
+            ## Splitting the data into training and validation sets
+            
+            
+            train = reframed.values
+            valid = reframed_validation.values
+            test = reframed_test.values
+            # split into input and outputs
+            #[39, 40, 41]
+            predict_columns = [39, 40, 41]
+            feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
+            
+            train_X, train_y = train[:, feature_columns], train[:,predict_columns]
+            valid_X, valid_y = valid[:, feature_columns], valid[:,predict_columns]
+            test_X, test_y = test[:, feature_columns], test[:,predict_columns]
+            # reshape input to be 3D [samples, timesteps, features]
+            train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
+            valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
+            test_X_prior = test_X
+            test_X = test_X.reshape((test_X.shape[0], 1, test_X.shape[1]))
+            print(train_X.shape, train_y.shape, valid_X.shape, valid_y.shape, test_X.shape, test_y.shape)
+            
+            
+            
+            # flatten input
+            n_input = train_X.shape[1] * train_X.shape[2]
+            X = train_X.reshape((train_X.shape[0], n_input))
+            
+            test_dataset = test_master_dataframe #test_dataset.drop(columns=["timestamp","ping_timestamp","ping_success"])
+            #test_values = test_dataset.values
+            
+            #reframed_test = series_to_supervised(test_values, 1, 1)
+            #reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
+            #testset = reframed_test.values
+            #testset_X, testset_y = testset[:, :-3], testset[:,-3:]
+            testset_X, testset_y = test_X_prior, test_y
+            testdataReshaped = test_X
+            #testset_X.reshape((testset_X.shape[0], 1, testset_X.shape[1]))
 
-        elif iterations==2:
-            servers = np.arange(2,4)
-            train_master_dataframe_temp, test_master_dataframe_temp, validation_master_dataframe_temp = createMasterFrame(servers, tactics)
+
+        # else:
+        #     servers = np.arange(1,4)
             
-            train_master_dataframe_original = pd.concat([reframed, train_master_dataframe_temp], axis = 1)
-            validation_master_dataframe_original = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
-            test_master_dataframe_original = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
+        #     if iterations==2:
+        #         sample_rate = 5
+        #     elif iterations==3:
+        #         sample_rate = 10
+        #     elif iterations==4:
+        #         sample_rate = 20
             
-            train_master_dataframe = train_master_dataframe_original.iloc[::5, :]
-            test_master_dataframe = test_master_dataframe_original.iloc[::5, :]
-            validation_master_dataframe = validation_master_dataframe_original.iloc[::5, :]
+        #     base_path_parts = ["sampleRate/","sample_rate_"+str(sample_rate)]
+
+        #     train_master_dataframe_temp, test_master_dataframe_temp, validation_master_dataframe_temp = createMasterFrame(servers, tactics, base_path_parts)
+            
+        #     train_master_dataframe_original = pd.concat([reframed, train_master_dataframe_temp], axis = 1)
+        #     validation_master_dataframe_original = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
+        #     test_master_dataframe_original = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
+            
+            # train_master_dataframe = train_master_dataframe_original.iloc[::5, :]
+            # test_master_dataframe = test_master_dataframe_original.iloc[::5, :]
+            # validation_master_dataframe = validation_master_dataframe_original.iloc[::5, :]
         #servers = np.arange(1,4)
         #tactics = [1]#np.arange(1,6)
         #cols_orig = ["timestamp", "time_since_last_recording", "latency", "cost", "reliability", "ping_timestamp", "time_since_last_ping", "ping_success", "ping_time"]
@@ -389,7 +511,6 @@ if __name__=="__main__":
             name = "results/lstm_results_model_"+str(idx)+".pkl"
             lstm_models_results.to_pickle(name)
             result_lstm.to_pickle("results/raw_results_lstm_"+str(idx)+" "+str(z)+".pkl")
-
 
         
         
