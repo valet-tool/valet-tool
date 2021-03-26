@@ -7,6 +7,7 @@ Created on Mon Feb  1 14:07:09 2021
 """
 import math
 import numpy as np
+from collections import deque
 import pandas as pd
 from math import sqrt
 from numpy import concatenate
@@ -168,9 +169,7 @@ def break_timestamp(dataset):
 
 
 if __name__=="__main__":
-    #first ieration is plain with ping data
-    #second iteration is with all servers data
-    #TODO: ADD other models
+
     model_trials = 10
     base_columns = ["RMSE","MSE", "MAE"]
     columns_w_trials = []
@@ -188,432 +187,401 @@ if __name__=="__main__":
     svr_rbf_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate", "10 sample Sampling Rate", "20 sample Sampling Rate"])
     svr_linear_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate", "10 sample Sampling Rate", "20 sample Sampling Rate"])
     kNN_models_results = pd.DataFrame(columns = base_columns , index = ["Plain Ping", "All Servers","5 sample Sampling Rate", "10 sample Sampling Rate", "20 sample Sampling Rate"])
-    for iterations in range(0,5):
-        #Iteration 0: Plain ping data
-        #Iteration 1: All servers ping data
-        #Iteration 2: 5 sampling rate
-        #Iteration 3: 10 sampling rate
-        #Iteration 4: 20 sampling rate
-        tactics = [1]
-        if iterations==0:
-            
-            servers = [1] 
-            train_master_dataframe, test_master_dataframe, validation_master_dataframe = createMasterFrame(servers, tactics)
-            # load dataset
-            dataset = train_master_dataframe #.values
-            values = dataset.values
-            
-            values_validation = validation_master_dataframe.values#test_master_dataframe.values
-            
-            values_test = test_master_dataframe.values
-            
-            
-            
-            temp=[]
-            original_indices = [0, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-            columns_to_remove = [int(val + train_master_dataframe.shape[1]) for val in original_indices]
-            
-            ## Calling the function to do the preprocessing the data and removing unwanted columns
-            
-            #0,4,5
-            #[13, 17, 18]
-            # frame as supervised learning
-            reframed = series_to_supervised(values, 1, 1)
-            reframed_validation = series_to_supervised(values_validation, 1, 1)
-            reframed_test = series_to_supervised(values_test, 1, 1)
-            # drop columns we don't want to predict
-            reframed.drop(reframed.columns[columns_to_remove], axis=1, inplace=True)
-            reframed_validation.drop(reframed_validation.columns[columns_to_remove], axis=1, inplace=True)
-            reframed_test.drop(reframed_test.columns[columns_to_remove], axis=1, inplace=True)
-            print(reframed.head(1))
-            
-            
-            
-            ## Splitting the data into training and validation sets
-            
-            
-            train = reframed.values
-            valid = reframed_validation.values
-            test = reframed_test.values
-            
-            predict_columns = [13, 14, 15]
-            feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
-            
-            # split into input and outputs
-            train_X, train_y = train[:, feature_columns], train[:,predict_columns]
-            valid_X, valid_y = valid[:, feature_columns], valid[:,predict_columns]
-            test_X, test_y = test[:, feature_columns], test[:,predict_columns]
-            # reshape input to be 3D [samples, timesteps, features]
-            train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
-            valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
-            test_X_prior = test_X
-
-            test_X = test_X.reshape((test_X.shape[0], 1, test_X.shape[1]))
-            print(train_X.shape, train_y.shape, valid_X.shape, valid_y.shape, test_X.shape, test_y.shape)
-            
-            
-            
-            # flatten input
-            n_input = train_X.shape[1] * train_X.shape[2]
-            X = train_X.reshape((train_X.shape[0], n_input))
-            
-            test_dataset = test_master_dataframe #test_dataset.drop(columns=["timestamp","ping_timestamp","ping_success"])
-            # test_values = test_dataset.values
-            
-            # reframed_test = series_to_supervised(test_values, 1, 1)
-            # reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
-            # testset = reframed_test.values
-            # testset_X, testset_y = testset[:, :-3], testset[:,-3:]
-            testdataReshaped = test_X
-            testset_X, testset_y = test_X_prior, test_y
-            #testset_X.reshape((testset_X.shape[0], 1, testset_X.shape[1]))
-
-
-        else:
-            
-            servers = np.arange(1,4)
-            if iterations!=1:
-                if iterations==2:
-                    sample_rate = 5
-                elif iterations==3:
-                    sample_rate = 10
-                elif iterations==4:
-                    sample_rate = 20
-                
-                base_path_parts = ["sampleRate/","sample_rate_"+str(sample_rate)]
-            
-            # train_master_dataframe = pd.concat([reframed, train_master_dataframe_temp], axis = 1)
-            # validation_master_dataframe = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
-            # test_master_dataframe = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
-            # load dataset
-            train_master_dataframe, test_master_dataframe, validation_master_dataframe = createMasterFrame(servers, tactics)
-            
-            dataset = train_master_dataframe #.values
-            values = dataset.values
-            
-            values_validation = validation_master_dataframe.values#test_master_dataframe.values
-            
-            values_test = test_master_dataframe.values
-            
-            
-            ## Calling the function to do the preprocessing the data and removing unwanted columns
-            temp=[]
-            original_indices = [0, 4, 5, 6, 7, 8, 9, 10 , 11, 12]
-            #updating original indices for 3 servers
-            for i in range(0, len(servers)):
-                if i!=0:
-                    temp_indices = [val+i*(train_master_dataframe.shape[1]/len(servers)-1) for val in original_indices]
-                    temp+=temp_indices
-            original_indices+=temp
-            #pushing the original indices to remove in shifted frame    
-            columns_to_remove = [int(val + train_master_dataframe.shape[1]) for val in original_indices]
-            
-            
-                    
-                    
-            #+12, 3 times
-            #Original indices:[0, 4, 5, 13, 17, 18, 26, 30, 31, 37, 41, 42]
-            # frame as supervised learning
-            reframed = series_to_supervised(values, 1, 1)
-            reframed_validation = series_to_supervised(values_validation, 1, 1)
-            reframed_test = series_to_supervised(values_test, 1, 1)
-            # drop columns we don't want to predict
-            reframed.drop(reframed.columns[columns_to_remove], axis=1, inplace=True)
-            reframed_validation.drop(reframed_validation.columns[columns_to_remove], axis=1, inplace=True)
-            reframed_test.drop(reframed_test.columns[columns_to_remove], axis=1, inplace=True)
-            print(reframed.head(1))
-            
-            ## Splitting the data into training and validation sets
-            
-            
-            train = reframed.values
-            valid = reframed_validation.values
-            test = reframed_test.values
-            # split into input and outputs
-            #[39, 40, 41]
-            predict_columns = [39, 40, 41]
-            feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
-            
-            train_X, train_y = train[:, feature_columns], train[:,predict_columns]
-            valid_X, valid_y = valid[:, feature_columns], valid[:,predict_columns]
-            test_X, test_y = test[:, feature_columns], test[:,predict_columns]
-            # reshape input to be 3D [samples, timesteps, features]
-            train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
-            valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
-            test_X_prior = test_X
-            test_X = test_X.reshape((test_X.shape[0], 1, test_X.shape[1]))
-            print(train_X.shape, train_y.shape, valid_X.shape, valid_y.shape, test_X.shape, test_y.shape)
-            
-            
-            
-            # flatten input
-            n_input = train_X.shape[1] * train_X.shape[2]
-            X = train_X.reshape((train_X.shape[0], n_input))
-            
-            test_dataset = test_master_dataframe #test_dataset.drop(columns=["timestamp","ping_timestamp","ping_success"])
-            #test_values = test_dataset.values
-            
-            #reframed_test = series_to_supervised(test_values, 1, 1)
-            #reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
-            #testset = reframed_test.values
-            #testset_X, testset_y = testset[:, :-3], testset[:,-3:]
-            testset_X, testset_y = test_X_prior, test_y
-            testdataReshaped = test_X
-            #testset_X.reshape((testset_X.shape[0], 1, testset_X.shape[1]))
-
-
-        # else:
-        #     servers = np.arange(1,4)
-            
-        #     if iterations==2:
-        #         sample_rate = 5
-        #     elif iterations==3:
-        #         sample_rate = 10
-        #     elif iterations==4:
-        #         sample_rate = 20
-            
-        #     base_path_parts = ["sampleRate/","sample_rate_"+str(sample_rate)]
-
-        #     train_master_dataframe_temp, test_master_dataframe_temp, validation_master_dataframe_temp = createMasterFrame(servers, tactics, base_path_parts)
-            
-        #     train_master_dataframe_original = pd.concat([reframed, train_master_dataframe_temp], axis = 1)
-        #     validation_master_dataframe_original = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
-        #     test_master_dataframe_original = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
-            
-            # train_master_dataframe = train_master_dataframe_original.iloc[::5, :]
-            # test_master_dataframe = test_master_dataframe_original.iloc[::5, :]
-            # validation_master_dataframe = validation_master_dataframe_original.iloc[::5, :]
-        #servers = np.arange(1,4)
-        #tactics = [1]#np.arange(1,6)
-        #cols_orig = ["timestamp", "time_since_last_recording", "latency", "cost", "reliability", "ping_timestamp", "time_since_last_ping", "ping_success", "ping_time"]
-        
-
-       
-
     
+    server_to_predict = np.arange(1,4)
+    
+    for curr_server in server_to_predict:
         
-
-
-        ## For MLP use below line only
-        
-        for z in range(0, model_trials):
-            # define MLP model
-            model = Sequential()
-            model.add(Dense(100, activation='relu', input_dim=n_input))
-            model.add(Dense(3))
-            model.compile(optimizer='adam', loss='mse')
-            history= model.fit(X, train_y, epochs=20, verbose=1)
-            # plot history
-            pyplot.plot(history.history['loss'], label='train')
-            pyplot.legend()
-            pyplot.show()
-        
-            yhat = model.predict(testset_X)
-        
-            #print(yhat)
-            dataset_results_mlp = pd.DataFrame({'predicted_Latency'+" "+str(z): yhat[:, 0], 'predicted_Cost'+" "+str(z): yhat[:, 1],
-                               'predicted_Reliability'+" "+str(z): yhat[:, 2]})
-            dataset_results_mlp['predicted_Reliability'+" "+str(z)].loc[dataset_results_mlp['predicted_Reliability'+" "+str(z)] >0.5] = 1
-            dataset_results_mlp['predicted_Reliability'+" "+str(z)].loc[dataset_results_mlp['predicted_Reliability'+" "+str(z)] <0.5] = 0
-        
-        
-            frames = [test_dataset, dataset_results_mlp]
-            result_mlp = pd.concat(frames,axis =1)
-
-            ## Finding the root mean squared error of the model
-        
-            rmse = sqrt(mean_squared_error(yhat, testset_y))
-            print('Test RMSE for MLP'+" "+str(z) , rmse)
-        
-            mse = mean_squared_error(yhat, testset_y)
-            print('Test MSE for MLP'+" "+str(z),  mse)
-        
-            mae = mean_absolute_error(yhat, testset_y)
-            print('Test MAE for MLP'+" "+str(z),  mae)
-            
-            mlp_models_results["RMSE"+" "+str(z)].iloc[iterations] = rmse
-            mlp_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
-            mlp_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
-            
-            result_mlp.to_pickle("results/raw_results_mlp"+" "+str(z)+".pkl")
-        
-        #################################################################################
-        # design LSTM network with variable architectures, use adam optimizer and mse loss function
-        '''
-        To start:
-        Architecture 1: LSTM with 1000 nodes in the hidden layer
-        Architecture 2: LSTM with 3 layers containing 100 nodes each
-        Architecture 3: LSTM with 3 layers of 10 nodes each
-        '''
-        for idx in range(0, 4):
-            if idx == 0:       
-                model = Sequential()
-                model.add(LSTM(1000, input_shape=(train_X.shape[1], train_X.shape[2])))
-                model.add(Dense(3))
-            elif idx == 1:
-                model = Sequential()
-                model.add(LSTM(100, return_sequences=True, input_shape=(train_X.shape[1], train_X.shape[2])))
-                model.add(LSTM(100, return_sequences=True))
-                model.add(LSTM(100))
-                model.add(Dense(3))
-            elif idx == 2:
-                model = Sequential()
-                model.add(LSTM(10, return_sequences=True, input_shape=(train_X.shape[1], train_X.shape[2])))
-                model.add(LSTM(10, return_sequences=True))
-                model.add(LSTM(10))
-                model.add(Dense(3))
-            elif idx == 3:
-                model = Sequential()
-                model.add(LSTM(100, return_sequences=True, input_shape=(train_X.shape[1], train_X.shape[2])))
-                model.add(LSTM(100))
-                model.add(Dense(3))
-        
-            
-            base_model = model
-            for z in range(0, model_trials):
+        for iterations in range(0,5):
+            #Iteration 0: Plain ping data
+            #Iteration 1: All servers ping data
+            #Iteration 2: 5 sampling rate
+            #Iteration 3: 10 sampling rate
+            #Iteration 4: 20 sampling rate
+            tactics = [1]
+            if iterations==0:
                 
-                #print("LSTM model summary",model.summary())
-                model = base_model
-                model.compile(loss='mse', optimizer='adam')
-                # fit network
-                history = model.fit(train_X, train_y, epochs=20, batch_size=72, validation_data=(test_X, test_y), verbose=1, shuffle=False)
+                servers = [curr_server]#[1] 
+                train_master_dataframe, test_master_dataframe, validation_master_dataframe = createMasterFrame(servers, tactics)
+                # load dataset
+                dataset = train_master_dataframe #.values
+                values = dataset.values
+                
+                values_validation = validation_master_dataframe.values#test_master_dataframe.values
+                
+                values_test = test_master_dataframe.values
+                
+                
+                
+                temp=[]
+                original_indices = [0, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                columns_to_remove = [int(val + train_master_dataframe.shape[1]) for val in original_indices]
+                
+                ## Calling the function to do the preprocessing the data and removing unwanted columns
+                
+                #0,4,5
+                #[13, 17, 18]
+                # frame as supervised learning
+                reframed = series_to_supervised(values, 1, 1)
+                reframed_validation = series_to_supervised(values_validation, 1, 1)
+                reframed_test = series_to_supervised(values_test, 1, 1)
+                # drop columns we don't want to predict
+                reframed.drop(reframed.columns[columns_to_remove], axis=1, inplace=True)
+                reframed_validation.drop(reframed_validation.columns[columns_to_remove], axis=1, inplace=True)
+                reframed_test.drop(reframed_test.columns[columns_to_remove], axis=1, inplace=True)
+                print(reframed.head(1))
+                
+                
+                
+                ## Splitting the data into training and validation sets
+                
+                
+                train = reframed.values
+                valid = reframed_validation.values
+                test = reframed_test.values
+                
+                predict_columns = [13, 14, 15]
+                feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
+                
+                # split into input and outputs
+                train_X, train_y = train[:, feature_columns], train[:,predict_columns]
+                valid_X, valid_y = valid[:, feature_columns], valid[:,predict_columns]
+                test_X, test_y = test[:, feature_columns], test[:,predict_columns]
+                # reshape input to be 3D [samples, timesteps, features]
+                train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
+                valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
+                test_X_prior = test_X
+    
+                test_X = test_X.reshape((test_X.shape[0], 1, test_X.shape[1]))
+                print(train_X.shape, train_y.shape, valid_X.shape, valid_y.shape, test_X.shape, test_y.shape)
+                
+                
+                
+                # flatten input
+                n_input = train_X.shape[1] * train_X.shape[2]
+                X = train_X.reshape((train_X.shape[0], n_input))
+                
+                test_dataset = test_master_dataframe #test_dataset.drop(columns=["timestamp","ping_timestamp","ping_success"])
+                # test_values = test_dataset.values
+                
+                # reframed_test = series_to_supervised(test_values, 1, 1)
+                # reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
+                # testset = reframed_test.values
+                # testset_X, testset_y = testset[:, :-3], testset[:,-3:]
+                testdataReshaped = test_X
+                testset_X, testset_y = test_X_prior, test_y
+                #testset_X.reshape((testset_X.shape[0], 1, testset_X.shape[1]))
+    
+    
+            else:
+                
+                base_path_parts = None
+                servers = np.arange(1,4)
+                
+                server_arr = deque(servers)
+                while server_arr[0] != curr_server:
+                    server_arr.rotate(1)
+                servers = list(server_arr)
+                
+                if iterations!=1:
+                    if iterations==2:
+                        sample_rate = 5
+                    elif iterations==3:
+                        sample_rate = 10
+                    elif iterations==4:
+                        sample_rate = 20
+                    
+                    base_path_parts = ["sampleRate/","sample_rate_"+str(sample_rate)]
+                
+                # train_master_dataframe = pd.concat([reframed, train_master_dataframe_temp], axis = 1)
+                # validation_master_dataframe = pd.concat([reframed_validation, validation_master_dataframe_temp], axis = 1)
+                # test_master_dataframe = pd.concat([reframed_test, test_master_dataframe_temp], axis = 1)
+                # load dataset
+                train_master_dataframe, test_master_dataframe, validation_master_dataframe = createMasterFrame(servers, tactics, base_path_parts)
+                
+                dataset = train_master_dataframe #.values
+                values = dataset.values
+                
+                values_validation = validation_master_dataframe.values#test_master_dataframe.values
+                
+                values_test = test_master_dataframe.values
+                
+                
+                ## Calling the function to do the preprocessing the data and removing unwanted columns
+                temp=[]
+                original_indices = [0, 4, 5, 6, 7, 8, 9, 10 , 11, 12]
+                #updating original indices for 3 servers
+                for i in range(0, len(servers)):
+                    if i!=0:
+                        temp_indices = [val+i*(train_master_dataframe.shape[1]/len(servers)-1) for val in original_indices]
+                        temp+=temp_indices
+                original_indices+=temp
+                #pushing the original indices to remove in shifted frame    
+                columns_to_remove = [int(val + train_master_dataframe.shape[1]) for val in original_indices]
+                
+                
+                        
+                        
+                #+12, 3 times
+                #Original indices:[0, 4, 5, 13, 17, 18, 26, 30, 31, 37, 41, 42]
+                # frame as supervised learning
+                reframed = series_to_supervised(values, 1, 1)
+                reframed_validation = series_to_supervised(values_validation, 1, 1)
+                reframed_test = series_to_supervised(values_test, 1, 1)
+                # drop columns we don't want to predict
+                reframed.drop(reframed.columns[columns_to_remove], axis=1, inplace=True)
+                reframed_validation.drop(reframed_validation.columns[columns_to_remove], axis=1, inplace=True)
+                reframed_test.drop(reframed_test.columns[columns_to_remove], axis=1, inplace=True)
+                print(reframed.head(1))
+                
+                ## Splitting the data into training and validation sets
+                
+                
+                train = reframed.values
+                valid = reframed_validation.values
+                test = reframed_test.values
+                # split into input and outputs
+                #[39, 40, 41]
+                predict_columns = [39, 40, 41]
+                feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
+                
+                train_X, train_y = train[:, feature_columns], train[:,predict_columns]
+                valid_X, valid_y = valid[:, feature_columns], valid[:,predict_columns]
+                test_X, test_y = test[:, feature_columns], test[:,predict_columns]
+                # reshape input to be 3D [samples, timesteps, features]
+                train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
+                valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
+                test_X_prior = test_X
+                test_X = test_X.reshape((test_X.shape[0], 1, test_X.shape[1]))
+                print(train_X.shape, train_y.shape, valid_X.shape, valid_y.shape, test_X.shape, test_y.shape)
+                
+                
+                
+                # flatten input
+                n_input = train_X.shape[1] * train_X.shape[2]
+                X = train_X.reshape((train_X.shape[0], n_input))
+                
+                test_dataset = test_master_dataframe #test_dataset.drop(columns=["timestamp","ping_timestamp","ping_success"])
+                #test_values = test_dataset.values
+                
+                #reframed_test = series_to_supervised(test_values, 1, 1)
+                #reframed_test.drop(reframed_test.columns[[6,10,11]], axis=1, inplace=True)
+                #testset = reframed_test.values
+                #testset_X, testset_y = testset[:, :-3], testset[:,-3:]
+                testset_X, testset_y = test_X_prior, test_y
+                testdataReshaped = test_X
+                #testset_X.reshape((testset_X.shape[0], 1, testset_X.shape[1]))
+    
+
+            
+    
+    
+            ## For MLP use below line only
+            
+            for z in range(0, model_trials):
+                # define MLP model
+                model = Sequential()
+                model.add(Dense(100, activation='relu', input_dim=n_input))
+                model.add(Dense(3))
+                model.compile(optimizer='adam', loss='mse')
+                history= model.fit(X, train_y, epochs=20, verbose=1)
                 # plot history
                 pyplot.plot(history.history['loss'], label='train')
-                pyplot.plot(history.history['val_loss'], label='test')
                 pyplot.legend()
                 pyplot.show()
-                
-                yhat = model.predict(test_X)
-        
-                #print(yhat)
-                dataset_results_lstm = pd.DataFrame({'predicted_Latency'+" "+str(z): yhat[:, 0], 'predicted_Cost'+" "+str(z): yhat[:, 1],
-                                       'predicted_Reliability'+" "+str(z): yhat[:, 2]})
-                dataset_results_lstm['predicted_Reliability'+" "+str(z)].loc[dataset_results_lstm['predicted_Reliability'+" "+str(z)] >0.5] = 1
-                dataset_results_lstm['predicted_Reliability'+" "+str(z)].loc[dataset_results_lstm['predicted_Reliability'+" "+str(z)] <0.5] = 0
-                
-                frames = [test_dataset, dataset_results_lstm]
-                result_lstm = pd.concat(frames,axis =1)
             
+                yhat = model.predict(testset_X)
+            
+                #print(yhat)
+                dataset_results_mlp = pd.DataFrame({'predicted_Latency'+" "+str(z): yhat[:, 0], 'predicted_Cost'+" "+str(z): yhat[:, 1],
+                                   'predicted_Reliability'+" "+str(z): yhat[:, 2]})
+                dataset_results_mlp['predicted_Reliability'+" "+str(z)].loc[dataset_results_mlp['predicted_Reliability'+" "+str(z)] >0.5] = 1
+                dataset_results_mlp['predicted_Reliability'+" "+str(z)].loc[dataset_results_mlp['predicted_Reliability'+" "+str(z)] <0.5] = 0
+            
+            
+                frames = [test_dataset, dataset_results_mlp]
+                result_mlp = pd.concat(frames,axis =1)
+    
                 ## Finding the root mean squared error of the model
             
                 rmse = sqrt(mean_squared_error(yhat, testset_y))
-                print('Test RMSE for LSTM ',str(idx),":" , rmse)
+                print('Test RMSE for MLP'+" "+str(z) , rmse)
             
                 mse = mean_squared_error(yhat, testset_y)
-                print('Test MSE for LSTM ', str(idx),":",  mse)
+                print('Test MSE for MLP'+" "+str(z),  mse)
             
                 mae = mean_absolute_error(yhat, testset_y)
-                print('Test MAE for LSTM ', str(idx),":",  mae)
+                print('Test MAE for MLP'+" "+str(z),  mae)
                 
-                lstm_models_results["RMSE"+" "+str(z)].iloc[iterations] = rmse
-                lstm_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
-                lstm_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
-            name = "results/lstm_results_model_"+str(idx)+".pkl"
-            lstm_models_results.to_pickle(name)
-            result_lstm.to_pickle("results/raw_results_lstm_"+str(idx)+" "+str(z)+".pkl")
-
-        
-        
-        ###############################################################
-        regressor = SVR(kernel='rbf')
-        # flatten input
-        #tesetdataReshaped = test_X
-        n_input = testdataReshaped.shape[1] * testdataReshaped.shape[2]
-        X2 = testdataReshaped.reshape((testdataReshaped.shape[0], n_input))
-        regr = MultiOutputRegressor(regressor)
-        
-        regr.fit(X,train_y)
-        out= regr.predict(X2)
-        
-        rmse = sqrt(mean_squared_error(out,testset_y))
-        print('Test RMSE for SVR RBF: ' , rmse)
-        
-        mse = mean_squared_error(out,testset_y)
-        print('Test MSE for SVR RBF: ' , mse)
-        
-        mae = mean_absolute_error(out,testset_y)
-        print('Test MSE for SVR RBF: ' , mae)
-        
-        
-        svr_rbf_models_results["RMSE"].iloc[iterations] = rmse
-        svr_rbf_models_results["MSE"].iloc[iterations] = mse
-        svr_rbf_models_results["MAE"].iloc[iterations] = mae
-        
-        
-        ##########################################################
-        regressor = SVR(kernel='linear')
-        # flatten input
-        tesetdataReshaped = test_X
-        n_input = testdataReshaped.shape[1] * testdataReshaped.shape[2]
-        X2 = testdataReshaped.reshape((testdataReshaped.shape[0], n_input))
-        regr = MultiOutputRegressor(regressor)
-        regr.fit(X,train_y)
-        out= regr.predict(X2)
-        
-        rmse = sqrt(mean_squared_error(out,testset_y))
-        print('Test RMSE for SVR Linear: ' , rmse)
-        
-        mse = mean_squared_error(out,testset_y)
-        print('Test MSE for SVR Linear: ' , mse)
-        
-        mae = mean_absolute_error(out,testset_y)
-        print('Test MSE for SVR Linear: ' , mae)
-        
-        
-        svr_linear_models_results["RMSE"].iloc[iterations] = rmse
-        svr_linear_models_results["MSE"].iloc[iterations] = mse
-        svr_linear_models_results["MAE"].iloc[iterations] = mae
-        
-        ###########################################################
-        
-        knn = KNeighborsRegressor()
-        regr_knn = MultiOutputRegressor(knn)
-
-        # flatten input
-        tesetdataReshaped = test_X
-        n_input = testdataReshaped.shape[1] * testdataReshaped.shape[2]
-        X2 = testdataReshaped.reshape((testdataReshaped.shape[0], n_input))
-
-        regr_knn.fit(X,train_y)
-        regr_knn.predict(testset_X)
-        out= regr_knn.predict(X2)
-        
-        rmse = sqrt(mean_squared_error(out,testset_y))
-        print('Test RMSE for kNN: ' , rmse)
-        
-        mse = mean_squared_error(out,testset_y)
-        print('Test MSE for kNN: ' , mse)
-        
-        mae = mean_absolute_error(out,testset_y)
-        print('Test MSE for kNN: ' , mae)
-        
-        
-        kNN_models_results["RMSE"].iloc[iterations] = rmse
-        kNN_models_results["MSE"].iloc[iterations] = mse
-        kNN_models_results["MAE"].iloc[iterations] = mae
-        
-        
-        
-    train_master_dataframe.to_pickle("results/train_master_dataframe.pkl")
-    test_master_dataframe.to_pickle("results/test_master_dataframe.pkl")
+                mlp_models_results["RMSE"+" "+str(z)].iloc[iterations] = rmse
+                mlp_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
+                mlp_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
+                
+                result_mlp.to_pickle("results/"+str(curr_server)+"/raw_results_mlp"+" "+str(z)+".pkl")
+            
+            #################################################################################
+            # design LSTM network with variable architectures, use adam optimizer and mse loss function
+            '''
+            To start:
+            Architecture 1: LSTM with 1000 nodes in the hidden layer
+            Architecture 2: LSTM with 3 layers containing 100 nodes each
+            Architecture 3: LSTM with 3 layers of 10 nodes each
+            '''
+            for idx in range(0, 4):
+                if idx == 0:       
+                    model = Sequential()
+                    model.add(LSTM(1000, input_shape=(train_X.shape[1], train_X.shape[2])))
+                    model.add(Dense(3))
+                elif idx == 1:
+                    model = Sequential()
+                    model.add(LSTM(100, return_sequences=True, input_shape=(train_X.shape[1], train_X.shape[2])))
+                    model.add(LSTM(100, return_sequences=True))
+                    model.add(LSTM(100))
+                    model.add(Dense(3))
+                elif idx == 2:
+                    model = Sequential()
+                    model.add(LSTM(10, return_sequences=True, input_shape=(train_X.shape[1], train_X.shape[2])))
+                    model.add(LSTM(10, return_sequences=True))
+                    model.add(LSTM(10))
+                    model.add(Dense(3))
+                elif idx == 3:
+                    model = Sequential()
+                    model.add(LSTM(100, return_sequences=True, input_shape=(train_X.shape[1], train_X.shape[2])))
+                    model.add(LSTM(100))
+                    model.add(Dense(3))
+            
+                
+                base_model = model
+                for z in range(0, model_trials):
+                    
+                    #print("LSTM model summary",model.summary())
+                    model = base_model
+                    model.compile(loss='mse', optimizer='adam')
+                    # fit network
+                    history = model.fit(train_X, train_y, epochs=20, batch_size=72, validation_data=(test_X, test_y), verbose=1, shuffle=False)
+                    # plot history
+                    pyplot.plot(history.history['loss'], label='train')
+                    pyplot.plot(history.history['val_loss'], label='test')
+                    pyplot.legend()
+                    pyplot.show()
+                    
+                    yhat = model.predict(test_X)
+            
+                    #print(yhat)
+                    dataset_results_lstm = pd.DataFrame({'predicted_Latency'+" "+str(z): yhat[:, 0], 'predicted_Cost'+" "+str(z): yhat[:, 1],
+                                           'predicted_Reliability'+" "+str(z): yhat[:, 2]})
+                    dataset_results_lstm['predicted_Reliability'+" "+str(z)].loc[dataset_results_lstm['predicted_Reliability'+" "+str(z)] >0.5] = 1
+                    dataset_results_lstm['predicted_Reliability'+" "+str(z)].loc[dataset_results_lstm['predicted_Reliability'+" "+str(z)] <0.5] = 0
+                    
+                    frames = [test_dataset, dataset_results_lstm]
+                    result_lstm = pd.concat(frames,axis =1)
+                
+                    ## Finding the root mean squared error of the model
+                
+                    rmse = sqrt(mean_squared_error(yhat, testset_y))
+                    print('Test RMSE for LSTM ',str(idx),":" , rmse)
+                
+                    mse = mean_squared_error(yhat, testset_y)
+                    print('Test MSE for LSTM ', str(idx),":",  mse)
+                
+                    mae = mean_absolute_error(yhat, testset_y)
+                    print('Test MAE for LSTM ', str(idx),":",  mae)
+                    
+                    lstm_models_results["RMSE"+" "+str(z)].iloc[iterations] = rmse
+                    lstm_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
+                    lstm_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
+                name = "results/"+str(curr_server)+"/lstm_results_model_"+str(idx)+".pkl"
+                lstm_models_results.to_pickle(name)
+                result_lstm.to_pickle("results/"+str(curr_server)+"/raw_results_lstm_"+str(idx)+" "+str(z)+".pkl")
     
-    svr_rbf_models_results.to_pickle("results/svr_rbf_results.pkl")
-    svr_linear_models_results.to_pickle("results/svr_linear_results.pkl")
-    kNN_models_results.to_pickle("results/kNN_results.pkl")
-
-    mlp_models_results.to_pickle("results/mlp_results"+" "+str(z)+".pkl")
-
-    #dataset = break_timestamp(dataset)
-    #dataset= dataset.drop(columns=col_arr)#["ID"])
-    #dataset = dataset[["hours","minutes","seconds","latency","cost","reliability"]]
-    #norm_scaler = Normalizer().fit(dataset.iloc[:,0:3])
-    #dataset.loc[:,0:3] = norm_scaler.transform(dataset.iloc[:,0:3])
+            
+            
+            ###############################################################
+            regressor = SVR(kernel='rbf')
+            # flatten input
+            #tesetdataReshaped = test_X
+            n_input = testdataReshaped.shape[1] * testdataReshaped.shape[2]
+            X2 = testdataReshaped.reshape((testdataReshaped.shape[0], n_input))
+            regr = MultiOutputRegressor(regressor)
+            
+            regr.fit(X,train_y)
+            out= regr.predict(X2)
+            
+            rmse = sqrt(mean_squared_error(out,testset_y))
+            print('Test RMSE for SVR RBF: ' , rmse)
+            
+            mse = mean_squared_error(out,testset_y)
+            print('Test MSE for SVR RBF: ' , mse)
+            
+            mae = mean_absolute_error(out,testset_y)
+            print('Test MSE for SVR RBF: ' , mae)
+            
+            
+            svr_rbf_models_results["RMSE"].iloc[iterations] = rmse
+            svr_rbf_models_results["MSE"].iloc[iterations] = mse
+            svr_rbf_models_results["MAE"].iloc[iterations] = mae
+            
+            
+            ##########################################################
+            regressor = SVR(kernel='linear')
+            # flatten input
+            tesetdataReshaped = test_X
+            n_input = testdataReshaped.shape[1] * testdataReshaped.shape[2]
+            X2 = testdataReshaped.reshape((testdataReshaped.shape[0], n_input))
+            regr = MultiOutputRegressor(regressor)
+            regr.fit(X,train_y)
+            out= regr.predict(X2)
+            
+            rmse = sqrt(mean_squared_error(out,testset_y))
+            print('Test RMSE for SVR Linear: ' , rmse)
+            
+            mse = mean_squared_error(out,testset_y)
+            print('Test MSE for SVR Linear: ' , mse)
+            
+            mae = mean_absolute_error(out,testset_y)
+            print('Test MSE for SVR Linear: ' , mae)
+            
+            
+            svr_linear_models_results["RMSE"].iloc[iterations] = rmse
+            svr_linear_models_results["MSE"].iloc[iterations] = mse
+            svr_linear_models_results["MAE"].iloc[iterations] = mae
+            
+            ###########################################################
+            
+            knn = KNeighborsRegressor()
+            regr_knn = MultiOutputRegressor(knn)
     
+            # flatten input
+            tesetdataReshaped = test_X
+            n_input = testdataReshaped.shape[1] * testdataReshaped.shape[2]
+            X2 = testdataReshaped.reshape((testdataReshaped.shape[0], n_input))
     
-    #data_1 = pd.read_csv("/home/nd7896/data/TVA_E/valet-tool/parse_tactics/normalized_tva_server_1_tactic_1_train.csv")
-    #data_2 = pd.read_csv("/home/nd7896/data/TVA_E/valet-tool/parse_tactics/normalized_tva_server_2_tactic_1_train.csv")
-    #data_3 = pd.read_csv("/home/nd7896/data/TVA_E/valet-tool/parse_tactics/normalized_tva_server_1_tactic_2_train.csv")
+            regr_knn.fit(X,train_y)
+            regr_knn.predict(testset_X)
+            out= regr_knn.predict(X2)
+            
+            rmse = sqrt(mean_squared_error(out,testset_y))
+            print('Test RMSE for kNN: ' , rmse)
+            
+            mse = mean_squared_error(out,testset_y)
+            print('Test MSE for kNN: ' , mse)
+            
+            mae = mean_absolute_error(out,testset_y)
+            print('Test MSE for kNN: ' , mae)
+            
+            
+            kNN_models_results["RMSE"].iloc[iterations] = rmse
+            kNN_models_results["MSE"].iloc[iterations] = mse
+            kNN_models_results["MAE"].iloc[iterations] = mae
+            
+            
+            
+        train_master_dataframe.to_pickle("results/"+str(curr_server)+"/train_master_dataframe.pkl")
+        test_master_dataframe.to_pickle("results/"+str(curr_server)+"/test_master_dataframe.pkl")
+        
+        svr_rbf_models_results.to_pickle("results/"+str(curr_server)+"/svr_rbf_results.pkl")
+        svr_linear_models_results.to_pickle("results/"+str(curr_server)+"/svr_linear_results.pkl")
+        kNN_models_results.to_pickle("results/"+str(curr_server)+"/kNN_results.pkl")
     
-    #indices_1 = [data_1["timestamp"].iloc[:].values == data_2["timestamp"].iloc[:].values)]
+        mlp_models_results.to_pickle("results/"+str(curr_server)+"/mlp_results"+" "+str(z)+".pkl")
     
-    #indices_2 = data_1["timestamp"].iloc[:].values == data_3["timestamp"].iloc[:].values)
