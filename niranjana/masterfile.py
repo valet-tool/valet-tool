@@ -506,7 +506,7 @@ if __name__=="__main__":
             
             regr.fit(X,train_y)
             out= regr.predict(X2)
-            
+            svr_rbf = out
             rmse = sqrt(mean_squared_error(out,testset_y))
             print('Test RMSE for SVR RBF: ' , rmse)
             
@@ -521,7 +521,8 @@ if __name__=="__main__":
             svr_rbf_models_results["MSE"].iloc[iterations] = mse
             svr_rbf_models_results["MAE"].iloc[iterations] = mae
             
-            
+            #svr_rbf.savetxt("results/"+str(curr_server)+"/raw_results_svr_rbf.csv")
+            np.save("results/"+str(curr_server)+"/raw_results_svr_rbf.csv",svr_rbf)
             ##########################################################
             regressor = SVR(kernel='linear')
             # flatten input
@@ -532,6 +533,7 @@ if __name__=="__main__":
             regr.fit(X,train_y)
             out= regr.predict(X2)
             
+            svr_linear = out
             rmse = sqrt(mean_squared_error(out,testset_y))
             print('Test RMSE for SVR Linear: ' , rmse)
             
@@ -546,6 +548,8 @@ if __name__=="__main__":
             svr_linear_models_results["MSE"].iloc[iterations] = mse
             svr_linear_models_results["MAE"].iloc[iterations] = mae
             
+            #svr_linear.savetxt("results/"+str(curr_server)+"/raw_results_svr_linear.pkl")
+            np.save("results/"+str(curr_server)+"/raw_results_svr_linear.csv",svr_linear)
             ###########################################################
             
             knn = KNeighborsRegressor()
@@ -559,7 +563,7 @@ if __name__=="__main__":
             regr_knn.fit(X,train_y)
             regr_knn.predict(testset_X)
             out= regr_knn.predict(X2)
-            
+            knn_out = out
             rmse = sqrt(mean_squared_error(out,testset_y))
             print('Test RMSE for kNN: ' , rmse)
             
@@ -573,8 +577,9 @@ if __name__=="__main__":
             kNN_models_results["RMSE"].iloc[iterations] = rmse
             kNN_models_results["MSE"].iloc[iterations] = mse
             kNN_models_results["MAE"].iloc[iterations] = mae
-            
-            
+            #knn_out.save("results/"+str(curr_server)+"/raw_results_kNN.pkl")
+            np.save("results/"+str(curr_server)+"/raw_results_kNN.csv",knn_out)
+
             
         train_master_dataframe.to_pickle("results/"+str(curr_server)+"/train_master_dataframe.pkl")
         test_master_dataframe.to_pickle("results/"+str(curr_server)+"/test_master_dataframe.pkl")
