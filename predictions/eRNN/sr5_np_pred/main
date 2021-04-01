@@ -11,11 +11,7 @@
 [INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
 [INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.270115, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.444445, variance: 0.197531
 [INFO    main                 ] 	                  latency stats, min: 0.000000, avg: 0.015972, max: 0.103763, min_change: -0.103763, max_change: 0.103763, std_dev: 0.005952, variance: 0.000035
-[WARNING main                 ] WARNING: unchanging series: 'ping_success'
-[INFO    main                 ] 	             ping_success stats, min: 1.000000, avg: 1.000000, max: 1.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	                ping_time stats, min: 0.087574, avg: 0.261691, max: 0.596445, min_change: -0.405395, max_change: 0.501542, std_dev: 0.196198, variance: 0.038494
 [INFO    main                 ] 	              reliability stats, min: 0.000000, avg: 0.988506, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.106696, variance: 0.011384
-[INFO    main                 ] 	     time_since_last_ping stats, min: 0.000000, avg: 0.004666, max: 0.060283, min_change: -0.057428, max_change: 0.036428, std_dev: 0.005873, variance: 0.000034
 [INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.005099, max: 0.070315, min_change: -0.056667, max_change: 0.053991, std_dev: 0.006303, variance: 0.000040
 [INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_1_tactic_1_validation_weekdayOneHotsample_rate_5.csv' with number rows: 522
 [INFO    main                 ] 	                     cost stats, min: 0.066406, avg: 0.110520, max: 0.259766, min_change: -0.142578, max_change: 0.134766, std_dev: 0.017191, variance: 0.000296
@@ -31,12 +27,8 @@
 [INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
 [INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.270115, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.444445, variance: 0.197531
 [INFO    main                 ] 	                  latency stats, min: 0.013102, avg: 0.017924, max: 0.064428, min_change: -0.045701, max_change: 0.046663, std_dev: 0.002566, variance: 0.000007
-[WARNING main                 ] WARNING: unchanging series: 'ping_success'
-[INFO    main                 ] 	             ping_success stats, min: 1.000000, avg: 1.000000, max: 1.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	                ping_time stats, min: 0.379360, avg: 0.380379, max: 0.389597, min_change: -0.009030, max_change: 0.008331, std_dev: 0.000982, variance: 0.000001
 [WARNING main                 ] WARNING: unchanging series: 'reliability'
 [INFO    main                 ] 	              reliability stats, min: 1.000000, avg: 1.000000, max: 1.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	     time_since_last_ping stats, min: 0.000000, avg: 0.004348, max: 0.037583, min_change: -0.034253, max_change: 0.023311, std_dev: 0.004432, variance: 0.000020
 [INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.005455, max: 0.069646, min_change: -0.063223, max_change: 0.035325, std_dev: 0.006389, variance: 0.000041
 [INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_2_tactic_1_validation_weekdayOneHotsample_rate_5.csv' with number rows: 522
 [INFO    main                 ] 	                     cost stats, min: 0.015625, avg: 0.054369, max: 0.126953, min_change: -0.066406, max_change: 0.103516, std_dev: 0.015660, variance: 0.000245
@@ -52,26 +44,22 @@
 [INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
 [INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.270115, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.444445, variance: 0.197531
 [INFO    main                 ] 	                  latency stats, min: 0.035839, avg: 0.088692, max: 0.427752, min_change: -0.373292, max_change: 0.377489, std_dev: 0.060283, variance: 0.003634
-[WARNING main                 ] WARNING: unchanging series: 'ping_success'
-[INFO    main                 ] 	             ping_success stats, min: 1.000000, avg: 1.000000, max: 1.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	                ping_time stats, min: 0.038064, avg: 0.048343, max: 0.062615, min_change: -0.005481, max_change: 0.020795, std_dev: 0.010206, variance: 0.000104
 [WARNING main                 ] WARNING: unchanging series: 'reliability'
 [INFO    main                 ] 	              reliability stats, min: 1.000000, avg: 1.000000, max: 1.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	     time_since_last_ping stats, min: 0.000000, avg: 0.004981, max: 0.053215, min_change: -0.036020, max_change: 0.038943, std_dev: 0.004958, variance: 0.000025
 [INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.005166, max: 0.075734, min_change: -0.058072, max_change: 0.074463, std_dev: 0.006677, variance: 0.000045
 [INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_3_tactic_1_validation_weekdayOneHotsample_rate_5.csv' with number rows: 522
 [INFO    main                 ] normalized type: none 
-[INFO    main                 ] MSE: 0.453322
-[INFO    main                 ] MAE: 0.658610
+[INFO    main                 ] MSE: 0.224279
+[INFO    main                 ] MAE: 0.542486
 [INFO    main                 ] input filename[    0]: '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_1_tactic_1_validation_weekdayOneHotsample_rate_5.csv'
-[INFO    main                 ] output filename: 'sr5_pred/normalized_tva_server_1_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
+[INFO    main                 ] output filename: 'sr5_np_pred/normalized_tva_server_1_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
 [INFO    main                 ] input filename[    1]: '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_2_tactic_1_validation_weekdayOneHotsample_rate_5.csv'
-[INFO    main                 ] output filename: 'sr5_pred/normalized_tva_server_2_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
+[INFO    main                 ] output filename: 'sr5_np_pred/normalized_tva_server_2_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
 [INFO    main                 ] input filename[    2]: '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_3_tactic_1_validation_weekdayOneHotsample_rate_5.csv'
-[INFO    main                 ] output filename: 'sr5_pred/normalized_tva_server_3_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
+[INFO    main                 ] output filename: 'sr5_np_pred/normalized_tva_server_3_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
 [INFO    main                 ] input filename[    0]: '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_1_tactic_1_validation_weekdayOneHotsample_rate_5.csv'
-[INFO    main                 ] output filename: 'sr5_pred/normalized_tva_server_1_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
+[INFO    main                 ] output filename: 'sr5_np_pred/normalized_tva_server_1_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
 [INFO    main                 ] input filename[    1]: '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_2_tactic_1_validation_weekdayOneHotsample_rate_5.csv'
-[INFO    main                 ] output filename: 'sr5_pred/normalized_tva_server_2_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
+[INFO    main                 ] output filename: 'sr5_np_pred/normalized_tva_server_2_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
 [INFO    main                 ] input filename[    2]: '../valet-tool/parse_tactics_weekend_sample_rate/sampleRate/normalized_tva_server_3_tactic_1_validation_weekdayOneHotsample_rate_5.csv'
-[INFO    main                 ] output filename: 'sr5_pred/normalized_tva_server_3_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
+[INFO    main                 ] output filename: 'sr5_np_pred/normalized_tva_server_3_tactic_1_validation_weekdayOneHotsample_rate_5_predictions.csv'
