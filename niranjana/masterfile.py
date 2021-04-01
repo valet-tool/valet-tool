@@ -425,7 +425,7 @@ if __name__=="__main__":
                 mlp_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
                 
                 #result_mlp.to_pickle("results/"+str(curr_server)+"/raw_results_mlp"+" "+str(z)+".pkl")
-                result_mlp.to_csv("results/"+str(curr_server)+"/raw_results_mlp"+" "+str(z)+".csv")
+                result_mlp.to_csv("results/"+str(curr_server)+"/raw_results_mlp"+"_model_"+str(z)+"_iteration_"+str(iterations)+".csv")
             
             #################################################################################
             # design LSTM network with variable architectures, use adam optimizer and mse loss function
@@ -498,12 +498,12 @@ if __name__=="__main__":
                     lstm_models_results["RMSE"+" "+str(z)].iloc[iterations] = rmse
                     lstm_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
                     lstm_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
-                name = "results/"+str(curr_server)+"/lstm_results_model_"+str(idx)+".pkl"
-                # lstm_models_results.to_pickle(name)
-                # result_lstm.to_pickle("results/"+str(curr_server)+"/raw_results_lstm_"+str(idx)+" "+str(z)+".pkl")
-                
-                lstm_models_results.to_csv(name)
-                result_lstm.to_csv("results/"+str(curr_server)+"/raw_results_lstm_"+str(idx)+" "+str(z)+".csv")
+                    name = "results/"+str(curr_server)+"/error_measures/lstm_results_model_"+str(idx)+"_model_"+str(z)+"_iteration"+str(iterations)+".pkl"
+                    # lstm_models_results.to_pickle(name)
+                    # result_lstm.to_pickle("results/"+str(curr_server)+"/raw_results_lstm_"+str(idx)+" "+str(z)+".pkl")
+                    
+                    lstm_models_results.to_csv(name)
+                    result_lstm.to_csv("results/"+str(curr_server)+"/raw_results_lstm_"+str(idx)+"_model_"+str(z)+"_iteration_"+str(iterations)+".csv")
     
             
             
@@ -533,7 +533,7 @@ if __name__=="__main__":
             svr_rbf_models_results["MAE"].iloc[iterations] = mae
             
             #svr_rbf.savetxt("results/"+str(curr_server)+"/raw_results_svr_rbf.csv")
-            np.save("results/"+str(curr_server)+"/raw_results_svr_rbf",svr_rbf)
+            np.save("results/"+str(curr_server)+"/raw_results_svr_rbf_iteration_"+str(iterations),svr_rbf)
             ##########################################################
             regressor = SVR(kernel='linear')
             # flatten input
@@ -560,7 +560,7 @@ if __name__=="__main__":
             svr_linear_models_results["MAE"].iloc[iterations] = mae
             
             #svr_linear.savetxt("results/"+str(curr_server)+"/raw_results_svr_linear.pkl")
-            np.save("results/"+str(curr_server)+"/raw_results_svr_linear",svr_linear)
+            np.save("results/"+str(curr_server)+"/raw_results_svr_linear_iterations"+str(iterations),svr_linear)
             ###########################################################
             
             knn = KNeighborsRegressor()
@@ -589,8 +589,13 @@ if __name__=="__main__":
             kNN_models_results["MSE"].iloc[iterations] = mse
             kNN_models_results["MAE"].iloc[iterations] = mae
             #knn_out.save("results/"+str(curr_server)+"/raw_results_kNN.pkl")
-            np.save("results/"+str(curr_server)+"/raw_results_kNN",knn_out)
+            np.save("results/"+str(curr_server)+"/raw_results_kNN_iterations_"+str(iterations),knn_out)
 
+            svr_rbf_models_results.to_csv("results/"+str(curr_server)+"/error_measures/"+"svr_rbf_results"+"_iterations_"+str(iterations)+".csv")
+            svr_linear_models_results.to_csv("results/"+str(curr_server)+"/error_measures/"+"svr_linear_results"+"_iterations_"+str(iterations)+".csv")
+            kNN_models_results.to_csv("results/"+str(curr_server)+"/error_measures/kNN_results"+"_iterations_"+str(iterations)+".csv")
+    
+            mlp_models_results.to_csv("results/"+str(curr_server)+"/error_measures"+"_iterations_"+str(iterations)+"mlp_results"+" "+str(z)+".csv")
             
         train_master_dataframe.to_pickle("results/"+str(curr_server)+"/train_master_dataframe.pkl")
         test_master_dataframe.to_pickle("results/"+str(curr_server)+"/test_master_dataframe.pkl")
@@ -600,9 +605,7 @@ if __name__=="__main__":
         # kNN_models_results.to_pickle("results/"+str(curr_server)+"/kNN_results.pkl")
     
         # mlp_models_results.to_pickle("results/"+str(curr_server)+"/mlp_results"+" "+str(z)+".pkl")
-        svr_rbf_models_results.to_csv("results/"+str(curr_server)+"/svr_rbf_results.csv")
-        svr_linear_models_results.to_csv("results/"+str(curr_server)+"/svr_linear_results.csv")
-        kNN_models_results.to_csv("results/"+str(curr_server)+"/kNN_results.csv")
-    
-        mlp_models_results.to_csv("results/"+str(curr_server)+"/mlp_results"+" "+str(z)+".csv")
+        #name = "results/"+str(curr_server)+"/"+"_iterations"+str(iterations)+"svr_rbf_results.csv"
+        #
+
     
