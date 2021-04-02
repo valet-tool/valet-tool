@@ -1,0 +1,6 @@
+,RMSE,MSE,MAE
+Plain Ping,,,
+All Servers,,,
+5 sample Sampling Rate,,,
+10 sample Sampling Rate,,,
+20 sample Sampling Rate,0.0037515495216828704,1.4074123813638974e-05,0.0016970785273696994

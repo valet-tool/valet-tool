@@ -192,16 +192,18 @@ if __name__=="__main__":
     
     for curr_server in server_to_predict:
         
-        for iterations in range(0,5):
+        for iterations in range(-1,0):#(-1,5):
             #Iteration 0: Plain ping data
             #Iteration 1: All servers ping data
             #Iteration 2: 5 sampling rate
             #Iteration 3: 10 sampling rate
             #Iteration 4: 20 sampling rate
             tactics = [1]
-            if iterations==0:
+            if iterations<=0:
                 
                 servers = [curr_server]#[1] 
+                
+                
                 train_master_dataframe, test_master_dataframe, validation_master_dataframe = createMasterFrame(servers, tactics)
                 # load dataset
                 dataset = train_master_dataframe #.values
@@ -216,6 +218,17 @@ if __name__=="__main__":
                 temp=[]
                 original_indices = [0, 4, 5, 6, 7, 8, 9, 10, 11, 12]
                 columns_to_remove = [int(val + train_master_dataframe.shape[1]) for val in original_indices]
+                
+                if iterations==-1:
+                    additional_columns_to_remove = [4, 5]
+                else:
+                    additional_columns_to_remove = None
+                
+                if additional_columns_to_remove != None:
+                    columns_to_remove += additional_columns_to_remove
+                    
+                
+                
                 
                 ## Calling the function to do the preprocessing the data and removing unwanted columns
                 
