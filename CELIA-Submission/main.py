@@ -59,26 +59,38 @@ def main(argFile):
             
         fileNames = []
 
-        for f in os.listdir(argFile['inputDirectory']):
-            if '.csv' in f:
-                fileNames.append(f)
+        for (dirpath, dirnames, filenames) in os.walk(inputDirectory):
+            
+            for file in filenames:
+                if '.csv' in file:
+                    fileNames.append([dirpath, file])
+        
+        # for f in os.listdir(argFile['inputDirectory']):
+        #     if '.csv' in f:
+        #         fileNames.append(f)
         if len(fileNames) == 0:
             print('No Files in directory')
             return
         
+        notDone = []
         for i in fileNames:
 
-            dataPred = pd.read_csv(inputDirectory+i)
-            
-            result, stats = simulation(dataPred,threshold,headers)
-            stats.insert(0,i)
+            dataPred = pd.read_csv(os.path.join(i[0], i[1]))
+            print("starting "+ str(i[1]))
 
-            celiaStats.append(stats)
-            
-            try:
-                result.to_csv(outputDirectory+i)
+            try: 
+                    
+                result, stats = simulation(dataPred,threshold,headers)
+                stats.insert(0,i[1])
+
+                celiaStats.append(stats)
+                
+                try:
+                    result.to_csv(outputDirectory+i[1])
+                except:
+                    result.to_csv(outputDirectory+'/'+i[1])
             except:
-                result.to_csv(outputDirectory+'/'+i)
+                notDone.append(os.path.join(i[0], i[1]))
 
                 
     celiaStats = pd.DataFrame(celiaStats, columns=['predictionType','utilDif','reward','negativeReward', 'numOfUpdates','lostUtil', 'wrongDecisions', 'correctDecisions', 'decisionShouldHaveDid', 'decisionShouldHaveDidNot', 'decisionNotHaveDid', 'decisionNotHaveDidNot'])
@@ -88,6 +100,8 @@ def main(argFile):
     except:
         celiaStats.to_csv(outputDirectory+'/'+outputStatFileName)
 
+    print("Not Done:")
+    print(notDone)
 
 if __name__ == "__main__":
     argFile = {}
