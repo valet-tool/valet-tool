@@ -1,64 +1,66 @@
-[INFO    main                 ] 	                     cost stats, min: 0.007812, avg: 0.171023, max: 0.384766, min_change: -0.177734, max_change: 0.214844, std_dev: 0.022719, variance: 0.000516
-[INFO    main                 ] 	                     day1 stats, min: 0.000000, avg: 0.453952, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.497971, variance: 0.247975
-[INFO    main                 ] 	                     day2 stats, min: 0.000000, avg: 0.275902, max: 1.000000, min_change: 0.000000, max_change: 1.000000, std_dev: 0.447053, variance: 0.199857
+[INFO    main                 ] 	                     cost stats, min: 0.082031, avg: 0.174813, max: 0.505859, min_change: -0.322266, max_change: 0.339844, std_dev: 0.013537, variance: 0.000183
+[WARNING main                 ] WARNING: unchanging series: 'day1'
+[INFO    main                 ] 	                     day1 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
+[WARNING main                 ] WARNING: unchanging series: 'day2'
+[INFO    main                 ] 	                     day2 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
 [WARNING main                 ] WARNING: unchanging series: 'day3'
 [INFO    main                 ] 	                     day3 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
 [WARNING main                 ] WARNING: unchanging series: 'day4'
 [INFO    main                 ] 	                     day4 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[WARNING main                 ] WARNING: unchanging series: 'day5'
-[INFO    main                 ] 	                     day5 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[WARNING main                 ] WARNING: unchanging series: 'day6'
-[INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.270146, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.444120, variance: 0.197243
-[INFO    main                 ] 	                  latency stats, min: 0.000000, avg: 0.017851, max: 1.000000, min_change: -1.000000, max_change: 0.648315, std_dev: 0.033507, variance: 0.001123
-[INFO    main                 ] 	              reliability stats, min: 0.000000, avg: 0.993477, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.080519, variance: 0.006483
-[INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.005540, max: 0.940724, min_change: -0.927812, max_change: 0.926407, std_dev: 0.019411, variance: 0.000377
-[INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_1_tactic_1_validation_weekdayOneHot.csv' with number rows: 2606
-[INFO    main                 ] 	                     cost stats, min: 0.052734, avg: 0.110615, max: 0.259766, min_change: -0.148438, max_change: 0.140625, std_dev: 0.016424, variance: 0.000270
-[INFO    main                 ] 	                     day1 stats, min: 0.000000, avg: 0.455104, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.498076, variance: 0.248080
-[INFO    main                 ] 	                     day2 stats, min: 0.000000, avg: 0.275902, max: 1.000000, min_change: 0.000000, max_change: 1.000000, std_dev: 0.447053, variance: 0.199857
-[WARNING main                 ] WARNING: unchanging series: 'day3'
-[INFO    main                 ] 	                     day3 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[WARNING main                 ] WARNING: unchanging series: 'day4'
-[INFO    main                 ] 	                     day4 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[WARNING main                 ] WARNING: unchanging series: 'day5'
-[INFO    main                 ] 	                     day5 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[WARNING main                 ] WARNING: unchanging series: 'day6'
-[INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.268995, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.443522, variance: 0.196712
-[INFO    main                 ] 	                  latency stats, min: 0.013084, avg: 0.018017, max: 0.111154, min_change: -0.093145, max_change: 0.076574, std_dev: 0.003483, variance: 0.000012
+[INFO    main                 ] 	                     day5 stats, min: 0.000000, avg: 0.386948, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.487145, variance: 0.237310
+[INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.486372, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.499910, variance: 0.249910
+[INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.126679, max: 1.000000, min_change: 0.000000, max_change: 1.000000, std_dev: 0.332677, variance: 0.110674
+[INFO    main                 ] 	                  latency stats, min: 0.014844, avg: 0.015860, max: 0.115215, min_change: -0.100300, max_change: 0.100259, std_dev: 0.003209, variance: 0.000010
 [WARNING main                 ] WARNING: unchanging series: 'reliability'
 [INFO    main                 ] 	              reliability stats, min: 1.000000, avg: 1.000000, max: 1.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.005543, max: 0.984545, min_change: -0.984412, max_change: 0.978591, std_dev: 0.020183, variance: 0.000407
-[INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_2_tactic_1_validation_weekdayOneHot.csv' with number rows: 2606
-[INFO    main                 ] 	                     cost stats, min: 0.000000, avg: 0.054938, max: 0.255859, min_change: -0.205078, max_change: 0.216797, std_dev: 0.016156, variance: 0.000261
-[INFO    main                 ] 	                     day1 stats, min: 0.000000, avg: 0.454929, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.498060, variance: 0.248064
-[INFO    main                 ] 	                     day2 stats, min: 0.000000, avg: 0.276180, max: 1.000000, min_change: 0.000000, max_change: 1.000000, std_dev: 0.447192, variance: 0.199981
+[INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.004454, max: 0.040276, min_change: -0.040276, max_change: 0.033920, std_dev: 0.004304, variance: 0.000019
+[INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_1_tactic_1_test_weekdayOneHot.csv' with number rows: 2605
+[INFO    main                 ] 	                     cost stats, min: 0.070312, avg: 0.112744, max: 0.171875, min_change: -0.080078, max_change: 0.074219, std_dev: 0.014784, variance: 0.000219
+[WARNING main                 ] WARNING: unchanging series: 'day1'
+[INFO    main                 ] 	                     day1 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
+[WARNING main                 ] WARNING: unchanging series: 'day2'
+[INFO    main                 ] 	                     day2 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
 [WARNING main                 ] WARNING: unchanging series: 'day3'
 [INFO    main                 ] 	                     day3 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
 [WARNING main                 ] WARNING: unchanging series: 'day4'
 [INFO    main                 ] 	                     day4 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[WARNING main                 ] WARNING: unchanging series: 'day5'
-[INFO    main                 ] 	                     day5 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[WARNING main                 ] WARNING: unchanging series: 'day6'
-[INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
-[INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.268891, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.443468, variance: 0.196664
-[INFO    main                 ] 	                  latency stats, min: 0.000000, avg: 0.086257, max: 0.476776, min_change: -0.327668, max_change: 0.366107, std_dev: 0.059334, variance: 0.003521
-[INFO    main                 ] 	              reliability stats, min: 0.000000, avg: 0.999233, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.027692, variance: 0.000767
-[INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.005545, max: 0.978926, min_change: -0.965411, max_change: 0.974577, std_dev: 0.020043, variance: 0.000402
-[INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_3_tactic_1_validation_weekdayOneHot.csv' with number rows: 2607
+[INFO    main                 ] 	                     day5 stats, min: 0.000000, avg: 0.386180, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.486966, variance: 0.237136
+[INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.489060, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.499976, variance: 0.249976
+[INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.124760, max: 1.000000, min_change: 0.000000, max_change: 1.000000, std_dev: 0.330510, variance: 0.109237
+[INFO    main                 ] 	                  latency stats, min: 0.015234, avg: 0.017059, max: 0.051192, min_change: -0.033470, max_change: 0.033321, std_dev: 0.001484, variance: 0.000002
+[WARNING main                 ] WARNING: unchanging series: 'reliability'
+[INFO    main                 ] 	              reliability stats, min: 1.000000, avg: 1.000000, max: 1.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
+[INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.004455, max: 0.029370, min_change: -0.026159, max_change: 0.029237, std_dev: 0.004280, variance: 0.000018
+[INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_2_tactic_1_test_weekdayOneHot.csv' with number rows: 2605
+[INFO    main                 ] 	                     cost stats, min: 0.013672, avg: 0.060564, max: 0.121094, min_change: -0.058594, max_change: 0.062500, std_dev: 0.015485, variance: 0.000240
+[WARNING main                 ] WARNING: unchanging series: 'day1'
+[INFO    main                 ] 	                     day1 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
+[WARNING main                 ] WARNING: unchanging series: 'day2'
+[INFO    main                 ] 	                     day2 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
+[WARNING main                 ] WARNING: unchanging series: 'day3'
+[INFO    main                 ] 	                     day3 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
+[WARNING main                 ] WARNING: unchanging series: 'day4'
+[INFO    main                 ] 	                     day4 stats, min: 0.000000, avg: 0.000000, max: 0.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
+[INFO    main                 ] 	                     day5 stats, min: 0.000000, avg: 0.386948, max: 1.000000, min_change: -1.000000, max_change: 0.000000, std_dev: 0.487145, variance: 0.237310
+[INFO    main                 ] 	                     day6 stats, min: 0.000000, avg: 0.486756, max: 1.000000, min_change: -1.000000, max_change: 1.000000, std_dev: 0.499921, variance: 0.249921
+[INFO    main                 ] 	                     day7 stats, min: 0.000000, avg: 0.126296, max: 1.000000, min_change: 0.000000, max_change: 1.000000, std_dev: 0.332246, variance: 0.110387
+[INFO    main                 ] 	                  latency stats, min: 0.032384, avg: 0.068369, max: 0.428501, min_change: -0.321479, max_change: 0.349062, std_dev: 0.040278, variance: 0.001622
+[WARNING main                 ] WARNING: unchanging series: 'reliability'
+[INFO    main                 ] 	              reliability stats, min: 1.000000, avg: 1.000000, max: 1.000000, min_change: 0.000000, max_change: 0.000000, std_dev: 0.000000, variance: 0.000000
+[INFO    main                 ] 	time_since_last_recording stats, min: 0.000000, avg: 0.004452, max: 0.037332, min_change: -0.034254, max_change: 0.036596, std_dev: 0.004253, variance: 0.000018
+[INFO    main                 ] read time series '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_3_tactic_1_test_weekdayOneHot.csv' with number rows: 2605
 [INFO    main                 ] normalized type: none 
-[INFO    main                 ] MSE: 0.064988
-[INFO    main                 ] MAE: 0.342391
-[INFO    main                 ] input filename[    0]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_1_tactic_1_validation_weekdayOneHot.csv'
-[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_1_tactic_1_validation_weekdayOneHot_predictions.csv'
-[INFO    main                 ] input filename[    1]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_2_tactic_1_validation_weekdayOneHot.csv'
-[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_2_tactic_1_validation_weekdayOneHot_predictions.csv'
-[INFO    main                 ] input filename[    2]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_3_tactic_1_validation_weekdayOneHot.csv'
-[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_3_tactic_1_validation_weekdayOneHot_predictions.csv'
-[INFO    main                 ] input filename[    0]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_1_tactic_1_validation_weekdayOneHot.csv'
-[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_1_tactic_1_validation_weekdayOneHot_predictions.csv'
-[INFO    main                 ] input filename[    1]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_2_tactic_1_validation_weekdayOneHot.csv'
-[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_2_tactic_1_validation_weekdayOneHot_predictions.csv'
-[INFO    main                 ] input filename[    2]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_3_tactic_1_validation_weekdayOneHot.csv'
-[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_3_tactic_1_validation_weekdayOneHot_predictions.csv'
+[INFO    main                 ] MSE: 0.003737
+[INFO    main                 ] MAE: 0.073634
+[INFO    main                 ] input filename[    0]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_1_tactic_1_test_weekdayOneHot.csv'
+[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_1_tactic_1_test_weekdayOneHot_predictions.csv'
+[INFO    main                 ] input filename[    1]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_2_tactic_1_test_weekdayOneHot.csv'
+[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_2_tactic_1_test_weekdayOneHot_predictions.csv'
+[INFO    main                 ] input filename[    2]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_3_tactic_1_test_weekdayOneHot.csv'
+[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_3_tactic_1_test_weekdayOneHot_predictions.csv'
+[INFO    main                 ] input filename[    0]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_1_tactic_1_test_weekdayOneHot.csv'
+[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_1_tactic_1_test_weekdayOneHot_predictions.csv'
+[INFO    main                 ] input filename[    1]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_2_tactic_1_test_weekdayOneHot.csv'
+[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_2_tactic_1_test_weekdayOneHot_predictions.csv'
+[INFO    main                 ] input filename[    2]: '../valet-tool/parse_tactics_weekend_sample_rate/normalized_tva_server_3_tactic_1_test_weekdayOneHot.csv'
+[INFO    main                 ] output filename: 'sr0_np_pred/normalized_tva_server_3_tactic_1_test_weekdayOneHot_predictions.csv'
