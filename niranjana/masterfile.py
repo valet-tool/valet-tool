@@ -240,13 +240,13 @@ if __name__=="__main__":
                 valid = reframed_validation.values
                 test = reframed_test.values
                 
-                predict_columns = [13, 14, 15]
+                predict_columns = [14, 15, 16]
                 feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
                 
                 # split into input and outputs
-                train_X, train_y = train[:, feature_columns], train[:,predict_columns]
-                valid_X, valid_y = valid[:, feature_columns], valid[:,predict_columns]
-                test_X, test_y = test[:, feature_columns], test[:,predict_columns]
+                train_X, train_y = train[:, feature_columns], train[:,-len(predict_columns):]
+                valid_X, valid_y = valid[:, feature_columns], valid[:,-len(predict_columns):]
+                test_X, test_y = test[:, feature_columns], test[:,-len(predict_columns):]
                 # reshape input to be 3D [samples, timesteps, features]
                 train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
                 valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
@@ -276,12 +276,14 @@ if __name__=="__main__":
             else:
                 
                 base_path_parts = None
-                servers = np.arange(1,4)
+                # servers = np.arange(1,4)
                 
-                server_arr = deque(servers)
-                while server_arr[0] != curr_server:
-                    server_arr.rotate(1)
-                servers = list(server_arr)
+                # server_arr = deque(servers)
+                # while server_arr[0] != curr_server:
+                #     server_arr.rotate(1)
+                # servers = list(server_arr)
+                
+                servers = [curr_server]
                 
                 if iterations!=1:
                     if iterations==2:
@@ -311,14 +313,19 @@ if __name__=="__main__":
                 temp=[]
                 original_indices = [0, 4, 5, 6, 7, 8, 9, 10 , 11, 12]
                 #updating original indices for 3 servers
-                for i in range(0, len(servers)):
-                    if i!=0:
-                        temp_indices = [val+i*(train_master_dataframe.shape[1]/len(servers)-1) for val in original_indices]
-                        temp+=temp_indices
-                original_indices+=temp
+                # for i in range(0, len(servers)):
+                #     if i!=0:
+                #         temp_indices = [val+i*(train_master_dataframe.shape[1]/len(servers)-1) for val in original_indices]
+                #         temp+=temp_indices
+                # original_indices+=temp
                 #pushing the original indices to remove in shifted frame    
                 columns_to_remove = [int(val + train_master_dataframe.shape[1]) for val in original_indices]
                 
+                if iterations!=1:
+                    #dropping ping pdata columns for sampling rate iterations
+                    columns_to_remove.append(4)
+                    columns_to_remove.append(5)
+                    
                 
                         
                         
@@ -342,12 +349,12 @@ if __name__=="__main__":
                 test = reframed_test.values
                 # split into input and outputs
                 #[39, 40, 41]
-                predict_columns = [39, 40, 41]
-                feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
+                #predict_columns = [14, 15, 16]#[39, 40, 41]
+                #feature_columns = [ind for ind in range(0,train.shape[1]) if ind not in predict_columns]
                 
-                train_X, train_y = train[:, feature_columns], train[:,predict_columns]
-                valid_X, valid_y = valid[:, feature_columns], valid[:,predict_columns]
-                test_X, test_y = test[:, feature_columns], test[:,predict_columns]
+                train_X, train_y = train[:, feature_columns], train[:,-len(predict_columns):]
+                valid_X, valid_y = valid[:, feature_columns], valid[:,-len(predict_columns):]
+                test_X, test_y = test[:, feature_columns], test[:,-len(predict_columns):]
                 # reshape input to be 3D [samples, timesteps, features]
                 train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
                 valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
@@ -417,7 +424,8 @@ if __name__=="__main__":
                 mlp_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
                 mlp_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
                 
-                result_mlp.to_pickle("results/"+str(curr_server)+"/raw_results_mlp"+" "+str(z)+".pkl")
+                #result_mlp.to_pickle("results/"+str(curr_server)+"/raw_results_mlp"+" "+str(z)+".pkl")
+                result_mlp.to_csv("results/"+str(curr_server)+"/raw_results_mlp"+"_model_"+str(z)+"_iteration_"+str(iterations)+".csv")
             
             #################################################################################
             # design LSTM network with variable architectures, use adam optimizer and mse loss function
@@ -490,9 +498,12 @@ if __name__=="__main__":
                     lstm_models_results["RMSE"+" "+str(z)].iloc[iterations] = rmse
                     lstm_models_results["MSE"+" "+str(z)].iloc[iterations] = mse
                     lstm_models_results["MAE"+" "+str(z)].iloc[iterations] = mae
-                name = "results/"+str(curr_server)+"/lstm_results_model_"+str(idx)+".pkl"
-                lstm_models_results.to_pickle(name)
-                result_lstm.to_pickle("results/"+str(curr_server)+"/raw_results_lstm_"+str(idx)+" "+str(z)+".pkl")
+                    name = "results/"+str(curr_server)+"/error_measures/lstm_results_model_"+str(idx)+"_model_"+str(z)+"_iteration"+str(iterations)+".pkl"
+                    # lstm_models_results.to_pickle(name)
+                    # result_lstm.to_pickle("results/"+str(curr_server)+"/raw_results_lstm_"+str(idx)+" "+str(z)+".pkl")
+                    
+                    lstm_models_results.to_csv(name)
+                    result_lstm.to_csv("results/"+str(curr_server)+"/raw_results_lstm_"+str(idx)+"_model_"+str(z)+"_iteration_"+str(iterations)+".csv")
     
             
             
@@ -522,7 +533,7 @@ if __name__=="__main__":
             svr_rbf_models_results["MAE"].iloc[iterations] = mae
             
             #svr_rbf.savetxt("results/"+str(curr_server)+"/raw_results_svr_rbf.csv")
-            np.save("results/"+str(curr_server)+"/raw_results_svr_rbf.csv",svr_rbf)
+            np.save("results/"+str(curr_server)+"/raw_results_svr_rbf_iteration_"+str(iterations),svr_rbf)
             ##########################################################
             regressor = SVR(kernel='linear')
             # flatten input
@@ -549,7 +560,7 @@ if __name__=="__main__":
             svr_linear_models_results["MAE"].iloc[iterations] = mae
             
             #svr_linear.savetxt("results/"+str(curr_server)+"/raw_results_svr_linear.pkl")
-            np.save("results/"+str(curr_server)+"/raw_results_svr_linear.csv",svr_linear)
+            np.save("results/"+str(curr_server)+"/raw_results_svr_linear_iterations"+str(iterations),svr_linear)
             ###########################################################
             
             knn = KNeighborsRegressor()
@@ -578,15 +589,23 @@ if __name__=="__main__":
             kNN_models_results["MSE"].iloc[iterations] = mse
             kNN_models_results["MAE"].iloc[iterations] = mae
             #knn_out.save("results/"+str(curr_server)+"/raw_results_kNN.pkl")
-            np.save("results/"+str(curr_server)+"/raw_results_kNN.csv",knn_out)
+            np.save("results/"+str(curr_server)+"/raw_results_kNN_iterations_"+str(iterations),knn_out)
 
+            svr_rbf_models_results.to_csv("results/"+str(curr_server)+"/error_measures/"+"svr_rbf_results"+"_iterations_"+str(iterations)+".csv")
+            svr_linear_models_results.to_csv("results/"+str(curr_server)+"/error_measures/"+"svr_linear_results"+"_iterations_"+str(iterations)+".csv")
+            kNN_models_results.to_csv("results/"+str(curr_server)+"/error_measures/kNN_results"+"_iterations_"+str(iterations)+".csv")
+    
+            mlp_models_results.to_csv("results/"+str(curr_server)+"/error_measures"+"_iterations_"+str(iterations)+"mlp_results"+" "+str(z)+".csv")
             
         train_master_dataframe.to_pickle("results/"+str(curr_server)+"/train_master_dataframe.pkl")
         test_master_dataframe.to_pickle("results/"+str(curr_server)+"/test_master_dataframe.pkl")
         
-        svr_rbf_models_results.to_pickle("results/"+str(curr_server)+"/svr_rbf_results.pkl")
-        svr_linear_models_results.to_pickle("results/"+str(curr_server)+"/svr_linear_results.pkl")
-        kNN_models_results.to_pickle("results/"+str(curr_server)+"/kNN_results.pkl")
+        # svr_rbf_models_results.to_pickle("results/"+str(curr_server)+"/svr_rbf_results.pkl")
+        # svr_linear_models_results.to_pickle("results/"+str(curr_server)+"/svr_linear_results.pkl")
+        # kNN_models_results.to_pickle("results/"+str(curr_server)+"/kNN_results.pkl")
     
-        mlp_models_results.to_pickle("results/"+str(curr_server)+"/mlp_results"+" "+str(z)+".pkl")
+        # mlp_models_results.to_pickle("results/"+str(curr_server)+"/mlp_results"+" "+str(z)+".pkl")
+        #name = "results/"+str(curr_server)+"/"+"_iterations"+str(iterations)+"svr_rbf_results.csv"
+        #
+
     
