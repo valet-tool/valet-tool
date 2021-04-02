@@ -29,9 +29,9 @@ def celia(data,updateThreshold = 1000):
 
         timeDeltaReward = (data.iloc[i]['timestamp'] - data.iloc[lastUpdate]['timestamp'])
 
-        predictedUtil = utilFunction(data.iloc[i].predicted_latency, data.iloc[i].predicted_cost,(float)(timeDeltaReward), data.iloc[i].predicted_reliability )
+        predictedUtil = utilFunction(data.iloc[i].predicted_latency, data.iloc[i].predicted_cost,(float)(timeDeltaReward),1 )
 
-        realUtility = utilFunction(data.iloc[i].latency, data.iloc[i].cost,(float)(timeDeltaReward), data.iloc[i].reliability )
+        realUtility = utilFunction(data.iloc[i].latency, data.iloc[i].cost,(float)(timeDeltaReward), 1 )
         
         utilitPredicted.append(predictedUtil)
         
