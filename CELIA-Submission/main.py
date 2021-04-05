@@ -73,6 +73,7 @@ def main(argFile):
             return
         
         notDone = []
+        errorMsg = []
         for i in fileNames:
 
             dataPred = pd.read_csv(os.path.join(i[0], i[1]))
@@ -89,8 +90,9 @@ def main(argFile):
                     result.to_csv(outputDirectory+i[1])
                 except:
                     result.to_csv(outputDirectory+'/'+i[1])
-            except:
+            except Exception as e:
                 notDone.append(os.path.join(i[0], i[1]))
+                errorMsg.append(e)
 
                 
     celiaStats = pd.DataFrame(celiaStats, columns=['predictionType','utilDif','reward','negativeReward', 'numOfUpdates','lostUtil', 'wrongDecisions', 'correctDecisions', 'decisionShouldHaveDid', 'decisionShouldHaveDidNot', 'decisionNotHaveDid', 'decisionNotHaveDidNot'])
@@ -101,6 +103,7 @@ def main(argFile):
         celiaStats.to_csv(outputDirectory+'/'+outputStatFileName)
 
     print("Not Done:")
+    pd.DataFrame([notDone, errorMsg]).to_csv(outputDirectory+'/notDone.csv')
     print(notDone)
 
 if __name__ == "__main__":
