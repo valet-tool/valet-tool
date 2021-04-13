@@ -2,7 +2,7 @@
  "inputDirectory": "../predictions/final/",
  "multiFile": true,
  "inputFileName": "predictions_LSTM_server_1_tactic_1_Normalized.csv",
- "outputDirectory": "./aseOutput/2000/",
+ "outputDirectory": "./aseOutput/4000/",
  "outputFileName": "output.csv",
  "outputStatFileName": "stat.csv",
  "headers": {
@@ -14,5 +14,5 @@
   "predicted_cost": "predicted_cost",
   "predicted_reliability": "predicted_reliability"
  },
- "threshold": 2000
+ "threshold": 4000
 }
